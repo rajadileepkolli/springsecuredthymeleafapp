@@ -10,18 +10,20 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
 
 /**
  * 
- * @author rajakolli
- *  The @EnableRedisHttpSession annotation creates a Spring Bean with the name of springSessionRepositoryFilter that implements Filter.
- *  The filter is what is in charge of replacing the HttpSession implementation to be backed by Spring Session. 
- *  In this instance Spring Session is backed by Redis.
+ * @author rajakolli 
+ * 
+ * The @EnableRedisHttpSession annotation creates a Spring Bean with the
+ * name of springSessionRepositoryFilter that implements Filter. The filter is what is in
+ * charge of replacing the HttpSession implementation to be backed by Spring Session. In
+ * this instance Spring Session is backed by Redis.
  */
 
 @Configuration
 @EnableRedisHttpSession
-public class RedisConfiguration extends CachingConfigurerSupport{
+public class RedisConfiguration extends CachingConfigurerSupport {
+
     @Bean
-    public JedisConnectionFactory jedisConnectionFactory()
-    {
+    public JedisConnectionFactory jedisConnectionFactory() {
         JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory();
         jedisConnectionFactory.setHostName("127.0.0.1");
         jedisConnectionFactory.setPort(6379);
@@ -29,8 +31,7 @@ public class RedisConfiguration extends CachingConfigurerSupport{
     }
 
     @Bean
-    public RedisTemplate<Object, Object> redisTemplate()
-    {
+    public RedisTemplate<Object, Object> redisTemplate() {
         RedisTemplate<Object, Object> redisTemplate = new RedisTemplate<Object, Object>();
         redisTemplate.setConnectionFactory(jedisConnectionFactory());
         redisTemplate.setExposeConnection(true);
@@ -38,8 +39,7 @@ public class RedisConfiguration extends CachingConfigurerSupport{
     }
 
     @Bean
-    public RedisCacheManager cacheManager()
-    {
+    public RedisCacheManager cacheManager() {
         RedisCacheManager redisCacheManager = new RedisCacheManager(redisTemplate());
         redisCacheManager.setTransactionAware(true);
         redisCacheManager.setLoadRemoteCachesOnStartup(true);
