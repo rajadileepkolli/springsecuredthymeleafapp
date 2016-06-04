@@ -34,7 +34,8 @@ public class MongoDBAuthenticationProvider extends AbstractUserDetailsAuthentica
             throw new InternalAuthenticationServiceException(
                     "UserDetails didn't matched, which is an interface contract violation");
         }
-    */}
+    */
+    }
 
     @Override
     protected UserDetails retrieveUser(String username,

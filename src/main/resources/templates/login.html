@@ -7,7 +7,6 @@
 <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
 </head>
 <body>
-
 	<div id="page-wrapper">
 		<div class="container" style="margin-top: 100px;">
 			<div class="row">
@@ -64,13 +63,10 @@
 										</div>
 									</div>
 								</div>
-								<!-- <p class="lost_password">
-									New Customer? <a href="#" th:href="@{/users/new}"
-										title="Register">Register</a>
-								</p> -->
 								<p class="lost_password">
-								<a href="forgotPwd" th:href="@{/forgotPwd}" th:text="#{label.forgot_password}">I forgot my password</a><br/>
-</p>
+									<a href="forgotPwd" th:href="@{/forgotPwd}"
+										th:text="#{label.forgot_password}">I forgot my password</a><br />
+								</p>
 								<div class="clear"></div>
 							</form>
 						</div>

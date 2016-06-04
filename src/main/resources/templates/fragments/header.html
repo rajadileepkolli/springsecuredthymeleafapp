@@ -11,20 +11,30 @@
 			<nav class="navbar navbar-default">
 				<div class="container-fluid">
 					<div class="navbar-header">
-						<a class="navbar-brand" href="#" th:href="@{/home}">Home</a>
-						<ul class="nav navbar-nav" >
-							<li><a href="#" th:href="@{/products}">Products</a></li>
-							<li><a href="#" th:href="@{/product/new}">Create Product</a></li>
-							<!-- <li><a href="#" th:href="@{/users}">Users</a></li> -->
-							<li th:class="${CURRENT_MENU == 'Users'}? 'active' : ''"  sec:authorize="hasRole('ROLE_MANAGE_USERS')"><a href="#" th:href="@{'/users'}"><i class="fa fa-users"></i> Users</a></li>
-							<li><a href="#" th:href="@{/logout}">Logout</a></li>
-						</ul>
-						<button type="button" class="navbar-toggle" data-toggle="collapse"
-							data-target=".navbar-collapse" sec:authorize="isAuthenticated()">
-							<span class="sr-only">Toggle navigation</span> <span
-								class="icon-bar"></span> <span class="icon-bar"></span> <span
-								class="icon-bar"></span>
-						</button>
+						<div class="collapse navbar-collapse">
+							<a class="navbar-brand" href="#" th:href="@{/home}" th:text="#{label.home}">Home</a>
+							<ul class="nav navbar-nav">
+								<li th:class="${CURRENT_MENU == 'Products'}? 'active' : ''" sec:authorize="hasRole('ROLE_MANAGE_PRODUCTS')">
+									<a href="#" th:href="@{/products}"><i class="fa fa-users"></i> Products</a></li>
+								<li th:class="${CURRENT_MENU == 'Create Product'}? 'active' : ''" sec:authorize="hasRole('ROLE_MANAGE_PRODUCTS')">
+									<a href="#"	th:href="@{/product/new}"><i class="fa fa-users"></i> Create Product</a></li>
+								<li th:class="${CURRENT_MENU == 'Users'}? 'active' : ''" sec:authorize="hasRole('ROLE_MANAGE_USERS')">
+									<a href="#"	th:href="@{'/users'}"><i class="fa fa-users"></i> Users</a></li>
+							</ul>
+							<ul class="nav navbar-nav navbar-right logout-nav-section">
+								<li class="dropdown">
+									<a aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#"> 
+										<span sec:authentication="name" > User!</span> 
+										<span class="caret"></span>
+									</a>
+									<ul class="dropdown-menu dropdown-menu-right">
+							            <li><a href="#" th:href="@{'/myAccount'}">Edit Profile</a></li>
+							            <li class="divider" role="separator"></li>
+							            <li><a href="/Logout" th:href="@{'/logout'}">Logout</a></li>
+							          </ul>
+								</li>
+							</ul>
+						</div>
 					</div>
 				</div>
 			</nav>

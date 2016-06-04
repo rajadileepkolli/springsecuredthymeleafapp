@@ -41,11 +41,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
     }
     
     @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        /*http.authorizeRequests().antMatchers("/webjars/jquery/2.2.4/jquery.min.js",
-                "/webjars/bootstrap/3.3.6/css/bootstrap.min.css").permitAll();*/
+    protected void configure(HttpSecurity httpSecurity) throws Exception {
         
-        http
+        httpSecurity
             .csrf().disable()
             .authorizeRequests()
                 .antMatchers("/forgotPwd","/resetPwd").permitAll()
