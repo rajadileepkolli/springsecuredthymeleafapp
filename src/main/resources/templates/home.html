@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+
+<head lang="en">
+
+<title>Secured App Administration</title>
+
+<!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
+</head>
+<body>
+
+	<!-- <div th:fragment="pageHeader">
+		<section class="content-header">
+			<h1>
+				SecuredApp Administration <small>Manage Secured Site Content</small>
+			</h1>
+		</section>
+	</div> -->
+	
+	<div class="container">
+		<!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
+		<div th:fragment="content">
+		<p>
+			Welcome <span sec:authentication="name"> User !</span>
+		</p>
+	</div>
+	</div>
+	
+
+</body>
+
+</html>
