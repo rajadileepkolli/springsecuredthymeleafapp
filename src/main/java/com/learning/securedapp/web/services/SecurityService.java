@@ -20,4 +20,10 @@ public interface SecurityService {
 
     User findUserByEmail(String email);
 
+    String resetPassword(String email) throws SecuredAppException;
+
+    boolean verifyPasswordResetToken(String email, String token) throws SecuredAppException;
+
+    void updatePassword(String email, String token, String encodedPwd) throws SecuredAppException;
+
 }

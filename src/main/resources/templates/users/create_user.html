@@ -9,6 +9,19 @@
 </head>
 <body>
 	<div class="container">
+		<div th:fragment="header">
+			<nav class="navbar navbar-default">
+				<div class="container-fluid">
+					<div class="navbar-header">
+						<a class="navbar-brand" href="#" th:href="@{/home}">Home</a>
+						<ul class="nav navbar-nav">
+							<li><a href="#" th:href="@{/logout}">Logout</a></li>
+						</ul>
+					</div>
+				</div>
+			</nav>
+		</div>
+		<!-- ./header -->
 		<div th:fragment="pageHeader">
 			<section class="content-header">
 				<h1>Manage Users</h1>

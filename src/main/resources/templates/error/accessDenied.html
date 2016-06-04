@@ -21,7 +21,9 @@
 		<div th:fragment="content">
 
 			<div>
-
+				<p>
+					Error message: <span th:text="${errorMessage}">Unknown error</span>
+				</p>
 				<p>
 					You may want to go <a th:href="@{/home}">Home</a>
 				</p>

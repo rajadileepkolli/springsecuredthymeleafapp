@@ -2,9 +2,12 @@ package com.learning.securedapp.web.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import com.learning.securedapp.domain.Role;
 import com.learning.securedapp.domain.User;
@@ -36,17 +39,6 @@ public class SecurityServiceImpl implements SecurityService{
         }
         List<Role> persistedRoles = new ArrayList<>();
         List<Role> roles = user.getRoles();
-       /* List<Role> roles = new ArrayList<>();
-        Role temprole = new Role();
-        temprole.setRoleName("ROLE_SUPER_ADMIN");
-        temprole.setId("5752bd167df8866538ebfc8c");
-        List<Permission> permissions = new ArrayList<>();
-        Permission permission = new Permission();
-        permission.setName("MANAGE_USERS");
-        permission.setId("6");
-        permissions.add(permission);
-        temprole.setPermissions(permissions);
-        roles.add(temprole);*/
         if(roles != null){
             for (Role role : roles) {
                 if(role.getId() != null)
@@ -61,6 +53,7 @@ public class SecurityServiceImpl implements SecurityService{
     }
 
     @Override
+    @Cacheable(value = "user", key = "#id")
     public User getUserById(String id) {
         return userRepository.findOne(id);
     }
@@ -89,6 +82,47 @@ public class SecurityServiceImpl implements SecurityService{
     @Override
     public User findUserByEmail(String email) {
         return userRepository.findByEmail(email);
+    }
+
+    @Override
+    public String resetPassword(String email) throws SecuredAppException {
+        User user = findUserByEmail(email);
+        if(user == null)
+        {
+            throw new SecuredAppException("Invalid email address");
+        }
+        String uuid = UUID.randomUUID().toString();
+        user.setPasswordResetToken(uuid);
+        userRepository.save(user);
+        return uuid;
+    }
+
+    @Override
+    public boolean verifyPasswordResetToken(String email, String token) throws SecuredAppException {
+        User user = findUserByEmail(email);
+        if(user == null)
+        {
+            throw new SecuredAppException("Invalid email address");
+        }
+        if(!StringUtils.hasText(token) || !token.equals(user.getPasswordResetToken())){
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public void updatePassword(String email, String token, String encodedPwd) throws SecuredAppException {
+        User user = findUserByEmail(email);
+        if(user == null)
+        {
+            throw new SecuredAppException("Invalid email address");
+        }
+        if(!StringUtils.hasText(token) || !token.equals(user.getPasswordResetToken())){
+            throw new SecuredAppException("Invalid password reset token");
+        }
+        user.setPassword(encodedPwd);
+        user.setPasswordResetToken(null);
+        userRepository.save(user);
     }
 
 }

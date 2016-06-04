@@ -37,8 +37,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/css/**", "/js/**", "/images/**", "/resources/**",
-                "/webjars/**"/*, "/webjars/jquery/2.2.4/jquery.min.js",
-                "/webjars/bootstrap/3.3.6/css/bootstrap.min.css"*/);
+                "/webjars/**","/mails/**");
     }
     
     @Override
@@ -62,9 +61,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
                 .permitAll()
                 .and()
             .logout()
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID")
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 //.logoutUrl("/logout")
                 .permitAll()
+                .and()
+            .rememberMe()
                 .and()
             .exceptionHandling().accessDeniedPage("/403");
     }

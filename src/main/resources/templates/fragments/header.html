@@ -12,10 +12,11 @@
 				<div class="container-fluid">
 					<div class="navbar-header">
 						<a class="navbar-brand" href="#" th:href="@{/home}">Home</a>
-						<ul class="nav navbar-nav">
+						<ul class="nav navbar-nav" >
 							<li><a href="#" th:href="@{/products}">Products</a></li>
 							<li><a href="#" th:href="@{/product/new}">Create Product</a></li>
-							<li><a href="#" th:href="@{/users}">Users</a></li>
+							<!-- <li><a href="#" th:href="@{/users}">Users</a></li> -->
+							<li th:class="${CURRENT_MENU == 'Users'}? 'active' : ''"  sec:authorize="hasRole('ROLE_MANAGE_USERS')"><a href="#" th:href="@{'/users'}"><i class="fa fa-users"></i> Users</a></li>
 							<li><a href="#" th:href="@{/logout}">Logout</a></li>
 						</ul>
 						<button type="button" class="navbar-toggle" data-toggle="collapse"
