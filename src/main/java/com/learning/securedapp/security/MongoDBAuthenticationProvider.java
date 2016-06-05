@@ -11,32 +11,37 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.learning.securedapp.domain.Permission;
 import com.learning.securedapp.domain.Role;
 import com.learning.securedapp.domain.User;
+import com.learning.securedapp.exception.SecuredAppException;
 import com.learning.securedapp.web.repositories.UserRepository;
+import com.learning.securedapp.web.utils.KeyGeneratorUtil;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 @AllArgsConstructor // This is used to autowire userRepository bean from spring boot 1.4.0
 public class MongoDBAuthenticationProvider extends AbstractUserDetailsAuthenticationProvider {
 
     private UserRepository userRepository;
-    private PasswordEncoder passwordEncoder;
     
     @Override
     protected void additionalAuthenticationChecks(UserDetails userDetails,
             UsernamePasswordAuthenticationToken authentication)
                     throws AuthenticationException {
-        if (!passwordEncoder.encode((String) authentication.getCredentials()).equals(userDetails.getPassword())) {
-            throw new InternalAuthenticationServiceException(
-                    "UserDetails didn't matched, which is an interface contract violation");
+        try {
+            if (!KeyGeneratorUtil.encrypt((String) authentication.getCredentials()).equals(userDetails.getPassword())) {
+                throw new InternalAuthenticationServiceException(
+                        "Passwords didn't matched, which is an interface contract violation");
+            }
+        } catch (SecuredAppException e) {
+            log.error(e.getMessage(),e);
         }
-    
     }
 
     @Override
