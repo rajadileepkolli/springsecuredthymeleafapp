@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider;
@@ -20,15 +21,17 @@ import com.learning.securedapp.exception.SecuredAppException;
 import com.learning.securedapp.web.repositories.UserRepository;
 import com.learning.securedapp.web.utils.KeyGeneratorUtil;
 
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
-@AllArgsConstructor // This is used to autowire userRepository bean from spring boot 1.4.0
 public class MongoDBAuthenticationProvider extends AbstractUserDetailsAuthenticationProvider {
 
-    private UserRepository userRepository;
+    @Autowired private UserRepository userRepository;
+    
+    private boolean accountNonExpired = true;
+    private boolean credentialsNonExpired = true;
+    private boolean accountNonLocked= true;
     
     @Override
     protected void additionalAuthenticationChecks(UserDetails userDetails,
@@ -55,7 +58,8 @@ public class MongoDBAuthenticationProvider extends AbstractUserDetailsAuthentica
             User dbUser = userRepository.findByUserName(username);
             if (dbUser != null) {
                 loadedUser = new org.springframework.security.core.userdetails.User(
-                        dbUser.getUserName(), dbUser.getPassword(),
+                        dbUser.getUserName(), dbUser.getPassword(), dbUser.isEnabled(),
+                        accountNonExpired, credentialsNonExpired, accountNonLocked,
                         convertToGrantedAuthority(dbUser.getRoleList()));
             }
         } catch (Exception repositoryProblem) {
