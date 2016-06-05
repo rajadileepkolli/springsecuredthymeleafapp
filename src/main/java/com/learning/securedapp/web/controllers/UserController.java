@@ -70,7 +70,7 @@ public class UserController extends SecuredAppBaseController {
 
     @PostMapping(value = "/users")
     public String createUser(@Valid @ModelAttribute("user") User user,
-            BindingResult result, Model model, RedirectAttributes redirectAttributes) throws SecuredAppException {
+            BindingResult result, Model model, RedirectAttributes redirectAttributes) {
         userValidator.validate(user, result);
         if (result.hasErrors()) {
             return viewPrefix + "create_user";
@@ -78,10 +78,15 @@ public class UserController extends SecuredAppBaseController {
         String password = user.getPassword();
         String encodedPwd = passwordEncoder.encode(password);
         user.setPassword(encodedPwd);
-        User persistedUser = securityService.createUser(user);
-        log.debug("Created new User with id : {} and name : {}", persistedUser.getId(),
-                persistedUser.getUserName());
-        redirectAttributes.addFlashAttribute("info", "User created successfully");
+        try {
+            User persistedUser = securityService.createUser(user);
+            log.debug("Created new User with id : {} and name : {}", persistedUser.getId(),
+                    persistedUser.getUserName());
+        } catch (SecuredAppException e) {
+            log.error(e.getMessage());
+            redirectAttributes.addFlashAttribute("msg", e.getMessage());
+        }
+        redirectAttributes.addFlashAttribute("msg", "User created successfully");
         return "redirect:/users";
     }
 
@@ -117,7 +122,7 @@ public class UserController extends SecuredAppBaseController {
         User persistedUser = securityService.updateUser(user);
         log.debug("Updated user with id : {} and name : {}", persistedUser.getId(),
                 persistedUser.getUserName());
-        redirectAttributes.addFlashAttribute("info", "User updates successfully");
+        redirectAttributes.addFlashAttribute("msg", "User updates successfully");
         return "redirect:/users";
     }
 

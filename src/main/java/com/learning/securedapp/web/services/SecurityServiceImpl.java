@@ -9,9 +9,11 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import com.learning.securedapp.domain.Permission;
 import com.learning.securedapp.domain.Role;
 import com.learning.securedapp.domain.User;
 import com.learning.securedapp.exception.SecuredAppException;
+import com.learning.securedapp.web.repositories.PermissionRepository;
 import com.learning.securedapp.web.repositories.RoleRepository;
 import com.learning.securedapp.web.repositories.UserRepository;
 
@@ -20,6 +22,7 @@ public class SecurityServiceImpl implements SecurityService{
 
     @Autowired UserRepository userRepository;
     @Autowired RoleRepository roleRepository;
+    @Autowired PermissionRepository permissionRepository;
     
     @Override
     public List<Role> getAllRoles() {
@@ -123,6 +126,62 @@ public class SecurityServiceImpl implements SecurityService{
         user.setPassword(encodedPwd);
         user.setPasswordResetToken(null);
         userRepository.save(user);
+    }
+
+    @Override
+    public List<Permission> getAllPermissions() {
+        return permissionRepository.findAll();
+    }
+
+    @Override
+    public Role createRole(Role role) throws SecuredAppException {
+        Role roleByName = getRoleByName(role.getRoleName());
+        if(roleByName != null){
+            throw new SecuredAppException("Role "+role.getRoleName()+" already exist");
+        }
+        List<Permission> persistedPermissions = new ArrayList<>();
+        List<Permission> permissions = role.getPermissions();
+        if(permissions != null){
+            for (Permission permission : permissions) {
+                if(permission.getId() != null)
+                {
+                    persistedPermissions.add(permissionRepository.findOne(permission.getId()));
+                }
+            }
+        }
+        
+        role.setPermissions(persistedPermissions);
+        return roleRepository.save(role);
+    }
+
+    private Role getRoleByName(String roleName) {
+        return roleRepository.findByRoleName(roleName);
+    }
+
+    @Override
+    public Role getRoleById(String id) {
+        return roleRepository.findOne(id);
+    }
+
+    @Override
+    public Role updateRole(Role role) throws SecuredAppException {
+        Role persistedRole = getRoleById(role.getId());
+        if(persistedRole == null){
+            throw new SecuredAppException("Role "+role.getId()+" doesn't exist");
+        }
+        persistedRole.setDescription(role.getDescription());
+        List<Permission> updatedPermissions = new ArrayList<>();
+        List<Permission> permissions = role.getPermissions();
+        if(permissions != null){
+            for (Permission permission : permissions) {
+                if(permission.getId() != null)
+                {
+                    updatedPermissions.add(permissionRepository.findOne(permission.getId()));
+                }
+            }
+        }
+        persistedRole.setPermissions(updatedPermissions);
+        return roleRepository.save(persistedRole);
     }
 
 }

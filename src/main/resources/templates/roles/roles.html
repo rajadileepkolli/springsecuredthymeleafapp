@@ -4,7 +4,7 @@
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 
 <head>
-<title>Users</title>
+<title>Roles</title>
 <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
 </head>
 <body>
@@ -17,44 +17,50 @@
 				<div class="col-md-12">
 					<div class="box">
 						<div class="box-header">
-							<h3 class="box-title">List of Users</h3>
+							<h3 class="box-title">List of Roles</h3>
 							<div class="box-tools">
 								<div class="input-group" style="width: 150px;">
-									<a class="btn btn-sm btn-default" th:href="@{/users/new}"><i
-										class="fa fa-plus-circle"></i> New User</a>
+									<a class="btn btn-sm btn-default" th:href="@{/roles/new}"><i
+										class="fa fa-plus-circle"></i> New Role</a>
 								</div>
 							</div>
 						</div>
-						<!-- /.box-header -->
 						<div class="box-body table-responsive no-padding">
-							<table class="table table-hover">
+							<table class="table table-striped">
 								<tr>
 									<th style="width: 10px">#</th>
 									<th>Name</th>
-									<th>Email</th>
+									<th>Description</th>
 									<th>Edit</th>
+
 								</tr>
-								<tr th:each="user,iterStat : ${users}">
-									<td><a th:href="@{/users/{id}(id=${user.id})}"><span
+								<tr th:if="${not #lists.isEmpty(roles)}" th:each="role,iterStat : ${roles}">
+									<td><a th:href="@{/roles/{id}(id=${role.id})}"><span
 											th:text="${iterStat.count}">1</span></a></td>
-									<td th:text="${user.userName}">Name</td>
-									<td th:text="${user.email}">Email</td>
-									<td><a th:href="@{/users/{id}(id=${user.id})}"
-										class="btn btn-sm btn-default"><i class="fa fa-edit"></i>
-											Edit</a></td>
+									<td th:text="${role.roleName}">Role Name</td>
+									<td th:text="${role.description}">Role Description</td>
+									<td><a th:href="@{/roles/{id}(id=${role.id})}"
+										class="btn btn-sm btn-default"> <i class="fa fa-edit"></i>Edit
+									</a></td>
 								</tr>
 
 							</table>
 						</div>
-						<!-- /.box-body -->
-
+						<div class="row">
+							<div class="col-xs-12">
+								<div th:if="${msg!=null}"
+									class="alert alert-warning alert-dismissable">
+									<p>
+										<i class="icon fa fa-warning"></i> <span th:text="${msg}"></span>
+									</p>
+								</div>
+							</div>
+						</div>
 					</div>
-					<!-- /.box -->
 				</div>
 			</div>
 
 		</div>
-
 	</div>
 
 </body>

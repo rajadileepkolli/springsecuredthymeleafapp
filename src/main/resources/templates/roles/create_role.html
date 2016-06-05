@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+
+<head>
+<title>Roles - New</title>
+<!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
+</head>
+<body>
+
+	<div class="container">
+		<!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
+
+		<div th:fragment="content">
+
+			<div class="panel panel-warning">
+				<div class="panel-heading">
+					<h3 class="panel-title">Create New Role</h3>
+				</div>
+				<!-- /.panel-header -->
+				<div class="panel-body">
+					<form role="form" th:action="@{/roles}" th:object="${role}"	method="post">
+						<fieldset>
+							<p th:if="${#fields.hasErrors('global')}" th:errors="*{global}"	th:class="text-red">Incorrect data</p>
+							
+							<!-- text input -->
+							<div class="form-group" th:classappend="${#fields.hasErrors('roleName')}? 'has-error'">
+								<label>Role Name</label> 
+								<input type="text" class="form-control"	name="name" th:field="*{roleName}" placeholder="Enter Role Name" />
+								<p th:if="${#fields.hasErrors('roleName')}"
+									th:errors="*{roleName}" th:class="text-red">Incorrect data</p>
+							</div>
+	
+							<!-- textarea -->
+							<div class="form-group"	th:classappend="${#fields.hasErrors('description')}? 'has-error'">
+								<label>Description</label>
+								<textarea class="form-control" rows="3" name="description" th:field="*{description}" placeholder="Enter Role Description"></textarea>
+								<p th:if="${#fields.hasErrors('description')}"
+									th:errors="*{description}" th:class="text-red">Incorrect data</p>
+							</div>
+	
+							<div class="form-group">
+								<label>Permissions</label>
+								<div>
+									<p th:if="${not #lists.isEmpty(permissionsList)}" th:each="permission,rowStat : ${permissionsList}">
+										<input type="checkbox"
+											th:field="*{permissions[__${rowStat.index}__].id}"
+											th:value="${permission.id}" /> 
+											<label th:text="${permission.name}">Permission</label>
+									</p>
+								</div>
+							</div>
+						</fieldset>
+						<div class="row">
+							<div class="panel-footer">
+								<button type="submit" class="btn btn-primary">Submit</button>
+							</div>
+						</div>
+						<div class="clear"></div>
+					</form>
+				</div>
+				<!-- /.panel-body -->
+			</div>
+			<!-- /.panel -->
+		</div>
+	</div>
+</body>
+
+</html>

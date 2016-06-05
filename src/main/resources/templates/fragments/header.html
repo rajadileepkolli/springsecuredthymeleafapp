@@ -6,51 +6,68 @@
 </head>
 <body>
 
-	<div class="container">
-		<div th:fragment="header">
-			<nav class="navbar navbar-default">
-				<div class="container-fluid">
-					<div class="navbar-header">
-						<div class="collapse navbar-collapse">
-							<a class="navbar-brand" href="#" th:href="@{/home}" th:text="#{label.home}">Home</a>
-							<ul class="nav navbar-nav">
-								<li th:class="${CURRENT_MENU == 'Products'}? 'active' : ''" sec:authorize="hasRole('ROLE_MANAGE_PRODUCTS')">
-									<a href="#" th:href="@{/products}"><i class="fa fa-users"></i> Products</a></li>
-								<li th:class="${CURRENT_MENU == 'Create Product'}? 'active' : ''" sec:authorize="hasRole('ROLE_MANAGE_PRODUCTS')">
-									<a href="#"	th:href="@{/product/new}"><i class="fa fa-users"></i> Create Product</a></li>
-								<li th:class="${CURRENT_MENU == 'Users'}? 'active' : ''" sec:authorize="hasRole('ROLE_MANAGE_USERS')">
-									<a href="#"	th:href="@{'/users'}"><i class="fa fa-users"></i> Users</a></li>
-							</ul>
-							<ul class="nav navbar-nav navbar-right logout-nav-section">
-								<li class="dropdown">
-									<a aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#"> 
-										<span sec:authentication="name" > User!</span> 
-										<span class="caret"></span>
-									</a>
-									<ul class="dropdown-menu dropdown-menu-right">
-							            <li><a href="#" th:href="@{'/myAccount'}">Edit Profile</a></li>
-							            <li class="divider" role="separator"></li>
-							            <li><a href="/Logout" th:href="@{'/logout'}">Logout</a></li>
-							          </ul>
-								</li>
-							</ul>
-						</div>
-					</div>
+<div class="container">
+	<div th:fragment="header">
+		<nav class="navbar navbar-default">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<button data-target=".bs-example-js-navbar-collapse" data-toggle="collapse" type="button" class="navbar-toggle collapsed">
+						<span class="sr-only">Toggle navigation</span> 
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a href="#" class="navbar-brand" th:href="@{/home}"	th:text="#{label.home}">Home</a>
 				</div>
-			</nav>
-
-			<div class="jumbotron">
-				<div class="row text-center">
-					<div class="">
-						<h3>Spring Boot Secured Application</h3>
-					</div>
+				<div class="collapse navbar-collapse bs-example-js-navbar-collapse">
+					<ul class="nav navbar-nav">
+						<li th:class="${CURRENT_MENU == 'Products'}? 'active' : ''"	sec:authorize="hasRole('ROLE_MANAGE_PRODUCTS')">
+							<a href="#"	th:href="@{/products}">
+							<i class="fa fa-users"></i> Products</a>
+						</li>
+						<li th:class="${CURRENT_MENU == 'Create Product'}? 'active' : ''" sec:authorize="hasRole('ROLE_MANAGE_PRODUCTS')">
+							<a href="#"	th:href="@{/product/new}">
+								<i class="fa fa-users"></i> Create Product</a>
+						</li>
+						<li th:class="${CURRENT_MENU == 'Users'}? 'active' : ''" sec:authorize="hasRole('ROLE_MANAGE_USERS')">
+							<a href="#"	th:href="@{'/users'}"><i class="fa fa-users"></i> Users</a>
+						</li>
+						<li th:class="${CURRENT_MENU == 'Roles'}? 'active' : ''" sec:authorize="hasRole('ROLE_MANAGE_ROLES')">
+							<a href="#"	th:href="@{'/roles'}"><i class="fa fa-users"></i> Roles</a>
+						</li>
+						<li th:class="${CURRENT_MENU == 'Permissions'}? 'active' : ''" sec:authorize="hasRole('ROLE_MANAGE_PERMISSIONS')">
+							<a href="#" th:href="@{'/permissions'}"><i class="fa fa-users"></i>Permissions</a>
+						</li>
+					</ul>
+					<ul class="nav navbar-nav navbar-right logout-nav-section">
+						<li class="dropdown">
+							<a class="dropdown-toggle" aria-expanded="false" aria-haspopup="true" role="button"	data-toggle="dropdown" href="#">
+							<span sec:authentication="name"> User!</span> 
+							<span class="caret"></span>
+							</a>
+							<ul class="dropdown-menu dropdown-menu-right">
+								<li><a href="#" th:href="@{'/myAccount'}">Edit Profile</a></li>
+								<li class="divider" role="separator"></li>
+								<li><a href="/Logout" th:href="@{'/logout'}">Logout</a></li>
+							</ul>
+						</li>
+					</ul>
 				</div>
-				<!--  <div class="row text-center">
-                <img src="../../static/images/NewBannerBOOTS_2.png" width="400"
-                     th:src="@{/images/NewBannerBOOTS_2.png}"/>
-            </div> -->
 			</div>
+		</nav>
+
+		<div class="jumbotron">
+			<div class="row text-center">
+				<div class="">
+					<h3>Spring Boot Secured Application</h3>
+				</div>
+			</div>
+			<!--  <div class="row text-center">
+               <img src="../../static/images/NewBannerBOOTS_2.png" width="400"
+                    th:src="@{/images/NewBannerBOOTS_2.png}"/>
+           </div> -->
 		</div>
 	</div>
+</div>
 </body>
 </html>

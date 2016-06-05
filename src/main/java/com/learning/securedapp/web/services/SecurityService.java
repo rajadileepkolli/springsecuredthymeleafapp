@@ -2,6 +2,7 @@ package com.learning.securedapp.web.services;
 
 import java.util.List;
 
+import com.learning.securedapp.domain.Permission;
 import com.learning.securedapp.domain.Role;
 import com.learning.securedapp.domain.User;
 import com.learning.securedapp.exception.SecuredAppException;
@@ -25,5 +26,13 @@ public interface SecurityService {
     boolean verifyPasswordResetToken(String email, String token) throws SecuredAppException;
 
     void updatePassword(String email, String token, String encodedPwd) throws SecuredAppException;
+
+    List<Permission> getAllPermissions();
+
+    Role createRole(Role role) throws SecuredAppException;
+
+    Role getRoleById(String id);
+
+    Role updateRole(Role role) throws SecuredAppException;
 
 }

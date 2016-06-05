@@ -70,19 +70,22 @@ public class UserAuthController extends SecuredAppBaseController {
 
     @GetMapping(value = "/resetPwd")
     public String resetPwd(HttpServletRequest request, Model model,
-            RedirectAttributes redirectAttributes) throws SecuredAppException {
+            RedirectAttributes redirectAttributes) {
         String email = request.getParameter("email");
         String token = request.getParameter("token");
 
-        boolean valid = securityService.verifyPasswordResetToken(email, token);
-        if (valid) {
-            model.addAttribute("email", email);
-            model.addAttribute("token", token);
-            return viewPrefix + "resetPwd";
-        } else {
+        try {
+           boolean valid = securityService.verifyPasswordResetToken(email, token);
+            if (valid) {
+                model.addAttribute("email", email);
+                model.addAttribute("token", token);
+                return viewPrefix + "resetPwd";
+            }
+        } catch (SecuredAppException e) {
             redirectAttributes.addFlashAttribute("msg", getMessage(ERROR_INVALID_PASSWORD_RESET_REQUEST));
             return "redirect:/login";
         }
+        return null;
 
     }
 

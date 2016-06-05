@@ -1,4 +1,4 @@
-/*package com.learning.securedapp.web.controllers;
+package com.learning.securedapp.web.controllers;
 
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -18,8 +18,7 @@ public class ErrorControllerAdvice {
         String errorMessage = throwable != null ? throwable.getMessage() : "Unknown error";
         ModelAndView mav = new ModelAndView();
         mav.getModel().put("errorMessage", errorMessage);
-        mav.setViewName(viewPrefix + "error.html");
+        mav.setViewName(viewPrefix + "accessDenied");
         return mav;
     }
 }
-*/
