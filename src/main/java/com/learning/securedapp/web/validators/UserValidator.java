@@ -26,7 +26,6 @@ public class UserValidator implements Validator {
     public void validate(Object target, Errors errors) {
         log.debug("Validating {}", target);
         User user = (User) target;
-        validatePasswords(errors, user);
         validateEmail(errors, user);
     }
 
@@ -35,12 +34,6 @@ public class UserValidator implements Validator {
         User userByEmail = securityService.findUserByEmail(email);
         if(userByEmail != null){
             errors.rejectValue("email", "error.exists", new Object[]{email}, "Email "+email+" already in use");
-        }
-    }
-
-    private void validatePasswords(Errors errors, User user) {
-        if (!user.getPassword().equals(user.getPasswordRepeated())) {
-            errors.reject("password.no_match", "Passwords do not match");
         }
     }
 

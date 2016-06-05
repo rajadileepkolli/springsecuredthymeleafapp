@@ -11,7 +11,6 @@ import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +22,7 @@ import org.thymeleaf.context.Context;
 import com.learning.securedapp.exception.SecuredAppException;
 import com.learning.securedapp.service.email.EmailService;
 import com.learning.securedapp.web.services.SecurityService;
+import com.learning.securedapp.web.utils.KeyGeneratorUtil;
 import com.learning.securedapp.web.utils.WebUtils;
 
 import lombok.extern.slf4j.Slf4j;
@@ -36,8 +36,6 @@ public class UserAuthController extends SecuredAppBaseController {
     protected SecurityService securityService;
     @Autowired
     protected EmailService emailService;
-    @Autowired
-    protected PasswordEncoder passwordEncoder;
     @Autowired 
     private TemplateEngine templateEngine;
 
@@ -103,9 +101,8 @@ public class UserAuthController extends SecuredAppBaseController {
                 model.addAttribute("msg", getMessage(ERROR_PASSWORD_CONF_PASSWORD_MISMATCH));
                 return viewPrefix + "resetPwd";
             }
-            String encodedPwd = passwordEncoder.encode(password);
+            String encodedPwd = KeyGeneratorUtil.encrypt(password);
             securityService.updatePassword(email, token, encodedPwd);
-
             redirectAttributes.addFlashAttribute("msg", getMessage(INFO_PASSWORD_UPDATED_SUCCESS));
         } catch (SecuredAppException e) {
             log.error(e.getMessage());

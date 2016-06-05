@@ -9,7 +9,6 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,6 +23,7 @@ import com.learning.securedapp.domain.User;
 import com.learning.securedapp.exception.SecuredAppException;
 import com.learning.securedapp.security.SecurityUtil;
 import com.learning.securedapp.web.services.SecurityService;
+import com.learning.securedapp.web.utils.KeyGeneratorUtil;
 import com.learning.securedapp.web.validators.UserValidator;
 
 import lombok.extern.slf4j.Slf4j;
@@ -39,8 +39,6 @@ public class UserController extends SecuredAppBaseController {
     protected SecurityService securityService;
     @Autowired
     private UserValidator userValidator;
-    @Autowired
-    protected PasswordEncoder passwordEncoder;
 
     @Override
     protected String getHeaderTitle() {
@@ -75,15 +73,21 @@ public class UserController extends SecuredAppBaseController {
         if (result.hasErrors()) {
             return viewPrefix + "create_user";
         }
-        String password = user.getPassword();
-        String encodedPwd = passwordEncoder.encode(password);
-        user.setPassword(encodedPwd);
-        User persistedUser = securityService.createUser(user);
-        log.debug("Created new User with id : {} and name : {}", persistedUser.getId(), persistedUser.getUserName());
-        redirectAttributes.addFlashAttribute("msg", "User "+ persistedUser.getUserName() +"created successfully");
-        return "redirect:/users";
+        try {
+            String password = user.getPassword();
+            String encodedPwd = KeyGeneratorUtil.encrypt(password);
+            user.setPassword(encodedPwd);
+            User persistedUser = securityService.createUser(user);
+            log.debug("Created new User with id : {} and name : {}", persistedUser.getId(), persistedUser.getUserName());
+            redirectAttributes.addFlashAttribute("msg", "User :: { "+ persistedUser.getUserName() +" } created successfully");
+        } catch (SecuredAppException e) {
+            log.error("EncryptionError :{} ",e.getMessage(), e);
+            redirectAttributes.addFlashAttribute("msg", "Unable to create User");
+        }
+       return "redirect:/users";
     }
 
+    @Secured(value = { "ROLE_SUPER_ADMIN" })
     @GetMapping(value = "/users/{id}")
     public String editUserForm(@PathVariable String id, Model model) {
         User user = securityService.getUserById(id);
@@ -114,9 +118,8 @@ public class UserController extends SecuredAppBaseController {
             return viewPrefix + "edit_user";
         }
         User persistedUser = securityService.updateUser(user);
-        log.debug("Updated user with id : {} and name : {}", persistedUser.getId(),
-                persistedUser.getUserName());
-        redirectAttributes.addFlashAttribute("msg", "User updates successfully");
+        log.debug("Updated user with id : {} and name : {}", persistedUser.getId(), persistedUser.getUserName());
+        redirectAttributes.addFlashAttribute("msg", persistedUser.getUserName() +" updated successfully");
         return "redirect:/users";
     }
 

@@ -24,6 +24,18 @@ public class HomeController extends SecuredAppBaseController
 		return "home";
 	}
 	
+	@GetMapping(value={"/registration"})
+    public String registration()
+    {
+        return "registration";
+    }
+	
+	@GetMapping(value={"/successRegister"})
+    public String successRegister()
+    {
+        return "successRegister";
+    }
+	
 	@GetMapping("/login")
 	public String login()
 	{

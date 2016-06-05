@@ -10,7 +10,6 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.Data;
-import lombok.Getter;
 
 @Document
 @Data
@@ -24,13 +23,12 @@ public class User {
 
     private String password;
     
-    @Getter
-    private String passwordRepeated;
-
     private String passwordResetToken;
 
     @NotNull
     private String email;
+    
+    private boolean enabled = false;
 
     @DBRef(lazy= true)
     private List<Role> roleList;
