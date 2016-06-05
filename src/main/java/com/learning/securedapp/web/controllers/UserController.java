@@ -63,7 +63,7 @@ public class UserController extends SecuredAppBaseController {
     public String createUserForm(Model model) {
         User user = new User();
         model.addAttribute("user", user);
-        model.addAttribute("rolesList",securityService.getAllRoles());
+//        model.addAttribute("rolesList",securityService.getAllRoles());
 
         return viewPrefix + "create_user";
     }
@@ -78,15 +78,9 @@ public class UserController extends SecuredAppBaseController {
         String password = user.getPassword();
         String encodedPwd = passwordEncoder.encode(password);
         user.setPassword(encodedPwd);
-        try {
-            User persistedUser = securityService.createUser(user);
-            log.debug("Created new User with id : {} and name : {}", persistedUser.getId(),
-                    persistedUser.getUserName());
-        } catch (SecuredAppException e) {
-            log.error(e.getMessage());
-            redirectAttributes.addFlashAttribute("msg", e.getMessage());
-        }
-        redirectAttributes.addFlashAttribute("msg", "User created successfully");
+        User persistedUser = securityService.createUser(user);
+        log.debug("Created new User with id : {} and name : {}", persistedUser.getId(), persistedUser.getUserName());
+        redirectAttributes.addFlashAttribute("msg", "User "+ persistedUser.getUserName() +"created successfully");
         return "redirect:/users";
     }
 
@@ -94,7 +88,7 @@ public class UserController extends SecuredAppBaseController {
     public String editUserForm(@PathVariable String id, Model model) {
         User user = securityService.getUserById(id);
         Map<String, Role> assignedRoleMap = new HashMap<>();
-        List<Role> roles = user.getRoles();
+        List<Role> roles = user.getRoleList();
         for (Role role : roles) {
             assignedRoleMap.put(role.getId(), role);
         }
@@ -107,7 +101,7 @@ public class UserController extends SecuredAppBaseController {
                 userRoles.add(null);
             }
         }
-        user.setRoles(userRoles);
+        user.setRoleList(userRoles);
         model.addAttribute("user", user);
         // model.addAttribute("rolesList",allRoles);
         return viewPrefix + "edit_user";

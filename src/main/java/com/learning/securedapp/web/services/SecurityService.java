@@ -13,9 +13,11 @@ public interface SecurityService {
 
     List<User> getAllUsers();
 
-    User createUser(User user) throws SecuredAppException;
+    User createUser(User user);
 
     User getUserById(String id);
+    
+    User getUserByUserName(String userName);
 
     User updateUser(User user) throws SecuredAppException;
 
@@ -34,5 +36,11 @@ public interface SecurityService {
     Role getRoleById(String id);
 
     Role updateRole(Role role) throws SecuredAppException;
+
+    Permission createPermission(Permission permission);
+
+    Permission getPermissionByName(String permissionName);
+
+    Role getRoleByName(String roleName);
 
 }

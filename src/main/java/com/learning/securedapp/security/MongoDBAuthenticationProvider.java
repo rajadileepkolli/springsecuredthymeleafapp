@@ -11,6 +11,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.learning.securedapp.domain.Permission;
@@ -25,16 +26,17 @@ import lombok.AllArgsConstructor;
 public class MongoDBAuthenticationProvider extends AbstractUserDetailsAuthenticationProvider {
 
     private UserRepository userRepository;
+    private PasswordEncoder passwordEncoder;
     
     @Override
     protected void additionalAuthenticationChecks(UserDetails userDetails,
             UsernamePasswordAuthenticationToken authentication)
-                    throws AuthenticationException {/*
+                    throws AuthenticationException {
         if (!passwordEncoder.encode((String) authentication.getCredentials()).equals(userDetails.getPassword())) {
             throw new InternalAuthenticationServiceException(
                     "UserDetails didn't matched, which is an interface contract violation");
         }
-    */
+    
     }
 
     @Override
@@ -49,7 +51,7 @@ public class MongoDBAuthenticationProvider extends AbstractUserDetailsAuthentica
             if (dbUser != null) {
                 loadedUser = new org.springframework.security.core.userdetails.User(
                         dbUser.getUserName(), dbUser.getPassword(),
-                        convertToGrantedAuthority(dbUser.getRoles()));
+                        convertToGrantedAuthority(dbUser.getRoleList()));
             }
         } catch (Exception repositoryProblem) {
             throw new InternalAuthenticationServiceException(

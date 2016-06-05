@@ -8,7 +8,10 @@ import org.springframework.validation.Validator;
 import com.learning.securedapp.domain.Role;
 import com.learning.securedapp.web.services.SecurityService;
 
+import lombok.AllArgsConstructor;
+
 @Component
+@AllArgsConstructor // used for creating autowired bean for securityService
 public class RoleValidator implements Validator {
 
     private SecurityService securityService;
@@ -23,8 +26,8 @@ public class RoleValidator implements Validator {
         Role role = (Role) target;
         String name = role.getRoleName();
         if (StringUtils.isNotBlank(name)) {
-            Role RoleByName = securityService.getRoleById(name);
-            if (RoleByName != null) {
+            Role roleByName = securityService.getRoleByName(name);
+            if (roleByName != null) {
                 errors.rejectValue("roleName", "error.exists", new Object[] { name }, "Role " + name + " already exists");
             }
         } else {

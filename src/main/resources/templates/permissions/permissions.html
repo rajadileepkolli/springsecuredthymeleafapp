@@ -15,12 +15,19 @@
 		<div th:fragment="content">
 			<div class="row">
 				<div class="col-md-12">
-					<div class="box">
-						<div class="box-header">
-							<h3 class="box-title">List of Permissions</h3>
+					<div class="panel panel-warning">
+						<div class="panel-heading">
+							<h3 class="panel-title">List of Permissions</h3>
+							<div class="row"></div>
+							<div class="box">
+								<div class="input-group" style="width: 150px;">
+									<a class="btn btn-sm btn-default" th:href="@{/permissions/new}"><i
+										class="fa fa-plus-circle"></i> New Permission</a>
+								</div>
+							</div>
 						</div>
 						<div class="box-body table-responsive no-padding">
-							<table class="table table-hover">
+							<table class="table table-striped">
 								<tr>
 									<th style="width: 10px">#</th>
 									<th>Name</th>
@@ -33,6 +40,16 @@
 								</tr>
 
 							</table>
+						</div>
+						<div class="row">
+							<div class="col-xs-12">
+								<div th:if="${msg!=null}"
+									class="alert alert-warning alert-dismissable">
+									<p>
+										<i class="icon fa fa-warning"></i> <span th:text="${msg}"></span>
+									</p>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>

@@ -35,13 +35,9 @@ public class SecurityServiceImpl implements SecurityService{
     }
 
     @Override
-    public User createUser(User user) throws SecuredAppException {
-        User userByEmail = findUserByEmail(user.getEmail());
-        if(userByEmail != null){
-            throw new SecuredAppException("Email "+user.getEmail()+" already in use");
-        }
+    public User createUser(User user) {
         List<Role> persistedRoles = new ArrayList<>();
-        List<Role> roles = user.getRoles();
+        List<Role> roles = user.getRoleList();
         if(roles != null){
             for (Role role : roles) {
                 if(role.getId() != null)
@@ -50,7 +46,7 @@ public class SecurityServiceImpl implements SecurityService{
                 }
             }
         }
-        user.setRoles(persistedRoles);
+        user.setRoleList(persistedRoles);
         
         return userRepository.save(user);
     }
@@ -69,7 +65,7 @@ public class SecurityServiceImpl implements SecurityService{
         }
         
         List<Role> updatedRoles = new ArrayList<>();
-        List<Role> roles = user.getRoles();
+        List<Role> roles = user.getRoleList();
         if(roles != null){
             for (Role role : roles) {
                 if(role.getId() != null)
@@ -78,7 +74,7 @@ public class SecurityServiceImpl implements SecurityService{
                 }
             }
         }
-        persistedUser.setRoles(updatedRoles);
+        persistedUser.setRoleList(updatedRoles);
         return userRepository.save(persistedUser);
     }
 
@@ -154,7 +150,7 @@ public class SecurityServiceImpl implements SecurityService{
         return roleRepository.save(role);
     }
 
-    private Role getRoleByName(String roleName) {
+    public Role getRoleByName(String roleName) {
         return roleRepository.findByRoleName(roleName);
     }
 
@@ -182,6 +178,21 @@ public class SecurityServiceImpl implements SecurityService{
         }
         persistedRole.setPermissions(updatedPermissions);
         return roleRepository.save(persistedRole);
+    }
+
+    @Override
+    public Permission createPermission(Permission permission) {
+        return permissionRepository.save(permission);
+    }
+
+    @Override
+    public Permission getPermissionByName(String permissionName) {
+        return permissionRepository.findByName(permissionName);
+    }
+
+    @Override
+    public User getUserByUserName(String userName) {
+        return userRepository.findByUserName(userName);
     }
 
 }

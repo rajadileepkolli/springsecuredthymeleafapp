@@ -1,7 +1,6 @@
 package com.learning.securedapp.web.validators;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
@@ -15,8 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class UserValidator implements Validator {
 
-    @Autowired
-    protected MessageSource messageSource;
     @Autowired
     protected SecurityService securityService;
 

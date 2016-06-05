@@ -114,7 +114,7 @@ public class RoleController extends SecuredAppBaseController
         try {
             Role persistedRole = securityService.updateRole(role);
             log.debug("Updated role with id : {} and name : {}", persistedRole.getId(), persistedRole.getRoleName());
-            redirectAttributes.addFlashAttribute("msg", "Role updated successfully for"+ persistedRole.getRoleName());
+            redirectAttributes.addFlashAttribute("msg", "Role updated successfully for "+ persistedRole.getRoleName());
         } catch (SecuredAppException e) {
             model.addAttribute("errorMessage", e.getMessage());
             return "redirect:/error/accessDenied";

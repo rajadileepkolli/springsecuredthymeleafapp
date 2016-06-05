@@ -8,20 +8,10 @@
 <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
 </head>
 <body>
+
 	<div class="container">
-		<div th:fragment="header">
-			<nav class="navbar navbar-default">
-				<div class="container-fluid">
-					<div class="navbar-header">
-						<a class="navbar-brand" href="#" th:href="@{/home}">Home</a>
-						<ul class="nav navbar-nav">
-							<li><a href="#" th:href="@{/logout}">Logout</a></li>
-						</ul>
-					</div>
-				</div>
-			</nav>
-		</div>
-		<!-- ./header -->
+		<!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
+
 		<div th:fragment="content">
 
 			<div class="box box-warning">
@@ -30,8 +20,7 @@
 				</div>
 				<!-- /.box-header -->
 				<div class="box-body">
-					<form role="form" th:action="@{/users/{id}(id=${user.id})}"
-						th:object="${user}" method="post">
+					<form role="form" th:action="@{/users/{id}(id=${user.id})}"	th:object="${user}" method="post">
 						<p th:if="${#fields.hasErrors('global')}" th:errors="*{global}"
 							th:class="text-red">Incorrect data</p>
 						<!-- text input -->
@@ -49,9 +38,8 @@
 							<label>Roles</label>
 							<div>
 								<p th:each="role,rowStat : ${rolesList}">
-									<input type="checkbox"
-										th:field="*{roles[__${rowStat.index}__].id}"
-										th:value="${role.id}" /> <label th:text="${role.roleName}">Role</label>
+									<input type="checkbox" th:field="*{roleList[__${rowStat.index}__].id}"	th:value="${role.id}" /> 
+									<label th:text="${role.roleName}">Role</label>
 								</p>
 							</div>
 
