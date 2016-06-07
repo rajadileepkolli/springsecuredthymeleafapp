@@ -77,6 +77,7 @@ public class UserController extends SecuredAppBaseController {
             String password = user.getPassword();
             String encodedPwd = KeyGeneratorUtil.encrypt(password);
             user.setPassword(encodedPwd);
+            user.setEnabled(true);
             User persistedUser = securityService.createUser(user);
             log.debug("Created new User with id : {} and name : {}", persistedUser.getId(), persistedUser.getUserName());
             redirectAttributes.addFlashAttribute("msg", "User :: { "+ persistedUser.getUserName() +" } created successfully");

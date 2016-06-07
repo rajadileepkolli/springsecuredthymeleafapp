@@ -20,6 +20,7 @@ public class UserRepositoryTest extends ApplicationTests{
         user.setUserName("superadmin");
         user.setPassword(KeyGeneratorUtil.encrypt("superadmin"));
         user.setEmail("rajadileepkolli@gmail.com");
+        user.setEnabled(true);
         user.setRoleList(roleRepository.findAll());
         userRepository.save(user);
     }

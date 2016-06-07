@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head lang="en">
+<head>
 
 <title>Secured App RegistrationPage</title>
 
@@ -13,6 +13,7 @@ color:#000;
 <script th:src="@{/js/pwstrength.js}"></script>
 </head>
 <body>
+	<div id="page-wrapper">
     <div class="container">
         <div >
             <h1 th:text="#{label.form.title}">form</h1>
@@ -53,6 +54,7 @@ color:#000;
             <a th:href="@{/login.html}" th:text="#{label.form.loginLink}">login</a>
         </div>
     </div>
+   </div>
 
 <script th:inline="javascript">
 /*<![CDATA[*/

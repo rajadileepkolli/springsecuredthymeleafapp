@@ -1,5 +1,7 @@
 package com.learning.securedapp.configuration;
 
+import java.util.Locale;
+
 import org.apache.catalina.Context;
 import org.apache.catalina.connector.Connector;
 import org.apache.tomcat.util.descriptor.web.SecurityCollection;
@@ -9,7 +11,12 @@ import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.LocaleResolver;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.i18n.CookieLocaleResolver;
+import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 
 /**
  * 
@@ -26,6 +33,26 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
 
     @Value("${server.port:8443}")
     private int serverPort;
+   
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(localeChangeInterceptor());
+    }
+
+    @Bean
+    public HandlerInterceptor localeChangeInterceptor() {
+        LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
+        localeChangeInterceptor.setParamName("lang");
+        return localeChangeInterceptor;
+    }
+    
+    @Bean
+    public LocaleResolver localeResolver() {
+        CookieLocaleResolver cookieLocaleResolver = new CookieLocaleResolver();
+//        SessionLocaleResolver
+        cookieLocaleResolver.setDefaultLocale(Locale.ENGLISH);
+        return cookieLocaleResolver;
+    }
 
     @Bean
     public EmbeddedServletContainerFactory servletContainer() {
