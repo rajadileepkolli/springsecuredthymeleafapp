@@ -4,21 +4,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.learning.securedapp.domain.Product;
-import com.learning.securedapp.exception.SecuredAppException;
 import com.learning.securedapp.web.services.ProductService;
 
-import lombok.extern.slf4j.Slf4j;
-
 @Controller
-@Slf4j
 public class ProductController extends SecuredAppBaseController {
 
     private static final String viewPrefix = "products/";
@@ -32,9 +26,22 @@ public class ProductController extends SecuredAppBaseController {
     }
 
     @Secured(value = { "ROLE_ADMIN" })
-    @PostMapping(value = "/product")
-    public String saveProduct(Product product) {
+    @PostMapping(value = "product")
+    public String saveProduct(Product product, RedirectAttributes redirectAttributes) {
+        boolean updated = true;
+        if (product.getProductId().trim().length() == 0) {
+            product.setProductId(null);
+            updated = false;
+        }
         productService.saveProduct(product);
+        if (updated) {
+            redirectAttributes.addFlashAttribute("msg",
+                    product.getProductId() + " updated successfully");
+        } else {
+            redirectAttributes.addFlashAttribute("success",
+                    product.getProductId() + " Created successfully");
+        }
+
         return "redirect:/product/" + product.getProductId();
     }
 
@@ -59,18 +66,6 @@ public class ProductController extends SecuredAppBaseController {
         return viewPrefix + "create_product";
     }
     
-    @PostMapping(value = "/product/{id}")
-    public String updateProduct(@ModelAttribute("products") Product product, BindingResult result,
-            Model model, RedirectAttributes redirectAttributes) throws SecuredAppException{
-        if (result.hasErrors()) {
-            return viewPrefix + "productshow";
-        }
-        Product persistedProduct = productService.updateProduct(product);
-        log.debug("Updated Product with id : {} ", persistedProduct.getProductId());
-        redirectAttributes.addFlashAttribute("msg", persistedProduct.getProductId() +" updated successfully");
-        return "redirect:/products";
-    }
-
     // Delete
     @GetMapping("product/delete/{id}")
     public String delete(@PathVariable String id) {

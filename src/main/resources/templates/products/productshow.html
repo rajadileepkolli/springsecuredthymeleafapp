@@ -14,10 +14,10 @@
 			<div class="row">
 				<div class="col-md-12">
 					<div class="panel panel-primary">
-						<div class="panel-heading" th:if="${not #lists.isEmpty(products)}">
+						<div class="panel-heading" th:if="${not #lists.isEmpty(product)}">
 							<h1 class="panel-title">Product Details</h1>
 						</div>
-						<div>
+						<div class="panel-body">
 							<form class="form-horizontal" role="form">
 								<div class="form-group">
 									<label class="col-sm-2 control-label">Product Id:</label>
@@ -46,6 +46,36 @@
 									</div>
 								</div>
 							</form>
+						</div>
+						<div class="row">
+							<div class="col-xs-12">
+								<div th:if="${success!=null}"
+									class="alert alert-success alert-dismissable" role="alert">
+									<p>
+										<i class="icon fa fa-success"></i> <span th:text="${success}"></span>
+									</p>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12">
+								<div th:if="${msg!=null}"
+									class="alert alert-warning alert-dismissable" role="alert">
+									<p>
+										<i class="icon fa fa-warning"></i> <span th:text="${msg}"></span>
+									</p>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12">
+								<div th:if="${error!=null}"
+									class="alert alert-danger alert-dismissable" role="alert">
+									<p>
+										<i class="icon fa fa-danger"></i> <span th:text="${error}"></span>
+									</p>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
