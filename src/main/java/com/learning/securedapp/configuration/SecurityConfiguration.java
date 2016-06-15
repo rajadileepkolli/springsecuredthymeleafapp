@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.learning.securedapp.security.MongoDBAuthenticationProvider;
@@ -20,6 +21,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 
     @Autowired
     private MongoDBAuthenticationProvider authenticationProvider;
+    @Autowired
+    private AuthenticationFailureHandler authenticationFailureHandler;
     
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
@@ -29,7 +32,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/css/**", "/js/**", "/images/**", "/resources/**",
-                "/webjars/**","/mails/**");
+                "/webjars/**","/mails/**","/**/favicon.ico");
     }
     
     @Override
@@ -38,8 +41,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
         httpSecurity
             .csrf().disable()
             .authorizeRequests()
-                .antMatchers("/forgotPwd", "/resetPwd", "/user/registration*",
-                        "/successRegister*", "/registrationConfirm*","/registration*")
+                .antMatchers("/forgotPwd", "/resetPwd", "/successRegister*",
+                        "/registrationConfirm*", "/registration","/login?error=true")
                 .permitAll()
                 //.antMatchers(HttpMethod.POST,"/api","/api/**").hasRole("ROLE_ADMIN")
                 .anyRequest().fullyAuthenticated()
@@ -49,7 +52,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
                 .defaultSuccessUrl("/home")
                 .usernameParameter("username")
                 .passwordParameter("password")
-                .failureUrl("/login?error")
+                .failureUrl("/login?error=true")
+                .failureHandler(authenticationFailureHandler)
                 .permitAll()
                 .and()
             .sessionManagement()

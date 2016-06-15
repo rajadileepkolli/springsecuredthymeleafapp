@@ -18,13 +18,19 @@ public class HomeController extends SecuredAppBaseController
 		return "Home";
 	}
 	
-	@GetMapping(value={"/home"})
+	@GetMapping(value={"/home","/"})
 	public String home(Model model)
 	{
 		return "home";
 	}
 	
-	@GetMapping(value={"/registration"})
+	@GetMapping(value={"/invalidSession.html"})
+    public String invalidSession(Model model)
+    {
+        return "invalidSession";
+    }
+	
+	@GetMapping("/registration")
     public String registration()
     {
         return "registration";
@@ -36,8 +42,8 @@ public class HomeController extends SecuredAppBaseController
         return "successRegister";
     }
 	
-	@GetMapping("/login")
-	public String login()
+    @GetMapping(value = { "/login", "login?lang=en" })
+    public String login()
 	{
 	    return "login";
 	}

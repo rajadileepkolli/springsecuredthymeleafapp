@@ -11,7 +11,7 @@ import org.springframework.context.support.ResourceBundleMessageSource;
 @Configuration
 public class MessagesConfig {
     
-    private static final String MESSAGES_BASENAME = "Messages";
+    private static final String MESSAGES_BASENAME = "messages";
 
     /**
      * Message externalization/internationalization.
