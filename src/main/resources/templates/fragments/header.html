@@ -10,15 +10,19 @@
 	<div th:fragment="header">
 		<nav class="navbar navbar-default">
 			<div class="container-fluid">
+			<!-- Brand and toggle get grouped for better mobile display -->
 				<div class="navbar-header">
-					<button data-target=".bs-example-js-navbar-collapse" data-toggle="collapse" type="button" class="navbar-toggle collapsed">
-						<span class="sr-only">Toggle navigation</span> 
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-					</button>
-					<a href="#" class="navbar-brand" th:href="@{/home}"	th:text="#{label.home}">Home</a>
+						<button type="button" class="navbar-toggle collapsed"
+							data-toggle="collapse"
+							data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+							<span class="sr-only">Toggle navigation</span> <span
+								class="icon-bar"></span> <span class="icon-bar"></span> <span
+								class="icon-bar"></span>
+						</button>
+						<a href="#" class="navbar-brand" th:href="@{/home}"	th:text="#{label.home}">Home</a>
 				</div>
+				
+				<!-- Collect the nav links, forms, and other content for toggling -->
 				<div class="collapse navbar-collapse bs-example-js-navbar-collapse">
 					<ul class="nav navbar-nav">
 						<li th:class="${CURRENT_MENU == 'Products'}? 'active' : ''"	sec:authorize="hasRole('ROLE_MANAGE_PRODUCTS')">
@@ -47,7 +51,7 @@
 							</a>
 							<ul class="dropdown-menu dropdown-menu-right">
 								<li><a href="#" th:href="@{'/myAccount'}">Edit Profile</a></li>
-								<li class="divider" role="separator"></li>
+								<li role="separator" class="divider"></li>
 								<li><a href="/Logout" th:href="@{'/logout'}">Logout</a></li>
 							</ul>
 						</li>
