@@ -78,7 +78,7 @@ public class RoleController extends SecuredAppBaseController
             model.addAttribute("errorMessage", e.getMessage());
             return "error/accessDenied";
         }
-        redirectAttributes.addFlashAttribute("msg", "Role created successfully");
+        redirectAttributes.addFlashAttribute("success", "Role created successfully");
         return "redirect:/roles";
     }
     

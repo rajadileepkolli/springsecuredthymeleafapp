@@ -55,10 +55,30 @@
 						<!-- /.panel-body -->
 						<div class="row">
 							<div class="col-xs-12">
+								<div th:if="${success!=null}"
+									class="alert alert-success alert-dismissable" role="alert">
+									<p>
+										<i class="icon fa fa-success"></i> <span th:text="${success}"></span>
+									</p>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12">
 								<div th:if="${msg!=null}"
-									class="alert alert-warning alert-dismissable">
+									class="alert alert-warning alert-dismissable" role="alert">
 									<p>
 										<i class="icon fa fa-warning"></i> <span th:text="${msg}"></span>
+									</p>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12">
+								<div th:if="${error!=null}"
+									class="alert alert-danger alert-dismissable" role="alert">
+									<p>
+										<i class="icon fa fa-danger"></i> <span th:text="${error}"></span>
 									</p>
 								</div>
 							</div>

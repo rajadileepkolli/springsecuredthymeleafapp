@@ -14,13 +14,14 @@
 
 		<div th:fragment="content">
 
-			<div class="box box-warning">
-				<div class="box-header with-border">
-					<h3 class="box-title">Edit User</h3>
+			<div class="panel panel-primary">
+				<div class="panel-heading with-border">
+					<h3 class="panel-title">Edit User</h3>
 				</div>
-				<!-- /.box-header -->
-				<div class="box-body">
-					<form role="form" th:action="@{/users/{id}(id=${user.id})}"	th:object="${user}" method="post">
+				<!-- /.panel-header -->
+				<div class="panel-body">
+					<form role="form" th:action="@{/users/{id}(id=${user.id})}"
+						th:object="${user}" method="post">
 						<p th:if="${#fields.hasErrors('global')}" th:errors="*{global}"
 							th:class="text-red">Incorrect data</p>
 						<!-- text input -->
@@ -38,19 +39,22 @@
 							<label>Roles</label>
 							<div>
 								<p th:each="role,rowStat : ${rolesList}">
-									<input type="checkbox" th:field="*{roleList[__${rowStat.index}__].id}"	th:value="${role.id}" /> 
-									<label th:text="${role.roleName}">Role</label>
+									<input type="checkbox"
+										th:field="*{roleList[__${rowStat.index}__].id}"
+										th:value="${role.id}" /> <label th:text="${role.roleName}">Role</label>
 								</p>
 							</div>
 
 						</div>
-
-						<div class="box-footer">
-							<button type="submit" class="btn btn-primary">Submit</button>
+						<div class="div">
+							<div class="panel-footer">
+								<button type="submit" class="btn btn-primary">Submit</button>
+							</div>
 						</div>
+						<div class="clear"></div>
 					</form>
 				</div>
-				<!-- /.box-body -->
+				<!-- /.panel-body -->
 			</div>
 			<!-- /.box -->
 		</div>

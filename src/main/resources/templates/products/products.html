@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+
+<title>List of Products</title>
+
+<!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
+</head>
+<body>
+	<div class="container">
+		<!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
+		<div th:fragment="content">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="panel panel-primary">
+						<div class="panel-heading" th:if="${not #lists.isEmpty(products)}">
+							<h1 class="panel-title">Product List</h1>
+						</div>
+						<div class="panel-body table-responsive no-padding">
+							<table class="table table-striped">
+								<tr>
+									<th style="width: 10px">#</th>
+									<th>Description</th>
+									<th>Price</th>
+									<th>View</th>
+									<th>Edit</th>
+									<th>Delete</th>
+								</tr>
+								<tr th:each="product,iterStat : ${products}">
+									<td>
+										<a th:href="@{/product/{id}(id=${product.productId})}">
+											<span th:text="${iterStat.count}">1</span>
+										</a>
+									</td>
+									<td th:text="${product.description}">description</td>
+									<td th:text="${product.price}">price</td>
+									<td><a th:href="${'/product/' + product.productId}">View</a></td>
+									<td><a th:href="${'/product/edit/' + product.productId}">Edit</a></td>
+									<td><a th:href="${'/product/delete/' + product.productId}">Delete</a></td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

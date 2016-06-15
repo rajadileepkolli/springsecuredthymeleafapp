@@ -80,10 +80,10 @@ public class UserController extends SecuredAppBaseController {
             user.setEnabled(true);
             User persistedUser = securityService.createUser(user);
             log.debug("Created new User with id : {} and name : {}", persistedUser.getId(), persistedUser.getUserName());
-            redirectAttributes.addFlashAttribute("msg", "User :: { "+ persistedUser.getUserName() +" } created successfully");
+            redirectAttributes.addFlashAttribute("success", "User :: { "+ persistedUser.getUserName() +" } created successfully");
         } catch (SecuredAppException e) {
             log.error("EncryptionError :{} ",e.getMessage(), e);
-            redirectAttributes.addFlashAttribute("msg", "Unable to create User");
+            redirectAttributes.addFlashAttribute("error", "Unable to create User");
         }
        return "redirect:/users";
     }
