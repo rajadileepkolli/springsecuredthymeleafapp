@@ -1,7 +1,11 @@
 package com.learning.securedapp.web.controllers;
 
+import java.util.NoSuchElementException;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 import lombok.extern.slf4j.Slf4j;
@@ -20,5 +24,11 @@ public class ErrorControllerAdvice {
         mav.getModel().put("errorMessage", errorMessage);
         mav.setViewName(viewPrefix + "accessDenied");
         return mav;
+    }
+    
+    @ExceptionHandler(NoSuchElementException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public String handleNoSuchElementException(NoSuchElementException e) {
+        return e.getMessage();
     }
 }

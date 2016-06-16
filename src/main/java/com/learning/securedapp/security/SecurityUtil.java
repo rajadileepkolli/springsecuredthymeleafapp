@@ -1,9 +1,6 @@
 package com.learning.securedapp.security;
 
-public class SecurityUtil {
-    private SecurityUtil(){
-        
-    }
+public interface SecurityUtil {
     
     public static final String MANAGE_CATEGORIES = "ROLE_MANAGE_CATEGORIES";
     public static final String MANAGE_PRODUCTS = "ROLE_MANAGE_PRODUCTS";
@@ -15,6 +12,4 @@ public class SecurityUtil {
     public static final String MANAGE_PERMISSIONS = "ROLE_MANAGE_PERMISSIONS";
     public static final String MANAGE_SETTINGS = "ROLE_MANAGE_SETTINGS";
     
-    
-
 }
