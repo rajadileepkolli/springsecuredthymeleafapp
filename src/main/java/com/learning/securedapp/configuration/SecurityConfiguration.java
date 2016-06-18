@@ -2,18 +2,30 @@ package com.learning.securedapp.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.core.annotation.Order;
+import org.springframework.core.env.Environment;
+import org.springframework.security.access.expression.SecurityExpressionHandler;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
+import org.springframework.security.authentication.RememberMeAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.FilterInvocation;
+import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.RememberMeServices;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-import com.learning.securedapp.security.MongoDBAuthenticationProvider;
+import com.learning.securedapp.web.repositories.MongoPersistentTokenRepositoryImpl;
+import com.learning.securedapp.web.repositories.RememberMeTokenRepository;
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled= true)
@@ -21,15 +33,26 @@ import com.learning.securedapp.security.MongoDBAuthenticationProvider;
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 
     @Autowired
-    private MongoDBAuthenticationProvider authenticationProvider;
-    @Autowired
     private AuthenticationFailureHandler authenticationFailureHandler;
-    @Autowired
-    private AuthenticationSuccessHandler myAuthenticationSuccessHandler;
+    /*@Autowired
+    private AuthenticationSuccessHandler myAuthenticationSuccessHandler;*/
     
     @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationProvider(authenticationProvider);
+    Environment environment;
+
+    @Autowired
+    private RememberMeTokenRepository rememberMeTokenRepository;
+    
+    @Autowired
+    private UserDetailsService userDetailsService;
+    @Autowired
+    private RoleHierarchy roleHierarchy;
+    
+    @Override
+    public void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth
+                .userDetailsService(userDetailsService)
+                .passwordEncoder(new BCryptPasswordEncoder());
     }
     
     @Override
@@ -44,7 +67,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
         httpSecurity
             .csrf().disable()
             .authorizeRequests()
-                .antMatchers("/forgotPwd", "/resetPwd", "/successRegister*",
+                .expressionHandler(webExpressionHandler())
+                .antMatchers("/forgotPwd", "/resetPwd*", "/successRegister*",
                         "/registrationConfirm*", "/registration","/login?error=true")
                 .permitAll()
                 //.antMatchers(HttpMethod.POST,"/api","/api/**").hasRole("ROLE_ADMIN")
@@ -66,13 +90,44 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
                 .and()
             .logout()
                 .invalidateHttpSession(true)
-                .deleteCookies("JSESSIONID","remember-me","SESSION")
+                .deleteCookies("remember-me","SESSION")
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                //.logoutUrl("/logout")
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/login")
                 .permitAll()
                 .and()
             .rememberMe()
+                .rememberMeServices(rememberMeServices())
+                .tokenValiditySeconds(86400)
+                .rememberMeCookieName("remember-me")
                 .and()
             .exceptionHandling().accessDeniedPage("/403");
+    }
+    
+    private SecurityExpressionHandler<FilterInvocation> webExpressionHandler() {
+        DefaultWebSecurityExpressionHandler defaultWebSecurityExpressionHandler = new DefaultWebSecurityExpressionHandler();
+        defaultWebSecurityExpressionHandler.setRoleHierarchy(roleHierarchy);
+        return defaultWebSecurityExpressionHandler;
+    }
+    
+    @Bean
+    public RememberMeServices rememberMeServices() {
+        PersistentTokenBasedRememberMeServices rememberMeServices = new PersistentTokenBasedRememberMeServices(
+                environment.getProperty("spring.application.name","securedApp"), userDetailsService,
+                persistentTokenRepository());
+        rememberMeServices.setAlwaysRemember(true);
+        return rememberMeServices;
+    }
+
+    @Bean
+    public RememberMeAuthenticationProvider rememberMeAuthenticationProvider() {
+        RememberMeAuthenticationProvider rememberMeAuthenticationProvider = new RememberMeAuthenticationProvider(
+                environment.getProperty("spring.application.name","securedApp"));
+        return rememberMeAuthenticationProvider;
+    }
+
+    @Bean
+    public PersistentTokenRepository persistentTokenRepository() {
+        return new MongoPersistentTokenRepositoryImpl(rememberMeTokenRepository);
     }
 }

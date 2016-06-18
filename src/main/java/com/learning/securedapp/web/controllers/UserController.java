@@ -9,6 +9,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -23,7 +24,6 @@ import com.learning.securedapp.domain.User;
 import com.learning.securedapp.exception.SecuredAppException;
 import com.learning.securedapp.security.SecurityUtil;
 import com.learning.securedapp.web.services.SecurityService;
-import com.learning.securedapp.web.utils.KeyGeneratorUtil;
 import com.learning.securedapp.web.validators.UserValidator;
 
 import lombok.extern.slf4j.Slf4j;
@@ -73,18 +73,13 @@ public class UserController extends SecuredAppBaseController {
         if (result.hasErrors()) {
             return viewPrefix + "create_user";
         }
-        try {
-            String password = user.getPassword();
-            String encodedPwd = KeyGeneratorUtil.encrypt(password);
-            user.setPassword(encodedPwd);
-            user.setEnabled(true);
-            User persistedUser = securityService.createUser(user);
-            log.debug("Created new User with id : {} and name : {}", persistedUser.getId(), persistedUser.getUserName());
-            redirectAttributes.addFlashAttribute("success", "User :: { "+ persistedUser.getUserName() +" } created successfully");
-        } catch (SecuredAppException e) {
-            log.error("EncryptionError :{} ",e.getMessage(), e);
-            redirectAttributes.addFlashAttribute("error", "Unable to create User");
-        }
+        String password = user.getPassword();
+        String encodedPwd = new BCryptPasswordEncoder().encode(password);
+        user.setPassword(encodedPwd);
+        user.setEnabled(true);
+        User persistedUser = securityService.createUser(user);
+        log.debug("Created new User with id : {} and name : {}", persistedUser.getId(), persistedUser.getUserName());
+        redirectAttributes.addFlashAttribute("success", "User :: { "+ persistedUser.getUserName() +" } created successfully");
        return "redirect:/users";
     }
 
