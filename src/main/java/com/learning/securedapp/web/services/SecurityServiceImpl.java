@@ -195,4 +195,9 @@ public class SecurityServiceImpl implements SecurityService{
         return userRepository.findByUserName(userName);
     }
 
+    @Override
+    public void deleteUser(String id) {
+        userRepository.delete(id);
+    }
+
 }

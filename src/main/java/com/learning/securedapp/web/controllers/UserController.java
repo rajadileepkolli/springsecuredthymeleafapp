@@ -9,7 +9,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -39,6 +39,8 @@ public class UserController extends SecuredAppBaseController {
     protected SecurityService securityService;
     @Autowired
     private UserValidator userValidator;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     protected String getHeaderTitle() {
@@ -74,7 +76,7 @@ public class UserController extends SecuredAppBaseController {
             return viewPrefix + "create_user";
         }
         String password = user.getPassword();
-        String encodedPwd = new BCryptPasswordEncoder().encode(password);
+        String encodedPwd = passwordEncoder.encode(password);
         user.setPassword(encodedPwd);
         user.setEnabled(true);
         User persistedUser = securityService.createUser(user);
@@ -119,6 +121,13 @@ public class UserController extends SecuredAppBaseController {
         User persistedUser = securityService.updateUser(user);
         log.debug("Updated user with id : {} and name : {}", persistedUser.getId(), persistedUser.getUserName());
         redirectAttributes.addFlashAttribute("msg", persistedUser.getUserName() +" updated successfully");
+        return "redirect:/users";
+    }
+    
+ // Delete
+    @GetMapping("user/delete/{id}")
+    public String delete(@PathVariable String id) {
+        securityService.deleteUser(id);
         return "redirect:/users";
     }
 

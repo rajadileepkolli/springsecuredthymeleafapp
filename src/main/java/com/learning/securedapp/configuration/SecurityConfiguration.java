@@ -16,6 +16,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -28,93 +29,31 @@ import com.learning.securedapp.web.repositories.MongoPersistentTokenRepositoryIm
 import com.learning.securedapp.web.repositories.RememberMeTokenRepository;
 
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(securedEnabled= true)
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
-public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
+public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private AuthenticationFailureHandler authenticationFailureHandler;
-    /*@Autowired
-    private AuthenticationSuccessHandler myAuthenticationSuccessHandler;*/
-    
     @Autowired
     Environment environment;
-
-    @Autowired
-    private RememberMeTokenRepository rememberMeTokenRepository;
-    
     @Autowired
     private UserDetailsService userDetailsService;
     @Autowired
     private RoleHierarchy roleHierarchy;
-    
-    @Override
-    public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth
-                .userDetailsService(userDetailsService)
-                .passwordEncoder(new BCryptPasswordEncoder());
+    @Autowired
+    private RememberMeTokenRepository rememberMeTokenRepository;
+    @Autowired
+    private AuthenticationFailureHandler authenticationFailureHandler;
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder(10);
     }
-    
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/css/**", "/js/**", "/images/**", "/resources/**",
-                "/webjars/**","/mails/**","/**/favicon.ico");
-    }
-    
-    @Override
-    protected void configure(HttpSecurity httpSecurity) throws Exception {
-        
-        httpSecurity
-            .csrf().disable()
-            .authorizeRequests()
-                .expressionHandler(webExpressionHandler())
-                .antMatchers("/forgotPwd", "/resetPwd*", "/successRegister*",
-                        "/registrationConfirm*", "/registration","/login?error=true")
-                .permitAll()
-                //.antMatchers(HttpMethod.POST,"/api","/api/**").hasRole("ROLE_ADMIN")
-                .anyRequest().fullyAuthenticated()
-                .and()
-            .formLogin()
-                .loginPage("/login")
-                .defaultSuccessUrl("/home")
-                .usernameParameter("username")
-                .passwordParameter("password")
-                .failureUrl("/login?error=true")
-//                .successHandler(myAuthenticationSuccessHandler)
-                .failureHandler(authenticationFailureHandler)
-                .permitAll()
-                .and()
-            .sessionManagement()
-                .invalidSessionUrl("/invalidSession.html")
-                .sessionFixation().none()
-                .and()
-            .logout()
-                .invalidateHttpSession(true)
-                .deleteCookies("remember-me","SESSION")
-                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/login")
-                .permitAll()
-                .and()
-            .rememberMe()
-                .rememberMeServices(rememberMeServices())
-                .tokenValiditySeconds(86400)
-                .rememberMeCookieName("remember-me")
-                .and()
-            .exceptionHandling().accessDeniedPage("/403");
-    }
-    
-    private SecurityExpressionHandler<FilterInvocation> webExpressionHandler() {
-        DefaultWebSecurityExpressionHandler defaultWebSecurityExpressionHandler = new DefaultWebSecurityExpressionHandler();
-        defaultWebSecurityExpressionHandler.setRoleHierarchy(roleHierarchy);
-        return defaultWebSecurityExpressionHandler;
-    }
-    
+
     @Bean
     public RememberMeServices rememberMeServices() {
         PersistentTokenBasedRememberMeServices rememberMeServices = new PersistentTokenBasedRememberMeServices(
-                environment.getProperty("spring.application.name","securedApp"), userDetailsService,
-                persistentTokenRepository());
+                environment.getProperty("spring.application.name", "securedApp"),
+                userDetailsService, persistentTokenRepository());
         rememberMeServices.setAlwaysRemember(true);
         return rememberMeServices;
     }
@@ -122,7 +61,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
     @Bean
     public RememberMeAuthenticationProvider rememberMeAuthenticationProvider() {
         RememberMeAuthenticationProvider rememberMeAuthenticationProvider = new RememberMeAuthenticationProvider(
-                environment.getProperty("spring.application.name","securedApp"));
+                environment.getProperty("spring.application.name", "securedApp"));
         return rememberMeAuthenticationProvider;
     }
 
@@ -130,4 +69,46 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
     public PersistentTokenRepository persistentTokenRepository() {
         return new MongoPersistentTokenRepositoryImpl(rememberMeTokenRepository);
     }
+
+    @Override
+    public void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+    }
+
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/css/**", "/js/**", "/images/**", "/resources/**",
+                "/webjars/**", "/mails/**", "/**/favicon.ico");
+    }
+
+    @Override
+    protected void configure(HttpSecurity httpSecurity) throws Exception {
+
+        httpSecurity.csrf().disable().authorizeRequests()
+                .expressionHandler(webExpressionHandler())
+                .antMatchers("/forgotPwd", "/resetPwd*", "/successRegister*",
+                        "/registrationConfirm*", "/registration", "/login?error=true")
+                .permitAll()
+                // .antMatchers(HttpMethod.POST,"/api","/api/**").hasRole("ROLE_ADMIN")
+                .anyRequest().fullyAuthenticated().and().formLogin().loginPage("/login")
+                .defaultSuccessUrl("/home").usernameParameter("username")
+                .passwordParameter("password").failureUrl("/login?error=true")
+                // .successHandler(myAuthenticationSuccessHandler)
+                .failureHandler(authenticationFailureHandler).permitAll().and()
+                .sessionManagement().invalidSessionUrl("/invalidSession.html")
+                .sessionFixation().none().and().logout().invalidateHttpSession(true)
+                .deleteCookies("remember-me", "SESSION")
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                .logoutUrl("/logout").logoutSuccessUrl("/login").permitAll().and()
+                .rememberMe().rememberMeServices(rememberMeServices())
+                .tokenValiditySeconds(86400).rememberMeCookieName("remember-me").and()
+                .exceptionHandling().accessDeniedPage("/403");
+    }
+
+    private SecurityExpressionHandler<FilterInvocation> webExpressionHandler() {
+        DefaultWebSecurityExpressionHandler defaultWebSecurityExpressionHandler = new DefaultWebSecurityExpressionHandler();
+        defaultWebSecurityExpressionHandler.setRoleHierarchy(roleHierarchy);
+        return defaultWebSecurityExpressionHandler;
+    }
+
 }

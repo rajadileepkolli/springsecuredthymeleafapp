@@ -38,27 +38,36 @@
 
 									<div class="row">
 										<!-- <div class="form-group col-xs-offset-8 col-xs-4"> -->
-											<button type="submit"
-												class="btn btn-primary btn-block btn-flat"
-												th:text="#{label.submit}">Submit</button>
+										<button type="submit"
+											class="btn btn-primary btn-block btn-flat"
+											th:text="#{label.submit}">Submit</button>
 										<!-- </div> -->
 									</div>
 								</fieldset>
-
-								<div class="row">
-									<div class="col-xs-12">
-										<div th:if="${msg!=null}"
-											class="alert alert-danger alert-dismissable">
-											<p>
-												<i class="icon fa fa-ban"></i> <span th:text="${msg}"></span>
-											</p>
-										</div>
-									</div>
-								</div>
 							</form>
 							<div class="row">
 								<div class="col-xs-12">
 									<a href="login" th:href="@{/login}" th:text="#{label.login}">Login</a><br />
+								</div>
+							</div>
+							<div class="row wrapper">
+								<div class="col-xs-12">
+									<div th:if="${msg!=null}"
+										class="alert alert-danger alert-dismissable">
+										<p>
+											<i class="icon fa fa-ban"></i> <span th:text="${msg}"></span>
+										</p>
+									</div>
+								</div>
+							</div>
+							<div class="row wrapper">
+								<div class="col-xs-12">
+									<div th:if="${success!=null}"
+										class="alert alert-success alert-dismissable">
+										<p>
+											<i class="icon fa fa-ban"></i> <span th:text="${success}"></span>
+										</p>
+									</div>
 								</div>
 							</div>
 						</div>

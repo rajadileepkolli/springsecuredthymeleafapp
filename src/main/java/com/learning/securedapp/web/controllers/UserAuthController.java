@@ -11,7 +11,7 @@ import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,6 +38,8 @@ public class UserAuthController extends SecuredAppBaseController {
     protected EmailService emailService;
     @Autowired 
     private TemplateEngine templateEngine;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     protected String getHeaderTitle() {
@@ -58,7 +60,7 @@ public class UserAuthController extends SecuredAppBaseController {
                     + "/resetPwd?email=" + email + "&token=" + token;
             log.debug(resetPwdURL);
             this.sendForgotPasswordEmail(email, resetPwdURL);
-            redirectAttributes.addFlashAttribute("msg", getMessage(INFO_PASSWORD_RESET_LINK_SENT));
+            redirectAttributes.addFlashAttribute("success", getMessage(INFO_PASSWORD_RESET_LINK_SENT));
         } catch (SecuredAppException e) {
             log.error(e.getMessage());
             redirectAttributes.addFlashAttribute("msg", e.getMessage());
@@ -101,9 +103,9 @@ public class UserAuthController extends SecuredAppBaseController {
                 model.addAttribute("msg", getMessage(ERROR_PASSWORD_CONF_PASSWORD_MISMATCH));
                 return viewPrefix + "resetPwd";
             }
-            String encodedPwd = new BCryptPasswordEncoder().encode(password);
+            String encodedPwd = passwordEncoder.encode(password);
             securityService.updatePassword(email, token, encodedPwd);
-            redirectAttributes.addFlashAttribute("msg", getMessage(INFO_PASSWORD_UPDATED_SUCCESS));
+            redirectAttributes.addFlashAttribute("success", getMessage(INFO_PASSWORD_UPDATED_SUCCESS));
         } catch (SecuredAppException e) {
             log.error(e.getMessage());
             redirectAttributes.addFlashAttribute("msg", getMessage(ERROR_INVALID_PASSWORD_RESET_REQUEST));

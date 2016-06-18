@@ -22,7 +22,9 @@
 						</div>
 						<!-- /.panel-header -->
 						<div class="panel-body table-responsive no-padding">
-							<div class="row">
+							<div class="row"
+								th:class="${CURRENT_MENU == 'New User'}? 'active' : ''"
+								sec:authorize="hasRole('ROLE_SUPER_ADMIN')">
 								<a href="#" class="btn btn-block btn-success btn-lg"
 									type="button" th:href="@{/users/new}">New User</a>
 							</div>
@@ -32,16 +34,20 @@
 									<th>Name</th>
 									<th>Email</th>
 									<th>Edit</th>
+									<th>Delete</th>
 								</tr>
 								<tr th:each="user,iterStat : ${users}">
-									<td><a th:href="@{/users/{id}(id=${user.id})}"> <span
-											th:text="${iterStat.count}">1</span>
-									</a></td>
+									<td>
+										<a th:href="@{/users/{id}(id=${user.id})}"> 
+											<span th:text="${iterStat.count}">1</span>
+										</a>
+									</td>
 									<td th:text="${user.userName}">Name</td>
 									<td th:text="${user.email}">Email</td>
 									<td><a th:href="@{/users/{id}(id=${user.id})}"
 										class="btn btn-sm btn-default"> <i class="fa fa-edit"></i>Edit
 									</a></td>
+									<td><a th:href="@{/user/delete/{id} (id=${user.id})}">Delete</a></td>
 								</tr>
 
 							</table>

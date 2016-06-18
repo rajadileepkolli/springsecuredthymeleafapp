@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
+import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 import com.learning.securedapp.domain.User;
@@ -26,6 +27,8 @@ public class UserValidator implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
         log.debug("Validating {}", target);
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "message.password", "Password is required.");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "userName", "message.username", "UserName is required.");
         User user = (User) target;
         validateEmail(errors, user);
     }

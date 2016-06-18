@@ -33,7 +33,7 @@
 							<a href="#"	th:href="@{/product/new}">
 								<i class="fa fa-users"></i> Create Product</a>
 						</li>
-						<li th:class="${CURRENT_MENU == 'Users'}? 'active' : ''" sec:authorize="hasRole('ROLE_MANAGE_USERS')">
+						<li th:class="${CURRENT_MENU == 'Users'}? 'active' : ''" sec:authorize="hasRole('ROLE_ADMIN')">
 							<a href="#"	th:href="@{'/users'}"><i class="fa fa-users"></i> Users</a>
 						</li>
 						<li th:class="${CURRENT_MENU == 'Roles'}? 'active' : ''" sec:authorize="hasRole('ROLE_MANAGE_ROLES')">

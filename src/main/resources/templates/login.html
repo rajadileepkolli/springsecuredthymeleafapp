@@ -46,12 +46,22 @@
 											out.</span>
 									</p>
 								</div>
-								<div class="row">
+								<div class="row wrapper">
 									<div class="col-xs-12">
 										<div th:if="${msg!=null}"
 											class="alert alert-warning alert-dismissable">
 											<p>
 												<i class="icon fa fa-warning"></i> <span th:text="${msg}"></span>
+											</p>
+										</div>
+									</div>
+								</div>
+								<div class="row wrapper">
+									<div class="col-xs-12">
+										<div th:if="${success!=null}"
+											class="alert alert-success alert-dismissable">
+											<p>
+												<i class="icon fa fa-warning"></i> <span th:text="${success}"></span>
 											</p>
 										</div>
 									</div>
