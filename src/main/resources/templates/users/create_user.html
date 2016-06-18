@@ -37,13 +37,7 @@
 							<input type="password" class="form-control" name="password" th:field="*{password}" placeholder="Enter password" />
 							<p th:if="${#fields.hasErrors('password')}"	th:errors="*{password}" th:class="text-red">Incorrect data</p>
 						</div>
-
-						<!-- <div class="form-group"	th:classappend="${#fields.hasErrors('passwordRepeated')}? 'has-error'">
-							<label>ReEnter Password</label>
-							<input type="password" class="form-control" name="passwordRepeated"	th:field="*{passwordRepeated}" placeholder="ReEnter password" />
-							<p th:if="${#fields.hasErrors('passwordRepeated')}"	th:errors="*{passwordRepeated}" th:class="text-red">Incorrect data</p>
-						</div> -->
-						
+			
 						<div class="form-group"	th:classappend="${#fields.hasErrors('email')}? 'has-error'">
 							<label>Email</label>
 							<input type="text" class="form-control"	name="email" th:field="*{email}" placeholder="Enter User Email" />
@@ -60,7 +54,7 @@
 							</div>
 						</div>
 
-						<div class="box-footer">
+						<div class="panel-footer">
 							<button type="submit" class="btn btn-primary">Submit</button>
 						</div>
 					</form>

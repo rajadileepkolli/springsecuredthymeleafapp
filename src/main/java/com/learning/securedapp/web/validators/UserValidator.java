@@ -1,5 +1,6 @@
 package com.learning.securedapp.web.validators;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -31,10 +32,15 @@ public class UserValidator implements Validator {
 
     private void validateEmail(Errors errors, User user) {
         String email = user.getEmail();
-        User userByEmail = securityService.findUserByEmail(email);
-        if(userByEmail != null){
-            errors.rejectValue("email", "error.exists", new Object[]{email}, "Email "+email+" already in use");
+        if (StringUtils.isNotBlank(email)) {
+            User userByEmail = securityService.findUserByEmail(email);
+            if(userByEmail != null){
+                errors.rejectValue("email", "error.exists", new Object[]{email}, "Email "+email+" already in use");
+            }
+        } else {
+            errors.rejectValue("email", "error.emailnull", new Object[]{email}, "Email cannot be null");
         }
+        
     }
 
 }

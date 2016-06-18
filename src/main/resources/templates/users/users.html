@@ -17,15 +17,16 @@
 				<div class="col-md-12">
 					<div class="panel panel-primary">
 						<div class="panel-heading">
-							<h1 class="panel-title" style="font-size:18px ">List of Users</h1>
+							<h1 class="panel-title" style="font-size: 18px">List of
+								Users</h1>
 						</div>
 						<!-- /.panel-header -->
 						<div class="panel-body table-responsive no-padding">
 							<div class="row">
-									<a class="btn btn-default active" role="button" th:href="@{/users/new}"><i
-										class="fa fa-plus-circle"></i> New User</a>
+								<a href="#" class="btn btn-block btn-success btn-lg"
+									type="button" th:href="@{/users/new}">New User</a>
 							</div>
-							<table class="table table-striped">
+							<table class="table table-striped table-bordered table-hover">
 								<tr>
 									<th style="width: 10px">#</th>
 									<th>Name</th>
@@ -33,18 +34,14 @@
 									<th>Edit</th>
 								</tr>
 								<tr th:each="user,iterStat : ${users}">
-									<td>
-										<a th:href="@{/users/{id}(id=${user.id})}">
-											<span th:text="${iterStat.count}">1</span>
-										</a>
-									</td>
+									<td><a th:href="@{/users/{id}(id=${user.id})}"> <span
+											th:text="${iterStat.count}">1</span>
+									</a></td>
 									<td th:text="${user.userName}">Name</td>
 									<td th:text="${user.email}">Email</td>
-									<td>
-										<a th:href="@{/users/{id}(id=${user.id})}" class="btn btn-sm btn-default">
-											<i class="fa fa-edit"></i>Edit
-										</a>
-									</td>
+									<td><a th:href="@{/users/{id}(id=${user.id})}"
+										class="btn btn-sm btn-default"> <i class="fa fa-edit"></i>Edit
+									</a></td>
 								</tr>
 
 							</table>

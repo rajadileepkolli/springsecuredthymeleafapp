@@ -88,10 +88,13 @@ public class UserController extends SecuredAppBaseController {
        return "redirect:/users";
     }
 
-    @Secured(value = { "ROLE_SUPER_ADMIN" })
+    @Secured(value = { "ROLE_USER" })
     @GetMapping(value = "/users/{id}")
-    public String editUserForm(@PathVariable String id, Model model) {
+    public String editUserForm(@PathVariable String id, Model model) throws SecuredAppException {
         User user = securityService.getUserById(id);
+        if (null == user) {
+            throw new SecuredAppException("409", "User Doesn't Exists");
+        }
         Map<String, Role> assignedRoleMap = new HashMap<>();
         List<Role> roles = user.getRoleList();
         for (Role role : roles) {
@@ -113,7 +116,7 @@ public class UserController extends SecuredAppBaseController {
     }
 
     @PostMapping(value = "/users/{id}")
-    public String updateUser(@ModelAttribute("user") User user, BindingResult result,
+    public String updateUser(@Valid @ModelAttribute("user") User user, BindingResult result,
             Model model, RedirectAttributes redirectAttributes) throws SecuredAppException {
         if (result.hasErrors()) {
             return viewPrefix + "edit_user";

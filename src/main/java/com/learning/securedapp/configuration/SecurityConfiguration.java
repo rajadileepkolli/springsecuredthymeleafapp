@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.learning.securedapp.security.MongoDBAuthenticationProvider;
@@ -23,6 +24,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
     private MongoDBAuthenticationProvider authenticationProvider;
     @Autowired
     private AuthenticationFailureHandler authenticationFailureHandler;
+    @Autowired
+    private AuthenticationSuccessHandler myAuthenticationSuccessHandler;
     
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
@@ -53,6 +56,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
                 .usernameParameter("username")
                 .passwordParameter("password")
                 .failureUrl("/login?error=true")
+//                .successHandler(myAuthenticationSuccessHandler)
                 .failureHandler(authenticationFailureHandler)
                 .permitAll()
                 .and()
@@ -62,7 +66,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
                 .and()
             .logout()
                 .invalidateHttpSession(true)
-                .deleteCookies("JSESSIONID")
+                .deleteCookies("JSESSIONID","remember-me","SESSION")
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 //.logoutUrl("/logout")
                 .permitAll()

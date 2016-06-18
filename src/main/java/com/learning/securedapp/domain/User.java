@@ -3,6 +3,7 @@ package com.learning.securedapp.domain;
 import java.util.List;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -19,15 +20,17 @@ public class User {
     private String id;
 
     @Indexed
+    @Size(min=2, max=30)
     private String userName;
 
+    @Size(min=2, max=30)
     private String password;
     
-    private String passwordResetToken;
-
     @NotNull
     private String email;
     
+    private String passwordResetToken;
+
     private boolean enabled = false;
 
     @DBRef(lazy= true)
