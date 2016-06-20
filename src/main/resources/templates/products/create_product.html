@@ -2,42 +2,72 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head lang="en">
 
-    <title>Spring Framework Guru</title>
+<title>Spring Framework Guru</title>
 
-    <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
+<!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
 </head>
 <body>
-<div class="container">
-    <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
-
-    <h2>Create New Product</h2>
-    <div>
-        <form class="form-horizontal" th:object="${product}" th:action="@{/product}" method="post">
-        	<input type="hidden" th:field="*{productId}"/>
-            <div class="form-group">
-                <label class="col-sm-2 control-label">Description:</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" th:field="*{description}"/>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-2 control-label">Price:</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" th:field="*{price}"/>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-2 control-label">Image Url:</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" th:field="*{imageUrl}"/>
-                </div>
-            </div>
-            <div class="row">
-                <button type="submit" class="btn btn-default">Submit</button>
-            </div>
-        </form>
-    </div>
-</div>
+	<div class="container">
+		<!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
+		<div th:fragment="content">
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h1 class="panel-title">Create New Role</h1>
+				</div>
+				<!-- /.panel-header -->
+				<div class="panel-body">
+					<form role="form" th:object="${product}" th:action="@{/product}" method="post">
+						<fieldset>
+							<input type="hidden" th:field="*{productId}" />
+							
+							<!-- text input -->
+							<div class="form-group"	th:classappend="${#fields.hasErrors('description')}? 'has-error'">
+								<label class="col-sm-2 control-label">Description:</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" name="description" th:field="*{description}" placeholder="Enter Description"/>
+									<p th:if="${#fields.hasErrors('description')}"
+										th:errors="*{description}" th:class="text-red">Incorrect data</p>
+								</div>
+							</div>
+							
+							<br></br>
+							<br></br>
+							
+							<!-- text input -->
+							<div class="form-group" th:classappend="${#fields.hasErrors('price')}? 'has-error'">
+								<label class="col-sm-2 control-label">Price:</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" th:field="*{price}" placeholder="price" />
+									<p th:if="${#fields.hasErrors('price')}"
+										th:errors="*{price}" th:class="text-red">Incorrect data</p>
+								</div>
+							</div>
+							
+							<br></br>
+							<br></br>
+							
+							<div class="form-group">
+								<label class="col-sm-2 control-label">Image Url:</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" th:field="*{imageUrl}" />
+								</div>
+							</div>
+							
+							<br></br>
+							<br></br>
+							
+						</fieldset>
+						<div class="row wrapper">
+							<div class="panel-footer">
+								<button type="submit" class="btn btn-primary">Submit</button>
+							</div>
+						</div>
+						<div class="clear"></div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
 
 </body>
 </html>

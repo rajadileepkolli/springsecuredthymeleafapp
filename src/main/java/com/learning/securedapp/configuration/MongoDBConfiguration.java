@@ -21,6 +21,7 @@ import com.mongodb.MongoClient;
 import com.mongodb.WriteConcern;
 
 @Configuration
+//@EnableAutoConfiguration(exclude = { EmbeddedMongoAutoConfiguration.class })
 public class MongoDBConfiguration extends AbstractMongoConfiguration {
 
     @Override
@@ -28,7 +29,7 @@ public class MongoDBConfiguration extends AbstractMongoConfiguration {
         return "test";
     }
 
-    @Override
+    @Bean(destroyMethod = "close")
     public Mongo mongo() throws Exception {
         return mongoClient();
     }

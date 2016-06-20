@@ -55,7 +55,7 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
         if (permissionRepository.findAll().size() <= 0) {
             List<String> permissionList = new ArrayList<String>();
             permissionList.addAll(Arrays.asList("MANAGE_USERS", "MANAGE_ROLES",
-                    "MANAGE_PERMISSIONS", "MANAGE_SETTINGS"));
+                    "MANAGE_PERMISSIONS", "MANAGE_SETTINGS", "MANAGE_PRODUCTS"));
             for (String string : permissionList) {
                 Permission permission = new Permission();
                 permission.setName(string);
@@ -66,7 +66,7 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
         if (roleRepository.findAll().size() <= 0) {
             List<String> roleList = new ArrayList<String>();
             roleList.addAll(
-                    Arrays.asList("", "ROLE_ADMIN", "ROLE_CMS_ADMIN", "ROLE_USER"));
+                    Arrays.asList("ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_CMS_ADMIN", "ROLE_USER"));
             for (String string : roleList) {
                 Role role = new Role();
                 role.setRoleName(string);
@@ -81,7 +81,7 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
         if (userRepository.findAll().size() <= 0) {
             User user = new User();
             user.setUserName("superadmin");
-            user.setPassword(new BCryptPasswordEncoder().encode("superadmin"));
+            user.setPassword(new BCryptPasswordEncoder(10).encode("superadmin"));
             user.setEmail("rajadileepkolli@gmail.com");
             user.setEnabled(true);
             user.setRoleList(roleRepository.findAll());

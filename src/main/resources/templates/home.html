@@ -14,10 +14,8 @@
 	<div class="container">
 		<!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
 		<div th:fragment="content">
-			<p class="lead">
-			<h1>
-				Welcome <small sec:authentication="name">! User!</small>
-			</h1>
+			<p class="lead text-center text-uppercase">
+				Welcome <em> <strong sec:authentication="name"> User!</strong> !</em>
 			</p>
 		</div>
 	</div>

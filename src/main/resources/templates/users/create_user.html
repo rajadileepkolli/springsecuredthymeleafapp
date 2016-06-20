@@ -22,6 +22,7 @@
 				<div class="panel-body">
 				<!-- <div class="box-body"> -->
 					<form role="form" th:action="@{/users}" th:object="${user}"	method="post">
+						<fieldset>
 						<p th:if="${#fields.hasErrors('global')}" th:errors="*{global}"
 							th:class="text-red">Incorrect data</p>
 							
@@ -53,7 +54,7 @@
 								</p>
 							</div>
 						</div>
-
+						</fieldset>
 						<div class="panel-footer">
 							<button type="submit" class="btn btn-primary">Submit</button>
 						</div>
