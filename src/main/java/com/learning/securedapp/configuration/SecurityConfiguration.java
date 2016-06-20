@@ -70,9 +70,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return new MongoPersistentTokenRepositoryImpl(rememberMeTokenRepository);
     }
 
-    @Override
-    public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+    @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        auth
+            .userDetailsService(userDetailsService)
+                .passwordEncoder(passwordEncoder());
     }
 
     @Override
@@ -84,25 +86,45 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
 
-        httpSecurity.csrf().disable().authorizeRequests()
+        httpSecurity
+            .csrf()
+                .disable()
+            .authorizeRequests()
                 .expressionHandler(webExpressionHandler())
                 .antMatchers("/forgotPwd", "/resetPwd*", "/successRegister*",
                         "/registrationConfirm*", "/registration", "/login?error=true")
                 .permitAll()
                 // .antMatchers(HttpMethod.POST,"/api","/api/**").hasRole("ROLE_ADMIN")
-                .anyRequest().fullyAuthenticated().and().formLogin().loginPage("/login")
-                .defaultSuccessUrl("/home").usernameParameter("username")
-                .passwordParameter("password").failureUrl("/login?error=true")
+                .anyRequest().fullyAuthenticated()
+                .and()
+            .formLogin()
+                .loginPage("/login")
+                .defaultSuccessUrl("/home")
+                .usernameParameter("username")
+                .passwordParameter("password")
+                .failureUrl("/login?error=true")
                 // .successHandler(myAuthenticationSuccessHandler)
-                .failureHandler(authenticationFailureHandler).permitAll().and()
-                .sessionManagement().invalidSessionUrl("/invalidSession.html")
-                .sessionFixation().none().and().logout().invalidateHttpSession(true)
+                .failureHandler(authenticationFailureHandler)
+                .permitAll()
+                .and()
+            .sessionManagement()
+                .invalidSessionUrl("/invalidSession.html")
+                .sessionFixation().none()
+                .and()
+            .logout()
+                .invalidateHttpSession(true)
                 .deleteCookies("remember-me", "SESSION")
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .logoutUrl("/logout").logoutSuccessUrl("/login").permitAll().and()
-                .rememberMe().rememberMeServices(rememberMeServices())
-                .tokenValiditySeconds(86400).rememberMeCookieName("remember-me").and()
-                .exceptionHandling().accessDeniedPage("/403");
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/login")
+                .permitAll()
+                .and()
+            .rememberMe()
+                .rememberMeServices(rememberMeServices())
+                .tokenValiditySeconds(86400)
+                .rememberMeCookieName("remember-me")
+                .and()
+            .exceptionHandling().accessDeniedPage("/403");
     }
 
     private SecurityExpressionHandler<FilterInvocation> webExpressionHandler() {
