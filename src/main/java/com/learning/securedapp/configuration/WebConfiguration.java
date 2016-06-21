@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
@@ -39,6 +40,15 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
         super.addInterceptors(registry);
         registry.addInterceptor(localeChangeInterceptor());
     }
+    
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        super.addViewControllers(registry);
+        registry.addViewController("/registration").setViewName("registration");
+        registry.addViewController("/successRegister.html").setViewName("successRegister");
+        registry.addViewController("/invalidSession.html");
+    }
+    
 
     @Bean
     public HandlerInterceptor localeChangeInterceptor() {

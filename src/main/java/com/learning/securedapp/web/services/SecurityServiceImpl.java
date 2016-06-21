@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -20,9 +21,14 @@ import com.learning.securedapp.web.repositories.UserRepository;
 @Service
 public class SecurityServiceImpl implements SecurityService{
 
-    @Autowired UserRepository userRepository;
-    @Autowired RoleRepository roleRepository;
-    @Autowired PermissionRepository permissionRepository;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private RoleRepository roleRepository;
+    @Autowired
+    private PermissionRepository permissionRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     
     @Override
     public List<Role> getAllRoles() {
@@ -47,6 +53,9 @@ public class SecurityServiceImpl implements SecurityService{
             }
         }
         user.setRoleList(persistedRoles);
+        String password = user.getPassword();
+        String encodedPwd = passwordEncoder.encode(password);
+        user.setPassword(encodedPwd);
         
         return userRepository.save(user);
     }

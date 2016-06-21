@@ -47,7 +47,7 @@ public class RegistrationController {
         String result = userService.validateVerificationToken(token);
         if (result == null) {
             model.addAttribute("message", messages.getMessage("message.accountVerified", null, locale));
-            return "redirect:/login?lang=" + locale.getLanguage();
+            return "login";
         }
         if (result == "expired") {
             model.addAttribute("expired", true);

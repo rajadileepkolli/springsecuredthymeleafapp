@@ -24,25 +24,7 @@ public class HomeController extends SecuredAppBaseController
 		return "home";
 	}
 	
-	@GetMapping(value={"/invalidSession.html"})
-    public String invalidSession(Model model)
-    {
-        return "invalidSession";
-    }
-	
-	@GetMapping("/registration")
-    public String registration()
-    {
-        return "registration";
-    }
-	
-	@GetMapping(value={"/successRegister"})
-    public String successRegister()
-    {
-        return "successRegister";
-    }
-	
-    @GetMapping(value = { "/login", "login?lang=en" })
+    @GetMapping(value = { "/login", "/login?lang=en" })
     public String login()
 	{
 	    return "login";

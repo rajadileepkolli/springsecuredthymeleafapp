@@ -36,7 +36,6 @@ public class UserServiceImpl implements IUserService{
         if ((verificationToken.getExpiryDate().getTime() - cal.getTime().getTime()) <= 0) {
             return TOKEN_EXPIRED;
         }
-
         user.setEnabled(true);
         tokenRepository.delete(verificationToken);
         userRepository.save(user);

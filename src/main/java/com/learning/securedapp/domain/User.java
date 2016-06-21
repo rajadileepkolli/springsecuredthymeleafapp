@@ -10,6 +10,8 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.learning.securedapp.web.validators.ValidEmail;
+
 import lombok.Data;
 
 @Document
@@ -27,6 +29,7 @@ public class User {
     private String password;
     
     @NotNull
+    @ValidEmail
     private String email;
     
     private String passwordResetToken;
