@@ -44,10 +44,16 @@ dependencies {
 	compile('org.projectlombok:lombok')
     compile('com.google.guava:guava:19.0')
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.4'
+    /* WebJars Dependencies*/
+    compile('org.webjars:webjars-locator')
+    compile group: 'org.webjars', name: 'bootstrap', version: '3.3.6'
+    compile group: 'org.webjars', name: 'jquery', version: '3.0.0'
+    /* WebJars Dependencies*/
 	compile('org.springframework.boot:spring-boot-starter-mail')
 	compile('org.springframework.boot:spring-boot-starter-security')
     compile('org.springframework.session:spring-session')
 	compile('org.springframework.boot:spring-boot-starter-thymeleaf')
+    compile group: 'org.thymeleaf.extras', name: 'thymeleaf-extras-springsecurity4', version: '3.0.0.RELEASE'
 	compile('org.springframework.boot:spring-boot-starter-web')
 	providedRuntime('org.springframework.boot:spring-boot-starter-tomcat')
 	testCompile('org.springframework.boot:spring-boot-starter-test') 
