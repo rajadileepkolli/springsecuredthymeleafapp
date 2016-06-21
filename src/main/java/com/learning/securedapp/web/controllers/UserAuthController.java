@@ -41,11 +41,6 @@ public class UserAuthController extends SecuredAppBaseController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Override
-    protected String getHeaderTitle() {
-        return "User";
-    }
-
     @GetMapping(value = "/forgotPwd")
     public String forgotPwd() {
         return viewPrefix + "forgotPwd";

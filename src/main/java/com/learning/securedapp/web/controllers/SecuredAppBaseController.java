@@ -9,8 +9,6 @@ public abstract class SecuredAppBaseController {
     
     @Autowired protected MessageSource messageSource;
     
-    protected abstract String getHeaderTitle();
-
     public String getMessage(String code)
     {
         return messageSource.getMessage(code, null, null);

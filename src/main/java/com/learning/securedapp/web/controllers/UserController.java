@@ -42,11 +42,6 @@ public class UserController extends SecuredAppBaseController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Override
-    protected String getHeaderTitle() {
-        return "Manage Users";
-    }
-
     @ModelAttribute("rolesList")
     public List<Role> rolesList() {
         return securityService.getAllRoles();
@@ -124,7 +119,7 @@ public class UserController extends SecuredAppBaseController {
         return "redirect:/users";
     }
     
- // Delete
+    // Delete
     @GetMapping("user/delete/{id}")
     public String delete(@PathVariable String id) {
         securityService.deleteUser(id);

@@ -32,12 +32,6 @@ public class PermissionController extends SecuredAppBaseController
 
 	@Autowired private PermissionValidator permissionValidator;
 	
-	@Override
-	protected String getHeaderTitle()
-	{
-		return "Manage Permissions";
-	}
-	
 	@GetMapping(value="/permissions")
 	public String listPermissions(Model model) {
 		List<Permission> list = securityService.getAllPermissions();

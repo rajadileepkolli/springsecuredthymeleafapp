@@ -43,6 +43,8 @@ public interface SecurityService {
 
     Role getRoleByName(String roleName);
 
-    void deleteUser(String id);
+    void deleteUser(String userId);
+
+    void deleteRole(String roleId);
 
 }

@@ -13,23 +13,6 @@ public class HomeController extends SecuredAppBaseController
 {
     @Autowired SecurityService securityService;
     
-	@Override
-	protected String getHeaderTitle() {
-		return "Home";
-	}
-	
-	@GetMapping(value={"/home","/"})
-	public String home(Model model)
-	{
-		return "home";
-	}
-	
-    @GetMapping(value = { "/login", "/login?lang=en" })
-    public String login()
-	{
-	    return "login";
-	}
-
 	@GetMapping("/myAccount")
 	public String myAccount(Model model){
         String userName = getCurrentUser();

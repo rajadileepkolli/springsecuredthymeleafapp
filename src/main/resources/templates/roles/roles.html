@@ -4,7 +4,7 @@
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 
 <head>
-<title>Roles</title>
+<title th:text="#{roles.page.title}">Roles</title>
 <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
 </head>
 <body>
@@ -17,7 +17,7 @@
 				<div class="col-md-12">
 					<div class="panel panel-primary">
 						<div class="panel-heading">
-							<h1 class="panel-title">List of Roles</h1>
+							<h1 class="panel-title" th:text="#{roles.list}">List of Roles</h1>
 						</div>
 						<!-- /.panel-header -->
 						<div class="row"></div>
@@ -50,7 +50,7 @@
 											 <i class="fa fa-edit"></i>Edit
 										</a>
 									</td>
-									<td><a th:href="@{/roles/delete/{id} (id=${role.id})}">Delete</a></td>
+									<td><a th:method="delete" th:href="@{/roles/delete/{id} (id=${role.id})}">Delete</a></td>
 								</tr>
 							</table>
 						</div>

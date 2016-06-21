@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 
 @Configuration
-public class ThymeleafReplaceConfigurator {
+public class ThymeleafConfigurator {
     
     @Bean
     public ClassLoaderTemplateResolver emailTemplateResolver() {

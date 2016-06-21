@@ -205,8 +205,13 @@ public class SecurityServiceImpl implements SecurityService{
     }
 
     @Override
-    public void deleteUser(String id) {
-        userRepository.delete(id);
+    public void deleteUser(String userId) {
+        userRepository.delete(userId);
+    }
+
+    @Override
+    public void deleteRole(String roleId) {
+        roleRepository.delete(roleId);
     }
 
 }

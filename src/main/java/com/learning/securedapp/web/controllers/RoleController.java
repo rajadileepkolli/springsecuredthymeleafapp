@@ -34,15 +34,9 @@ public class RoleController extends SecuredAppBaseController
 {
     private static final String viewPrefix = "roles/";
     
-    @Autowired protected SecurityService securityService;
+    @Autowired private SecurityService securityService;
     @Autowired private RoleValidator roleValidator;
 
-    @Override
-    protected String getHeaderTitle()
-    {
-        return "Manage Roles";
-    }
-    
     @ModelAttribute("permissionsList")
     public List<Permission> permissionsList(){
         return securityService.getAllPermissions();
@@ -123,5 +117,11 @@ public class RoleController extends SecuredAppBaseController
         return "redirect:/roles";
     }
     
+    // Delete
+    @GetMapping("/roles/delete/{id}")
+    public String delete(@PathVariable String id) {
+        securityService.deleteRole(id);
+        return "redirect:/roles";
+    }
 }
 

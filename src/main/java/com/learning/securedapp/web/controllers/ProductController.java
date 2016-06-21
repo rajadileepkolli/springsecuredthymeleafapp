@@ -73,8 +73,4 @@ public class ProductController extends SecuredAppBaseController {
         return "redirect:/products";
     }
 
-    @Override
-    protected String getHeaderTitle() {
-        return "Products";
-    }
 }
