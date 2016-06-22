@@ -20,7 +20,7 @@ import com.learning.securedapp.domain.Role;
 import com.learning.securedapp.domain.User;
 
 @Service
-public class MyUserDetailsService implements UserDetailsService {
+public class CustomUserDetailsService implements UserDetailsService {
 
     @Autowired
     private HttpServletRequest request;
@@ -31,7 +31,7 @@ public class MyUserDetailsService implements UserDetailsService {
     @Autowired
     private LoginAttemptService loginAttemptService;
 
-    public MyUserDetailsService() {
+    public CustomUserDetailsService() {
         super();
     }
 

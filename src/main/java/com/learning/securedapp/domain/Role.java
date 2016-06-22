@@ -1,5 +1,6 @@
 package com.learning.securedapp.domain;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.validation.constraints.NotNull;
@@ -13,7 +14,10 @@ import lombok.Data;
 
 @Data
 @Document
-public class Role {
+public class Role implements Serializable{
+    
+    private static final long serialVersionUID = -6260569351005920639L;
+    
     @Id
     private String id;
     

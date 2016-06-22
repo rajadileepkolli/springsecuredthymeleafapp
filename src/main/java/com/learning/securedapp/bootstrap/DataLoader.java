@@ -82,7 +82,7 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
             User user = new User();
             user.setUserName("superadmin");
             user.setPassword(new BCryptPasswordEncoder(10).encode("superadmin"));
-            user.setEmail("rajadileepkolli@gmail.com");
+            user.setEmail("expoenviron@gmail.com");
             user.setEnabled(true);
             user.setRoleList(roleRepository.findAll());
             userRepository.save(user);

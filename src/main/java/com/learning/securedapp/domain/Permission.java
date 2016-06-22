@@ -1,5 +1,7 @@
 package com.learning.securedapp.domain;
 
+import java.io.Serializable;
+
 import javax.validation.constraints.NotNull;
 
 import org.springframework.data.annotation.Id;
@@ -9,7 +11,10 @@ import lombok.Data;
 
 @Data
 @Document
-public class Permission {
+public class Permission implements Serializable{
+    
+    private static final long serialVersionUID = -6260569351005920639L;
+    
     @Id
     private String id;
     @NotNull

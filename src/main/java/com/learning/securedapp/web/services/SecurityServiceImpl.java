@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -29,8 +31,10 @@ public class SecurityServiceImpl implements SecurityService{
     private PermissionRepository permissionRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired KeyGenerator keyGenerator;
     
     @Override
+    @Cacheable("roles")
     public List<Role> getAllRoles() {
         return roleRepository.findAll();
     }
@@ -44,6 +48,8 @@ public class SecurityServiceImpl implements SecurityService{
     public User createUser(User user){
         return createUser(user, true);
     }
+    
+    @Override
     public User createUser(User user, boolean validated) {
 
         if (!validated) {
@@ -72,7 +78,6 @@ public class SecurityServiceImpl implements SecurityService{
     }
 
     @Override
-    @Cacheable(value = "user", key = "#id")
     public User getUserById(String id) {
         return userRepository.findOne(id);
     }
@@ -145,6 +150,7 @@ public class SecurityServiceImpl implements SecurityService{
     }
 
     @Override
+    @Cacheable(value = "permissions", keyGenerator = "keyGenerator")
     public List<Permission> getAllPermissions() {
         return permissionRepository.findAll();
     }
@@ -170,11 +176,13 @@ public class SecurityServiceImpl implements SecurityService{
         return roleRepository.save(role);
     }
 
+    @Override
     public Role getRoleByName(String roleName) {
         return roleRepository.findByRoleName(roleName);
     }
 
     @Override
+//    @Cacheable(value = "roles", key = "#id")
     public Role getRoleById(String id) {
         return roleRepository.findOne(id);
     }
@@ -201,6 +209,7 @@ public class SecurityServiceImpl implements SecurityService{
     }
 
     @Override
+    @CacheEvict(value = "permissions", allEntries = true, keyGenerator = "keyGenerator")
     public Permission createPermission(Permission permission) {
         return permissionRepository.save(permission);
     }

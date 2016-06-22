@@ -1,6 +1,8 @@
 package com.learning.securedapp.configuration;
 
 import org.springframework.cache.annotation.CachingConfigurerSupport;
+import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheManager;
@@ -19,22 +21,24 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
  */
 
 @Configuration
+@EnableCaching
 @EnableRedisHttpSession
 public class RedisConfiguration extends CachingConfigurerSupport {
 
     @Bean
     public JedisConnectionFactory jedisConnectionFactory() {
         JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory();
-        jedisConnectionFactory.setHostName("127.0.0.1");
+        jedisConnectionFactory.setHostName("localhost");
         jedisConnectionFactory.setPort(6379);
         return jedisConnectionFactory;
     }
 
     @Bean
-    public RedisTemplate<Object, Object> redisTemplate() {
+    public RedisTemplate<?, ?> redisTemplate() {
         RedisTemplate<Object, Object> redisTemplate = new RedisTemplate<Object, Object>();
         redisTemplate.setConnectionFactory(jedisConnectionFactory());
         redisTemplate.setExposeConnection(true);
+//        redisTemplate.setKeySerializer(stringRedisSerializer());
         return redisTemplate;
     }
 
@@ -46,5 +50,26 @@ public class RedisConfiguration extends CachingConfigurerSupport {
         redisCacheManager.setUsePrefix(true);
         return redisCacheManager;
     }
+    
+   /* @Bean
+    public StringRedisSerializer stringRedisSerializer() {
+       StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
+       return stringRedisSerializer;
+    }*/
+    
+    @Bean
+    @Override
+    public KeyGenerator keyGenerator() {
+      return (target, method, params) -> {
+        StringBuilder sb = new StringBuilder();
+        sb.append(target.getClass().getName());
+        sb.append(method.getName());
+        for (Object obj : params) {
+          sb.append(obj.toString());
+        }
+        return sb.toString();
+      };
+    }
+     
 
 }
