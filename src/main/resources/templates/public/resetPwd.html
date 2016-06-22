@@ -23,6 +23,7 @@
 									<!-- Hidden fields so that it can be used in post request -->
 									<input type="hidden" name="email" th:value="${email}" /> 
 									<input type="hidden" name="token" th:value="${token}" />
+									
 									<div class="form-group has-feedback">
 										<input type="password" name="password" class="form-control"
 											placeholder="New Password" required="required"
@@ -47,7 +48,7 @@
 							</form>
 							<div class="row">
 								<div class="col-xs-12">
-									<a href="login" th:href="@{/login}" th:text="#{label.login}">Login</a><br />
+									<a href="login" th:href="@{/login.html}" th:text="#{label.login}">Login</a><br />
 								</div>
 							</div>
 							<div class="row wrapper">
