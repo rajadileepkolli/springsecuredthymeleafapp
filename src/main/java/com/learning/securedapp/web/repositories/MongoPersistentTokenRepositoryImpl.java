@@ -5,11 +5,11 @@ import java.util.List;
 
 import org.springframework.security.web.authentication.rememberme.PersistentRememberMeToken;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
 import com.learning.securedapp.domain.RememberMeToken;
 
-@Service
+@Repository
 public class MongoPersistentTokenRepositoryImpl implements PersistentTokenRepository {
 
     private RememberMeTokenRepository rememberMeTokenRepository;

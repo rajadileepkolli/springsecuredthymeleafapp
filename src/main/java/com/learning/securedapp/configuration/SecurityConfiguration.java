@@ -92,7 +92,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .authorizeRequests()
                 .expressionHandler(webExpressionHandler())
                 .antMatchers("/forgotPwd", "/resetPwd*", "/successRegister*",
-                        "/registrationConfirm*", "/registration", "/user/registration")
+                        "/registrationConfirm*", "/registration.html", "/user/registration")
                 .permitAll()
                 // .antMatchers(HttpMethod.POST,"/api","/api/**").hasRole("ROLE_ADMIN")
                 .anyRequest().fullyAuthenticated()

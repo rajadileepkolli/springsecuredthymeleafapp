@@ -5,7 +5,6 @@ import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.MessageSource;
 import org.springframework.ui.Model;
@@ -21,23 +20,27 @@ import com.learning.securedapp.web.services.SecurityService;
 import com.learning.securedapp.web.utils.GenericResponse;
 import com.learning.securedapp.web.utils.WebUtils;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @Slf4j
+@AllArgsConstructor
 public class RegistrationController {
     
-    @Autowired private SecurityService securityService;
-    @Autowired private ApplicationEventPublisher eventPublisher;
-    @Autowired private IUserService userService;
-    @Autowired private MessageSource messages;
+    private SecurityService securityService;
+    private ApplicationEventPublisher eventPublisher;
+    private IUserService userService;
+    private MessageSource messages;
     
     //Registration
     @PostMapping(value = "/user/registration")
     public GenericResponse registerUserAccount(@Valid final User accountDto, final HttpServletRequest request) {
         log.debug("Registering user account with information: {}", accountDto);
-
-        final User registered = securityService.createUser(accountDto);
+        final User registered = securityService.createUser(accountDto , false);
+        if (null == registered.getId()) {
+            return new GenericResponse("UserAlreadyExist");
+        }
         eventPublisher.publishEvent(new OnRegistrationCompleteEvent(registered, request.getLocale(), WebUtils.getURLWithContextPath(request)));
         return new GenericResponse("success");
     }

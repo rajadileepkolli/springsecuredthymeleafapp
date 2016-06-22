@@ -41,13 +41,24 @@ public class SecurityServiceImpl implements SecurityService{
     }
 
     @Override
-    public User createUser(User user) {
+    public User createUser(User user){
+        return createUser(user, true);
+    }
+    public User createUser(User user, boolean validated) {
+
+        if (!validated) {
+            String email = user.getEmail();
+            User userByEmail = userRepository.findByEmail(email);
+            if (userByEmail != null) {
+                return new User();
+            }
+        }
+
         List<Role> persistedRoles = new ArrayList<>();
         List<Role> roles = user.getRoleList();
-        if(roles != null){
+        if (roles != null) {
             for (Role role : roles) {
-                if(role.getId() != null)
-                {
+                if (role.getId() != null) {
                     persistedRoles.add(roleRepository.findOne(role.getId()));
                 }
             }
@@ -56,7 +67,7 @@ public class SecurityServiceImpl implements SecurityService{
         String password = user.getPassword();
         String encodedPwd = passwordEncoder.encode(password);
         user.setPassword(encodedPwd);
-        
+
         return userRepository.save(user);
     }
 

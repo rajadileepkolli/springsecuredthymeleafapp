@@ -47,4 +47,6 @@ public interface SecurityService {
 
     void deleteRole(String roleId);
 
+    User createUser(User userDTO, boolean validates);
+
 }

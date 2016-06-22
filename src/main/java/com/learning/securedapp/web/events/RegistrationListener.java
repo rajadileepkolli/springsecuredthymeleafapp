@@ -1,57 +1,67 @@
 package com.learning.securedapp.web.events;
 
+import java.util.Locale;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.MessageSource;
-import org.springframework.core.env.Environment;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
 import com.learning.securedapp.domain.User;
+import com.learning.securedapp.exception.SecuredAppException;
+import com.learning.securedapp.service.email.EmailService;
 import com.learning.securedapp.web.services.IUserService;
 
 @Component
 public class RegistrationListener implements ApplicationListener<OnRegistrationCompleteEvent> {
-    @Autowired
-    private IUserService service;
+    
+    @Autowired private IUserService service;
 
-    @Autowired
-    private MessageSource messages;
+    @Autowired private MessageSource messages;
 
-    @Autowired
-    private JavaMailSender mailSender;
+    @Autowired private EmailService emailService;
 
-    @Autowired
-    private Environment env;
+    @Autowired private TemplateEngine templateEngine;
+    
+    private static final Logger LOG = LoggerFactory.getLogger(RegistrationListener.class);
 
     @Override
     public void onApplicationEvent(OnRegistrationCompleteEvent event) {
-        this.confirmRegistration(event);
+        try {
+            this.confirmRegistration(event);
+        } catch (SecuredAppException e) {
+            LOG.error("Error while sending email",e);
+        }
     }
 
-    private void confirmRegistration(OnRegistrationCompleteEvent event) {
+    private void confirmRegistration(OnRegistrationCompleteEvent event) throws SecuredAppException {
         final User user = event.getUser();
         final String token = UUID.randomUUID().toString();
         service.createVerificationTokenForUser(user, token);
-
-        final SimpleMailMessage email = constructEmailMessage(event, user, token);
-        mailSender.send(email);
+        emailService.sendEmail(user.getEmail(), "Registration Confirmation", getHtmlContent(event, token));
     }
 
-    private final SimpleMailMessage constructEmailMessage(final OnRegistrationCompleteEvent event, final User user, final String token) {
-        final String recipientAddress = user.getEmail();
-        final String subject = "Registration Confirmation";
-        final String confirmationUrl = event.getAppUrl() + "/registrationConfirm.html?token=" + token;
-        final String message = messages.getMessage("message.regSucc", null, event.getLocale());
-        final SimpleMailMessage email = new SimpleMailMessage();
-        email.setTo(recipientAddress);
-        email.setSubject(subject);
-        email.setText(message + " \r\n" + confirmationUrl);
-        email.setFrom(env.getProperty("support.email"));
-        return email;
+    private String getHtmlContent(OnRegistrationCompleteEvent event, String token) {
+        // Prepare the evaluation context
+        final Context ctx = new Context(Locale.ENGLISH);
+        ctx.setVariable("name", event.getUser().getUserName());
+        
+        final String message = messages.getMessage("message.regSucc", null,
+                event.getLocale());
+        ctx.setVariable("message", message);
+        
+        final String confirmationUrl = event.getAppUrl()
+                + "/registrationConfirm.html?token=" + token;
+        ctx.setVariable("url", confirmationUrl);
+
+        // Create the HTML body using Thymeleaf
+        final String htmlContent = this.templateEngine.process("registration-email", ctx);
+        return htmlContent;
     }
 
 }
