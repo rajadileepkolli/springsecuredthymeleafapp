@@ -35,7 +35,7 @@ public interface SecurityService {
 
     Role getRoleById(String id);
 
-    Role updateRole(Role role) throws SecuredAppException;
+    Role updateRole(Role role, String roleID) throws SecuredAppException;
 
     Permission createPermission(Permission permission);
 

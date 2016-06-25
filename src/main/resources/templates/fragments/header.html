@@ -52,7 +52,9 @@
 							<ul class="dropdown-menu dropdown-menu-right">
 								<li><a href="#" th:href="@{'/myAccount'}">Edit Profile</a></li>
 								<li role="separator" class="divider"></li>
-								<li><a href="/Logout" th:href="@{'/logout'}">Logout</a></li>
+								<!-- Added to make sure logout is always a post method -->
+								<li><a href="/logout" th:href="@{#}" onclick="$('#form').submit();">Logout</a>
+								<form style="visibility: hidden" id="form" method="post" action="#" th:action="@{/logout}"></form></li>
 							</ul>
 						</li>
 					</ul>

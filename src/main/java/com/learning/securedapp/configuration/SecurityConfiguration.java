@@ -23,6 +23,7 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.security.web.savedrequest.NullRequestCache;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.learning.securedapp.web.repositories.MongoPersistentTokenRepositoryImpl;
@@ -86,6 +87,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
 
+        //to disable loading application back button after logout
+        httpSecurity.headers().defaultsDisabled().cacheControl();
+        httpSecurity.requestCache().requestCache(new NullRequestCache());
+        
         httpSecurity
             .csrf()
                 .disable()

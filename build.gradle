@@ -12,6 +12,13 @@ buildscript {
 	}
 }
 
+plugins {
+    id "io.spring.dependency-management" version "0.5.7.RELEASE"
+}
+
+/* Above plugin is used to override default version in spring boot */
+ext['mongodb.version'] = '3.2.2'
+
 apply plugin: 'java'
 apply plugin: 'eclipse-wtp'
 apply plugin: 'spring-boot' 
@@ -41,11 +48,13 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-actuator')
     compile('org.springframework.boot:spring-boot-starter-data-redis')
 	compile('org.springframework.boot:spring-boot-starter-data-mongodb')
-	compile('org.springframework.boot:spring-boot-devtools')
+	//compile('org.springframework.boot:spring-boot-devtools')
 	compile('org.springframework.boot:spring-boot-starter-hateoas')
 	compile('org.projectlombok:lombok')
     compile('com.google.guava:guava:19.0')
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.4'
+        //Added pool jar to create redis pool by default
+    compile group: 'org.apache.commons', name: 'commons-pool2', version: '2.4.2'
     /* WebJars Dependencies*/
     compile('org.webjars:webjars-locator')
     compile group: 'org.webjars', name: 'bootstrap', version: '3.3.6'
@@ -77,3 +86,16 @@ tasks.withType(FindBugs) {
         html.stylesheet resources.text.fromFile('config/xsl/findbugs-custom.xsl')
     }
 }
+
+bootRun {
+    addResources = true
+}
+
+bootRepackage {
+    mainClass = 'com.learning.securedapp.Application'
+    excludeDevtools = true
+}
+
+task myJavadocs(type: Javadoc) {
+    source = sourceSets.main.allJava
+  }

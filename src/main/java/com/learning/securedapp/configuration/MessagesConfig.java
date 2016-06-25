@@ -14,7 +14,8 @@ public class MessagesConfig {
     private static final String MESSAGES_BASENAME = "messages";
 
     /**
-     * Message externalization/internationalization.
+     * 
+     * @return bean for Message externalization/internationalization.
      */
     @Bean
     public MessageSource messageSource() {

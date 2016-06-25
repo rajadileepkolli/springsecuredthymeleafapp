@@ -6,8 +6,9 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.interceptor.KeyGenerator;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -31,15 +32,16 @@ public class SecurityServiceImpl implements SecurityService{
     private PermissionRepository permissionRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
-    @Autowired KeyGenerator keyGenerator;
+//    @Autowired KeyGenerator keyGenerator;
     
     @Override
-    @Cacheable("roles")
+    @Cacheable(value = "roles")
     public List<Role> getAllRoles() {
         return roleRepository.findAll();
     }
 
     @Override
+    @Cacheable(value = "users")
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
@@ -150,24 +152,21 @@ public class SecurityServiceImpl implements SecurityService{
     }
 
     @Override
-    @Cacheable(value = "permissions", keyGenerator = "keyGenerator")
+    @Cacheable(value = "permissions")
     public List<Permission> getAllPermissions() {
         return permissionRepository.findAll();
     }
 
     @Override
+    @CacheEvict(value = "roles", allEntries = true)
     public Role createRole(Role role) throws SecuredAppException {
-        Role roleByName = getRoleByName(role.getRoleName());
-        if(roleByName != null){
-            throw new SecuredAppException("Role "+role.getRoleName()+" already exist");
-        }
         List<Permission> persistedPermissions = new ArrayList<>();
         List<Permission> permissions = role.getPermissions();
         if(permissions != null){
             for (Permission permission : permissions) {
                 if(permission.getId() != null)
                 {
-                    persistedPermissions.add(permissionRepository.findOne(permission.getId()));
+                    persistedPermissions.add(findPermission(permission.getId()));
                 }
             }
         }
@@ -177,21 +176,24 @@ public class SecurityServiceImpl implements SecurityService{
     }
 
     @Override
+    @Cacheable(value = "role", key = "#roleName", unless="#result == null")
     public Role getRoleByName(String roleName) {
         return roleRepository.findByRoleName(roleName);
     }
 
     @Override
-//    @Cacheable(value = "roles", key = "#id")
+    @Cacheable(value = "role", key = "#id")
     public Role getRoleById(String id) {
         return roleRepository.findOne(id);
     }
 
     @Override
-    public Role updateRole(Role role) throws SecuredAppException {
-        Role persistedRole = getRoleById(role.getId());
+    @Caching(evict = { @CacheEvict(value = "roles", allEntries = true) }, put = {
+            @CachePut(value = "role", key = "#id") })
+    public Role updateRole(Role role,String id) throws SecuredAppException {
+        Role persistedRole = getRoleById(id);
         if(persistedRole == null){
-            throw new SecuredAppException("Role "+role.getId()+" doesn't exist");
+            throw new SecuredAppException("Role " + id + " doesn't exist");
         }
         persistedRole.setDescription(role.getDescription());
         List<Permission> updatedPermissions = new ArrayList<>();
@@ -200,7 +202,7 @@ public class SecurityServiceImpl implements SecurityService{
             for (Permission permission : permissions) {
                 if(permission.getId() != null)
                 {
-                    updatedPermissions.add(permissionRepository.findOne(permission.getId()));
+                    updatedPermissions.add(findPermission(permission.getId()));
                 }
             }
         }
@@ -208,30 +210,42 @@ public class SecurityServiceImpl implements SecurityService{
         return roleRepository.save(persistedRole);
     }
 
+    @Cacheable(value = "permission", key = "#id")
+    private Permission findPermission(String id) {
+        return permissionRepository.findOne(id);
+    }
+
     @Override
-    @CacheEvict(value = "permissions", allEntries = true, keyGenerator = "keyGenerator")
+    @Caching(cacheable = { @Cacheable(value = "permission", key = "#id") }, evict = {
+            @CacheEvict(value = "permissions", allEntries = true) })
     public Permission createPermission(Permission permission) {
         return permissionRepository.save(permission);
     }
 
     @Override
+    @Cacheable(value="permission", key = "#permissionName")
     public Permission getPermissionByName(String permissionName) {
         return permissionRepository.findByName(permissionName);
     }
 
     @Override
+    @Cacheable(value = "user" , key="#userName", unless = "#result == null")
     public User getUserByUserName(String userName) {
         return userRepository.findByUserName(userName);
     }
 
     @Override
+    @Caching(evict={ @CacheEvict(value = "users", allEntries = true),
+            @CacheEvict(value = "user", key = "#id") })
     public void deleteUser(String userId) {
         userRepository.delete(userId);
     }
 
     @Override
-    public void deleteRole(String roleId) {
-        roleRepository.delete(roleId);
+    @Caching(evict={ @CacheEvict(value = "roles", allEntries = true),
+            @CacheEvict(value = "role", key = "#id") })
+    public void deleteRole(String id) {
+        roleRepository.delete(id);
     }
 
 }

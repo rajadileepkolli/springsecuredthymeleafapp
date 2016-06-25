@@ -22,22 +22,24 @@ import lombok.extern.slf4j.Slf4j;
 public class ErrorControllerAdvice {
 
     private static final String viewPrefix = "error/";
-    
-    @ExceptionHandler({IllegalArgumentException.class,NullPointerException.class})
+
+    @ExceptionHandler({ IllegalArgumentException.class, NullPointerException.class })
     void handleBadRequests(HttpServletResponse response) throws IOException {
-        response.sendError(HttpStatus.BAD_REQUEST.value(), "Please try again and with a non empty string");
+        response.sendError(HttpStatus.BAD_REQUEST.value(),
+                "Please try again and with a non empty string");
     }
 
     @ExceptionHandler(Throwable.class)
     public ModelAndView exception(Throwable throwable) {
         log.error("Exception during execution of SpringMail application", throwable);
-        String errorMessage = throwable != null ? throwable.getMessage() : "Unknown error";
+        String errorMessage = throwable != null ? throwable.getMessage()
+                : "Unknown error";
         ModelAndView mav = new ModelAndView();
         mav.getModel().put("errorMessage", errorMessage);
         mav.setViewName(viewPrefix + "accessDenied");
         return mav;
     }
-    
+
     @ExceptionHandler({ SecuredAppException.class, Exception.class })
     public ModelAndView handleError(HttpServletRequest req, Exception exception)
             throws Exception {

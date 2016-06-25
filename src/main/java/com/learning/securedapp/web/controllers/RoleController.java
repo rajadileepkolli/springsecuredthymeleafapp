@@ -68,11 +68,12 @@ public class RoleController extends SecuredAppBaseController
         try {
             Role persistedRole = securityService.createRole(role);
             log.debug("Created new role with id : {} and name : {}", persistedRole.getId(), persistedRole.getRoleName());
+            redirectAttributes.addFlashAttribute("success", "Role "+persistedRole.getRoleName()+" created successfully");
         } catch (SecuredAppException e) {
             model.addAttribute("errorMessage", e.getMessage());
+            redirectAttributes.addFlashAttribute("error", "Role "+ role.getRoleName() +" was not created");
             return "redirect:/error/accessDenied";
         }
-        redirectAttributes.addFlashAttribute("success", "Role created successfully");
         return "redirect:/roles";
     }
     
@@ -106,7 +107,7 @@ public class RoleController extends SecuredAppBaseController
     public String updateRole(@ModelAttribute("role") Role role, BindingResult result, 
             Model model, RedirectAttributes redirectAttributes) {
         try {
-            Role persistedRole = securityService.updateRole(role);
+            Role persistedRole = securityService.updateRole(role, role.getId());
             log.debug("Updated role with id : {} and name : {}", persistedRole.getId(),
                     persistedRole.getRoleName());
             redirectAttributes.addFlashAttribute("success",
