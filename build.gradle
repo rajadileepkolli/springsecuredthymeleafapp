@@ -14,6 +14,7 @@ buildscript {
 
 plugins {
     id "io.spring.dependency-management" version "0.5.7.RELEASE"
+    id "org.asciidoctor.convert" version "1.5.2"
 }
 
 /* Above plugin is used to override default version in spring boot */
@@ -25,6 +26,7 @@ apply plugin: 'spring-boot'
 apply plugin: 'war'
 //apply plugin: 'pmd'
 apply plugin: 'findbugs'
+apply plugin: 'io.spring.dependency-management'
 
 
 war {
@@ -99,3 +101,40 @@ bootRepackage {
 task myJavadocs(type: Javadoc) {
     source = sourceSets.main.allJava
   }
+
+/* Asking JUNIT to generate reports */
+test {
+    testLogging {
+        afterSuite { desc, result ->
+            if (!desc.parent) {
+                println "Results: ${result.resultType} (${result.testCount} tests, ${result.successfulTestCount} successes, ${result.failedTestCount} failures, ${result.skippedTestCount} skipped)"
+            }
+        }
+    }
+    reports {
+                junitXml.enabled = false
+                html.enabled = true
+        }
+}
+
+ext {
+    snippetsDir = file('build/generated-snippets')
+}
+
+
+test {
+    outputs.dir snippetsDir
+}
+
+
+asciidoctor {
+    attributes 'snippets': snippetsDir
+    inputs.dir snippetsDir
+    outputDir "build/asciidoc"
+    dependsOn test
+    sourceDir 'src/main/asciidoc'
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.14'
+}

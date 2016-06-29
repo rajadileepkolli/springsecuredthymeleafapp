@@ -23,8 +23,10 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
-import org.springframework.security.web.savedrequest.NullRequestCache;
+import org.springframework.security.web.header.writers.DelegatingRequestMatcherHeaderWriter;
+import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import com.learning.securedapp.web.repositories.MongoPersistentTokenRepositoryImpl;
 import com.learning.securedapp.web.repositories.RememberMeTokenRepository;
@@ -81,19 +83,32 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/css/**", "/js/**", "/images/**", "/resources/**",
-                "/webjars/**", "/mails/**", "/**/favicon.ico");
+                "/webjars/**", "/mails/**");
     }
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
+        
+        RequestMatcher matcher = new AntPathRequestMatcher("/login");
+        DelegatingRequestMatcherHeaderWriter headerWriter =
+            new DelegatingRequestMatcherHeaderWriter(matcher,new XFrameOptionsHeaderWriter());
 
         //to disable loading application back button after logout
-        httpSecurity.headers().defaultsDisabled().cacheControl();
-        httpSecurity.requestCache().requestCache(new NullRequestCache());
+        httpSecurity
+            .headers()
+                .defaultsDisabled()
+                    .cacheControl().and()
+                .contentTypeOptions().and().addHeaderWriter(headerWriter)
+                .httpStrictTransportSecurity()
+                    .includeSubDomains(true)
+                    .maxAgeInSeconds(31536000).and()
+                .frameOptions().sameOrigin().xssProtection().block(false);
+        
+//        httpSecurity.requestCache().requestCache(new NullRequestCache());
         
         httpSecurity
-            .csrf()
-                .disable()
+            /*.csrf()
+                .disable()*/
             .authorizeRequests()
                 .expressionHandler(webExpressionHandler())
                 .antMatchers("/forgotPwd", "/resetPwd*", "/successRegister*",
