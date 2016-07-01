@@ -113,7 +113,7 @@ public class UserController extends SecuredAppBaseController {
         if (result.hasErrors()) {
             return viewPrefix + "edit_user";
         }
-        User persistedUser = securityService.updateUser(user);
+        User persistedUser = securityService.updateUser(user, user.getId());
         log.debug("Updated user with id : {} and name : {}", persistedUser.getId(), persistedUser.getUserName());
         redirectAttributes.addFlashAttribute("msg", persistedUser.getUserName() +" updated successfully");
         return "redirect:/users";

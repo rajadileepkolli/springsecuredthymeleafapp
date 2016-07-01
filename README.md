@@ -17,4 +17,5 @@ Repository for source code of secured application using spring and thymeleaf
 		
 #TODO
 	We can use a Cron Job to check for token expiration in the background
-	We can give the user the opportunity to get a new token once it has expired		
+	We can give the user the opportunity to get a new token once it has expired
+	Disable browser back button		

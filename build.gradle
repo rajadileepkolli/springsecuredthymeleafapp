@@ -13,7 +13,7 @@ buildscript {
 }
 
 plugins {
-    id "io.spring.dependency-management" version "0.5.7.RELEASE"
+    id "io.spring.dependency-management" version "0.6.0.RELEASE"
     id "org.asciidoctor.convert" version "1.5.2"
 }
 
@@ -24,7 +24,6 @@ apply plugin: 'java'
 apply plugin: 'eclipse-wtp'
 apply plugin: 'spring-boot' 
 apply plugin: 'war'
-//apply plugin: 'pmd'
 apply plugin: 'findbugs'
 apply plugin: 'io.spring.dependency-management'
 

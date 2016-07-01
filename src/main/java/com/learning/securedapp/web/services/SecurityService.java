@@ -19,7 +19,7 @@ public interface SecurityService {
     
     User getUserByUserName(String userName);
 
-    User updateUser(User user) throws SecuredAppException;
+    User updateUser(User user, String id) throws SecuredAppException;
 
     User findUserByEmail(String email);
 

@@ -32,7 +32,6 @@ public class SecurityServiceImpl implements SecurityService{
     private PermissionRepository permissionRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
-//    @Autowired KeyGenerator keyGenerator;
     
     @Override
     @Cacheable(value = "roles")
@@ -47,19 +46,23 @@ public class SecurityServiceImpl implements SecurityService{
     }
 
     @Override
+    @CacheEvict(value="users", allEntries = true)
     public User createUser(User user){
         return createUser(user, true);
     }
     
     @Override
+    @CacheEvict(value="users", allEntries = true)
     public User createUser(User user, boolean validated) {
-
         if (!validated) {
             String email = user.getEmail();
             User userByEmail = userRepository.findByEmail(email);
             if (userByEmail != null) {
                 return new User();
             }
+            String password = user.getPassword();
+            String encodedPwd = passwordEncoder.encode(password);
+            user.setPassword(encodedPwd);
         }
 
         List<Role> persistedRoles = new ArrayList<>();
@@ -67,26 +70,25 @@ public class SecurityServiceImpl implements SecurityService{
         if (roles != null) {
             for (Role role : roles) {
                 if (role.getId() != null) {
-                    persistedRoles.add(roleRepository.findOne(role.getId()));
+                    persistedRoles.add(getRoleById(role.getId()));
                 }
             }
         }
         user.setRoleList(persistedRoles);
-        String password = user.getPassword();
-        String encodedPwd = passwordEncoder.encode(password);
-        user.setPassword(encodedPwd);
-
         return userRepository.save(user);
     }
 
     @Override
+    @Cacheable(value="user", key="#id")
     public User getUserById(String id) {
         return userRepository.findOne(id);
     }
 
     @Override
-    public User updateUser(User user) throws SecuredAppException {
-        User persistedUser = getUserById(user.getId());
+    @Caching(evict = { @CacheEvict(value = "users", allEntries = true) }, put = {
+            @CachePut(value = "user", key = "#id") })
+    public User updateUser(User user,String id) throws SecuredAppException {
+        User persistedUser = getUserById(id);
         if(persistedUser == null){
             throw new SecuredAppException("User "+user.getId()+" doesn't exist");
         }
@@ -97,7 +99,7 @@ public class SecurityServiceImpl implements SecurityService{
             for (Role role : roles) {
                 if(role.getId() != null)
                 {
-                    updatedRoles.add(roleRepository.findOne(role.getId()));
+                    updatedRoles.add(getRoleById(role.getId()));
                 }
             }
         }
@@ -235,15 +237,15 @@ public class SecurityServiceImpl implements SecurityService{
     }
 
     @Override
-    @Caching(evict={ @CacheEvict(value = "users", allEntries = true),
-            @CacheEvict(value = "user", key = "#id") })
-    public void deleteUser(String userId) {
-        userRepository.delete(userId);
+    @Caching(evict = { @CacheEvict(value = "user", key = "#id"),
+            @CacheEvict(value = "users", allEntries = true) })
+    public void deleteUser(String id) {
+        userRepository.delete(id);
     }
 
     @Override
-    @Caching(evict={ @CacheEvict(value = "roles", allEntries = true),
-            @CacheEvict(value = "role", key = "#id") })
+    @Caching(evict = { @CacheEvict(value = "role", key = "#id"),
+            @CacheEvict(value = "roles", allEntries = true) })
     public void deleteRole(String id) {
         roleRepository.delete(id);
     }
