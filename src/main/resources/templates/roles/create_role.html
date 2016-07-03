@@ -26,7 +26,7 @@
 							
 							<!-- text input -->
 							<div class="form-group" th:classappend="${#fields.hasErrors('roleName')}? 'has-error'">
-								<label>Role Name</label> 
+								<label class="col-sm-2 control-label">Role Name</label> 
 								<input type="text" class="form-control"	name="name" th:field="*{roleName}" placeholder="Enter Role Name" />
 								<p th:if="${#fields.hasErrors('roleName')}"
 									th:errors="*{roleName}" th:class="text-red">Incorrect data</p>
@@ -34,7 +34,7 @@
 	
 							<!-- textarea -->
 							<div class="form-group"	th:classappend="${#fields.hasErrors('description')}? 'has-error'">
-								<label>Description</label>
+								<label class="col-sm-2 control-label">Description</label>
 								<textarea class="form-control" rows="3" name="description" th:field="*{description}" placeholder="Enter Role Description"></textarea>
 								<p th:if="${#fields.hasErrors('description')}"
 									th:errors="*{description}" th:class="text-red">Incorrect data</p>

@@ -56,10 +56,8 @@ public class UserController extends SecuredAppBaseController {
 
     @GetMapping(value = "/users/new")
     public String createUserForm(Model model) {
-        User user = new User();
+        User user = User.builder().build();
         model.addAttribute("user", user);
-//        model.addAttribute("rolesList",securityService.getAllRoles());
-
         return viewPrefix + "create_user";
     }
 

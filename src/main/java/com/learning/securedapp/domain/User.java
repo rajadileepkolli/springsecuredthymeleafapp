@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.springframework.data.annotation.Id;
@@ -13,13 +14,19 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.learning.securedapp.web.validators.ValidEmail;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Document
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class User implements Serializable{
 
-    private static final long serialVersionUID = -6260569351005920639L;
+    private static final long serialVersionUID = 1L;
 
     @Id
     private String id;
@@ -38,6 +45,12 @@ public class User implements Serializable{
     private String passwordResetToken;
 
     private boolean enabled = false;
+    
+    @NotNull
+    @Pattern(regexp = "[0-9]{6}")
+    private String zip;
+    
+    private String address;
 
     @DBRef(lazy= true)
     private List<Role> roleList;

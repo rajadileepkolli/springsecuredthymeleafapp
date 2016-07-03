@@ -5,10 +5,22 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.session.ExpiringSession;
+import org.springframework.session.SessionRepository;
+import org.springframework.session.data.redis.RedisOperationsSessionRepository;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
+import org.springframework.web.context.WebApplicationContext;
+
+import com.learning.securedapp.web.domain.CachingCart;
+import com.learning.securedapp.web.domain.Cart;
+import com.learning.securedapp.web.repositories.InvalidClassExceptionSafeRepository;
 
 /**
  * 
@@ -35,10 +47,10 @@ public class RedisConfiguration extends CachingConfigurerSupport {
 
     @Bean
     public RedisTemplate<?, ?> redisTemplate() {
-        RedisTemplate<Object, Object> redisTemplate = new RedisTemplate<Object, Object>();
+        RedisTemplate<byte[], byte[]> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(jedisConnectionFactory());
         redisTemplate.setExposeConnection(true);
-//        redisTemplate.setKeySerializer(stringRedisSerializer());
+        redisTemplate.setKeySerializer(stringRedisSerializer());
         return redisTemplate;
     }
 
@@ -51,11 +63,11 @@ public class RedisConfiguration extends CachingConfigurerSupport {
         return redisCacheManager;
     }
     
-   /* @Bean
+    @Bean
     public StringRedisSerializer stringRedisSerializer() {
        StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
        return stringRedisSerializer;
-    }*/
+    }
     
     @Bean
     @Override
@@ -71,5 +83,16 @@ public class RedisConfiguration extends CachingConfigurerSupport {
       };
     }
      
+    @Bean
+    @Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
+    Cart cart() {
+        return new CachingCart();
+    }
+    
+    @Primary
+    @Bean
+    public SessionRepository<? extends ExpiringSession> primarySessionRepository(RedisOperationsSessionRepository delegate) {
+        return new InvalidClassExceptionSafeRepository(delegate);
+    }
 
 }

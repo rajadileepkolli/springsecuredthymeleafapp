@@ -1,4 +1,4 @@
-package com.learning.securedapp.web.services;
+package com.learning.securedapp.web.services.impl;
 
 import java.util.Calendar;
 
@@ -9,6 +9,7 @@ import com.learning.securedapp.domain.User;
 import com.learning.securedapp.domain.VerificationToken;
 import com.learning.securedapp.web.repositories.UserRepository;
 import com.learning.securedapp.web.repositories.VerificationTokenRepository;
+import com.learning.securedapp.web.services.IUserService;
 
 @Service
 public class UserServiceImpl implements IUserService{

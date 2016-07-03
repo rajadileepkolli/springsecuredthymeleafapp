@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.LocaleResolver;
+import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
@@ -43,6 +44,11 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
     }
     
     @Override
+    public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
+        configurer.enable();
+    }
+    
+    @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         super.addViewControllers(registry);
         registry.addViewController("/").setViewName("forward:/home.html");
@@ -51,6 +57,7 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
         registry.addViewController("/invalidSession.html");
         registry.addViewController("/login.html").setViewName("login");
         registry.addViewController("/home.html").setViewName("home");
+        registry.addViewController("/categories.html").setViewName("categories");
     }
     
 

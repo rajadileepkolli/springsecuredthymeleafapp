@@ -11,6 +11,27 @@
 		<!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
 		<div th:fragment="content">
 			<div class="row">
+				<!-- <div class="col-xs-6 tabbable">
+					<ul class="nav nav-tabs">
+						<li th:class="currentCategory==''?'active':''">
+							<a th:click="showForAllCategory()">All</a></li>
+						<li th:repeat="category in categories"
+							th:class="currentCategory==category.name?'active':''">
+							<a th:click="showProductsForCategory(category)">{{category.categoryName}}</a></li>
+					</ul>
+				</div> -->
+				<div class="col-xs-6">
+					<ul class="nav nav-pills navbar-right">
+						<li>
+							<a href="#" th:sref="order" class="btn btn-danger">
+								<span id="cart-item-count" class="badge">(0)</span>
+								<span class="glyphicon glyphicon-shopping-cart"></span>Shopping Cart
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="row">
 				<div class="col-md-12">
 					<div class="panel panel-primary">
 						<div class="panel-heading" th:if="${not #lists.isEmpty(products)}">
@@ -18,27 +39,82 @@
 						</div>
 						<div class="panel-body table-responsive no-padding">
 							<table class="table table-striped table-bordered table-hover">
+								<thead>
 								<tr>
 									<th style="width: 10px">#</th>
+									<th th:text="#{label.prodName}">Product Name</th>
 									<th>Description</th>
 									<th>Price</th>
 									<th>View</th>
-									<th>Edit</th>
-									<th>Delete</th>
+									<div sec:authorize="hasRole('ROLE_CMS_ADMIN')">
+										<th>Edit</th>
+										<th>Delete</th>
+									</div>
+									<th>Number</th>
 								</tr>
+								</thead>
+								<tbody>
 								<tr th:each="product,iterStat : ${products}">
 									<td>
 										<a th:href="@{/product/{id}(id=${product.productId})}">
 											<span th:text="${iterStat.count}">1</span>
 										</a>
 									</td>
+									<td th:text="${product.productName}">name</td>
 									<td th:text="${product.description}">description</td>
 									<td th:text="${product.price}">price</td>
 									<td><a th:href="${'/product/' + product.productId}">View</a></td>
-									<td><a th:href="${'/product/edit/' + product.productId}">Edit</a></td>
-									<td><a th:href="${'/product/delete/' + product.productId}">Delete</a></td>
-								</tr>
+									<div sec:authorize="hasRole('ROLE_CMS_ADMIN')">
+										<td><a th:href="${'/product/edit/' + product.productId}">Edit</a></td>
+										<td><a th:href="${'/product/delete/' + product.productId}">Delete</a></td>
+									</div>
+									<td>
+						                <form th:action="@{/addToCart}" action="../cart/viewCart.html" method="post" class="form-inline">
+						                    <input type="number" class="form-control" name="quantity" value="1"/>
+						                <span th:if="${#fields.hasErrors('addToCartForm.quantity') and (addToCartForm.productId == product.productId)}"
+						                      th:errors="${addToCartForm.quantity}"
+						                      class="text-danger">error!</span>
+						                    <input type="hidden" name="productId" th:value="${product.productId}"/>
+						                    <input type="hidden" name="categoryId" th:value="${product.category}"/>
+						                    <button type="submit" class="btn btn-default" th:text="#{label.addToCart}" >Add To Bucket</button>
+						                </form>
+						            </td>
+									</tr>
+								</tbody>
 							</table>
+						</div>
+						<div class="row">
+							<div class="col-xs-12">
+								<div th:if="${success!=null}"
+									class="alert alert-success alert-dismissable" role="alert">
+									<p>
+										<i class="icon fa fa-success"> <span th:text="${success}"></span></i>
+									</p>
+									<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12">
+								<div th:if="${msg!=null}"
+									class="alert alert-warning alert-dismissable" role="alert">
+									<p>
+										<i class="icon fa fa-warning"><span th:text="${msg}"></span></i>
+									</p>
+									<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12">
+								<div th:if="${error!=null}"
+									class="alert alert-danger alert-dismissable" role="alert">
+									<p>
+										<i class="icon fa fa-danger"> <span th:text="${error}"></span></i>
+									</p>
+									<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>

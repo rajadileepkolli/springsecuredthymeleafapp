@@ -48,10 +48,10 @@
     
     <logger name="org.springframework.security" level="DEBUG" />
     
-    <logger name="com.learning.securedapp" level="DEBUG" />
+    <logger name="com.learning.securedapp" level="TRACE" />
     
 	<springProfile name="local">
-		<root level="INFO">
+		<root level="trace">
 			<appender-ref ref="console" />  <!-- Uncomment when using local machine -->
 			<!-- <appender-ref ref="FILE" /> -->
 		</root>

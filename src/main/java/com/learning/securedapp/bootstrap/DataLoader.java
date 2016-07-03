@@ -1,6 +1,5 @@
 package com.learning.securedapp.bootstrap;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -10,10 +9,12 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import com.learning.securedapp.domain.Category;
 import com.learning.securedapp.domain.Permission;
 import com.learning.securedapp.domain.Product;
 import com.learning.securedapp.domain.Role;
 import com.learning.securedapp.domain.User;
+import com.learning.securedapp.web.repositories.CategoryRepository;
 import com.learning.securedapp.web.repositories.PermissionRepository;
 import com.learning.securedapp.web.repositories.ProductRepository;
 import com.learning.securedapp.web.repositories.RoleRepository;
@@ -31,23 +32,42 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
     private UserRepository userRepository;
     private RoleRepository roleRepository;
     private PermissionRepository permissionRepository;
+    private CategoryRepository categoryRepository;
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
+        if (categoryRepository.findAll().size() <= 0) {
+            Category clothingCategory = new Category();
+            clothingCategory.setCategoryId("1");
+            clothingCategory.setCategoryName("Clothing");
+            Category foodCategory = new Category();
+            foodCategory.setCategoryId("2");
+            foodCategory.setCategoryName("Food");
+            Category mobileCategory = new Category();
+            mobileCategory.setCategoryId("3");
+            mobileCategory.setCategoryName("Mobile");
+            categoryRepository
+                    .save(Arrays.asList(clothingCategory, foodCategory, mobileCategory));
+        }
+
         if (productRepository.findAll().size() <= 0) {
-            Product shirt = new Product();
-            shirt.setDescription("Spring Framework Guru Shirt");
-            shirt.setPrice(new BigDecimal("18.95"));
-            shirt.setImageUrl(
-                    "https://springframework.guru/wp-content/uploads/2015/04/spring_framework_guru_shirt-rf412049699c14ba5b68bb1c09182bfa2_8nax2_512.jpg");
+            Product shirt = Product.builder().productName("Shirt")
+                    .description("Spring Framework Guru Shirt")
+                    .price(Double.valueOf("18.95"))
+                    .category(categoryRepository.findOne("1"))
+                    .imageUrl(
+                            "https://springframework.guru/wp-content/uploads/2015/04/spring_framework_guru_shirt-rf412049699c14ba5b68bb1c09182bfa2_8nax2_512.jpg")
+                    .build();
             productRepository.save(shirt);
 
             log.info("Saved Shirt - id: " + shirt.getProductId());
 
-            Product mug = new Product();
-            mug.setDescription("Spring Framework Guru Mug");
-            mug.setImageUrl(
-                    "https://springframework.guru/wp-content/uploads/2015/04/spring_framework_guru_coffee_mug-r11e7694903c348e1a667dfd2f1474d95_x7j54_8byvr_512.jpg");
+            Product mug = Product.builder().productName("Mug")
+                    .description("Spring Framework Guru Mug")
+                    .imageUrl(
+                            "https://springframework.guru/wp-content/uploads/2015/04/spring_framework_guru_coffee_mug-r11e7694903c348e1a667dfd2f1474d95_x7j54_8byvr_512.jpg")
+                    .category(categoryRepository.findOne("1"))
+                    .build();
             productRepository.save(mug);
 
             log.info("Saved Mug - id:" + mug.getProductId());
@@ -65,8 +85,8 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
         }
         if (roleRepository.findAll().size() <= 0) {
             List<String> roleList = new ArrayList<String>();
-            roleList.addAll(
-                    Arrays.asList("ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_CMS_ADMIN", "ROLE_USER"));
+            roleList.addAll(Arrays.asList("ROLE_SUPER_ADMIN", "ROLE_ADMIN",
+                    "ROLE_CMS_ADMIN", "ROLE_USER"));
             for (String string : roleList) {
                 Role role = new Role();
                 role.setRoleName(string);
@@ -79,12 +99,10 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
             roleRepository.save(role);
         }
         if (userRepository.findAll().size() <= 0) {
-            User user = new User();
-            user.setUserName("superadmin");
-            user.setPassword(new BCryptPasswordEncoder(10).encode("superadmin"));
-            user.setEmail("expoenviron@gmail.com");
-            user.setEnabled(true);
-            user.setRoleList(roleRepository.findAll());
+            User user = User.builder().userName("superadmin")
+                    .password(new BCryptPasswordEncoder(10).encode("superadmin"))
+                    .email("rajadileepkolli@gmail.com").enabled(true)
+                    .roleList(roleRepository.findAll()).build();
             userRepository.save(user);
         }
     }

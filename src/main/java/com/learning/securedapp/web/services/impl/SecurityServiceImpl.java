@@ -1,4 +1,4 @@
-package com.learning.securedapp.web.services;
+package com.learning.securedapp.web.services.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +20,7 @@ import com.learning.securedapp.exception.SecuredAppException;
 import com.learning.securedapp.web.repositories.PermissionRepository;
 import com.learning.securedapp.web.repositories.RoleRepository;
 import com.learning.securedapp.web.repositories.UserRepository;
+import com.learning.securedapp.web.services.SecurityService;
 
 @Service
 public class SecurityServiceImpl implements SecurityService{
@@ -58,7 +59,7 @@ public class SecurityServiceImpl implements SecurityService{
             String email = user.getEmail();
             User userByEmail = userRepository.findByEmail(email);
             if (userByEmail != null) {
-                return new User();
+                return User.builder().build();
             }
             String password = user.getPassword();
             String encodedPwd = passwordEncoder.encode(password);

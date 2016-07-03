@@ -1,4 +1,4 @@
-package com.learning.securedapp.web.services;
+package com.learning.securedapp.web.services.impl;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -18,6 +18,8 @@ import org.springframework.stereotype.Service;
 import com.learning.securedapp.domain.Permission;
 import com.learning.securedapp.domain.Role;
 import com.learning.securedapp.domain.User;
+import com.learning.securedapp.web.services.LoginAttemptService;
+import com.learning.securedapp.web.services.SecurityService;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {

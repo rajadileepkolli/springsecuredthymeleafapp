@@ -1,7 +1,14 @@
 package com.learning.securedapp.configuration;
 
+import java.util.EnumSet;
+
+import javax.servlet.DispatcherType;
+import javax.servlet.Filter;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
@@ -39,7 +46,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     Environment environment;
     @Autowired
-    private UserDetailsService userDetailsService;
+    @Qualifier("customUserDetailsService")
+    private UserDetailsService customUserDetailsService;
     @Autowired
     private RoleHierarchy roleHierarchy;
     @Autowired
@@ -56,7 +64,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     public RememberMeServices rememberMeServices() {
         PersistentTokenBasedRememberMeServices rememberMeServices = new PersistentTokenBasedRememberMeServices(
                 environment.getProperty("spring.application.name", "securedApp"),
-                userDetailsService, persistentTokenRepository());
+                customUserDetailsService, persistentTokenRepository());
         rememberMeServices.setAlwaysRemember(true);
         return rememberMeServices;
     }
@@ -76,7 +84,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth
-            .userDetailsService(userDetailsService)
+            .userDetailsService(customUserDetailsService)
                 .passwordEncoder(passwordEncoder());
     }
 
@@ -112,7 +120,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .authorizeRequests()
                 .expressionHandler(webExpressionHandler())
                 .antMatchers("/forgotPwd", "/resetPwd*", "/successRegister*",
-                        "/registrationConfirm*", "/registration.html", "/user/registration","/login*")
+                        "/invalidSession.html", "/registrationConfirm*",
+                        "/registration.html", "/user/registration", "/login*")
                 .permitAll()
                 // .antMatchers(HttpMethod.POST,"/api","/api/**").hasRole("ROLE_ADMIN")
                 .anyRequest().fullyAuthenticated()
@@ -132,11 +141,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .sessionFixation().none()
                 .and()
             .logout()
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/login.html")
                 .invalidateHttpSession(true)
                 .deleteCookies("remember-me", "SESSION")
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/login.html")
                 .permitAll()
                 .and()
             .rememberMe()
@@ -151,6 +160,16 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         DefaultWebSecurityExpressionHandler defaultWebSecurityExpressionHandler = new DefaultWebSecurityExpressionHandler();
         defaultWebSecurityExpressionHandler.setRoleHierarchy(roleHierarchy);
         return defaultWebSecurityExpressionHandler;
+    }
+    
+    @Bean
+    public FilterRegistrationBean getSpringSecurityFilterChainBindedToError(
+                    @Qualifier("springSecurityFilterChain") Filter springSecurityFilterChain) {
+
+            FilterRegistrationBean registration = new FilterRegistrationBean();
+            registration.setFilter(springSecurityFilterChain);
+            registration.setDispatcherTypes(EnumSet.allOf(DispatcherType.class));
+            return registration;
     }
 
 }

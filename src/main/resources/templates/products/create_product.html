@@ -12,13 +12,23 @@
 		<div th:fragment="content">
 			<div class="panel panel-primary">
 				<div class="panel-heading">
-					<h1 class="panel-title">Create New Role</h1>
+					<h1 class="panel-title">Create New Product</h1>
 				</div>
 				<!-- /.panel-header -->
 				<div class="panel-body">
 					<form role="form" th:object="${product}" th:action="@{/product}" method="post">
 						<fieldset>
+							<p th:if="${#fields.hasErrors('global')}" th:errors="*{global}"	th:class="text-red">Incorrect data</p>
 							<input type="hidden" th:field="*{productId}" />
+							
+							<div class="form-group"	th:classappend="${#fields.hasErrors('productName')}? 'has-error'">
+								<label class="col-sm-2 control-label">productName:</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" name="productName" th:field="*{productName}" placeholder="Enter productName"/>
+									<p th:if="${#fields.hasErrors('productName')}"
+										th:errors="*{productName}" th:class="text-red">Incorrect data</p>
+								</div>
+							</div>
 							
 							<!-- text input -->
 							<div class="form-group"	th:classappend="${#fields.hasErrors('description')}? 'has-error'">
@@ -30,7 +40,6 @@
 								</div>
 							</div>
 							
-							<br></br>
 							<br></br>
 							
 							<!-- text input -->
@@ -44,7 +53,6 @@
 							</div>
 							
 							<br></br>
-							<br></br>
 							
 							<div class="form-group">
 								<label class="col-sm-2 control-label">Image Url:</label>
@@ -56,8 +64,20 @@
 							</div>
 							
 							<br></br>
-							<br></br>
-							
+
+							<div class="form-group">
+								<label>Categories</label>
+								<div>
+									<p th:if="${not #lists.isEmpty(categoryList)}"
+										th:each="category,rowStat : ${categoryList}">
+										<input type="checkbox"
+											th:field="*{category[__${rowStat.index}__].categoryId}"
+											th:value="${category.id}" /> 
+											<label th:text="${category.categoryName}">Category</label>
+									</p>
+								</div>
+							</div>
+
 						</fieldset>
 						<div class="row wrapper">
 							<div class="panel-footer">
