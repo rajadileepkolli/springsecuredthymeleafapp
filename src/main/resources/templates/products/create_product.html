@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head lang="en">
 
-<title>Spring Framework Guru</title>
+<title>Create New Product</title>
 
 <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
 </head>
@@ -22,7 +22,7 @@
 							<input type="hidden" th:field="*{productId}" />
 							
 							<div class="form-group"	th:classappend="${#fields.hasErrors('productName')}? 'has-error'">
-								<label class="col-sm-2 control-label">productName:</label>
+								<label class="col-sm-2 control-label">Product Name:</label>
 								<div class="col-sm-10">
 									<input type="text" class="form-control" name="productName" th:field="*{productName}" placeholder="Enter productName"/>
 									<p th:if="${#fields.hasErrors('productName')}"
@@ -65,20 +65,18 @@
 							
 							<br></br>
 
-							<div class="form-group">
-								<label>Categories</label>
-								<div>
-									<p th:if="${not #lists.isEmpty(categoryList)}"
-										th:each="category,rowStat : ${categoryList}">
-										<input type="checkbox"
-											th:field="*{category[__${rowStat.index}__].categoryId}"
-											th:value="${category.id}" /> 
-											<label th:text="${category.categoryName}">Category</label>
-									</p>
+							<div class="form-group" th:classappend="${#fields.hasErrors('category')} ? 'error'">
+								<label class="col-sm-2 control-label" for="category">Categories:</label>
+								<div class="col-sm-10">
+									<select  id="category" th:field="*{category}">
+										<option th:each="type : ${categoryList}"
+											th:value="${type.categoryId}"
+											th:text="${type.categoryName}">Wireframe</option>
+									</select>
 								</div>
 							</div>
-
 						</fieldset>
+						
 						<div class="row wrapper">
 							<div class="panel-footer">
 								<button type="submit" class="btn btn-primary">Submit</button>

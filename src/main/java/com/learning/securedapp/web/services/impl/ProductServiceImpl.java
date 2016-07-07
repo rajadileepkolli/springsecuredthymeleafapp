@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.learning.securedapp.domain.Product;
-import com.learning.securedapp.web.repositories.CategoryRepository;
 import com.learning.securedapp.web.repositories.ProductRepository;
 import com.learning.securedapp.web.services.ProductService;
 
@@ -15,13 +14,8 @@ public class ProductServiceImpl implements ProductService {
     
     @Autowired private ProductRepository productRepository;
     
-    @Autowired private CategoryRepository categoryRepository;
-
     @Override
     public Product saveProduct(Product product) {
-        if (product.getCategory() != null) {
-            product.setCategory(categoryRepository.findOne(product.getCategory().getCategoryId()));
-        }
         return productRepository.save(product);
     }
 

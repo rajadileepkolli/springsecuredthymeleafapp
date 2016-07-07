@@ -2,6 +2,8 @@ package com.learning.securedapp.web.controllers;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -53,7 +55,9 @@ public class ProductController extends SecuredAppBaseController {
 
     @Secured(value = { "ROLE_ADMIN" })
     @PostMapping(value = "product")
-    public String saveProduct(Product product, RedirectAttributes redirectAttributes) {
+    public String saveProduct(@Valid @ModelAttribute("product") Product product,
+            BindingResult bindingResult, Model model,
+            RedirectAttributes redirectAttributes) {
         boolean updated = true;
         if (product.getProductId().trim().length() == 0) {
             product.setProductId(null);

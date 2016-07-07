@@ -62,6 +62,13 @@ public class RedisConfiguration extends CachingConfigurerSupport {
         redisCacheManager.setUsePrefix(true);
         return redisCacheManager;
     }
+
+/*    @Profile("local")
+    @Bean
+    @Override
+    public CacheManager cacheManager() {
+        return new SimpleCacheManager();
+    }*/
     
     @Bean
     public StringRedisSerializer stringRedisSerializer() {

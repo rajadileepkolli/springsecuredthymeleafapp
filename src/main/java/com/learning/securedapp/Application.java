@@ -10,6 +10,8 @@ public class Application extends SpringBootServletInitializer {
 
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+        System.setProperty( "spring.profiles.active",
+                System.getProperty( "spring.profiles.active", "local" ) );
         return application.sources(Application.class);
     }
 

@@ -38,20 +38,20 @@
 
 	</appender>
 
-	<logger name="org.springframework" level="WARN" />
+	<logger name="org.springframework" level="INFO" />
 
-	<logger name="org.mongodb.driver" level="WARN" />
+	<logger name="org.mongodb.driver" level="INFO" />
     
     <logger name="org.springframework.data" level="INFO" />
 
-    <logger name="org.thymeleaf.TemplateEngine" level="DEBUG" />
+    <logger name="org.thymeleaf.TemplateEngine" level="INFO" />
     
-    <logger name="org.springframework.security" level="DEBUG" />
+    <logger name="org.springframework.security" level="INFO" />
     
     <logger name="com.learning.securedapp" level="TRACE" />
     
 	<springProfile name="local">
-		<root level="trace">
+		<root level="INFO">
 			<appender-ref ref="console" />  <!-- Uncomment when using local machine -->
 			<!-- <appender-ref ref="FILE" /> -->
 		</root>

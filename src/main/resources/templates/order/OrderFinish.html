@@ -1,48 +1,34 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8"/>
-    <title>注文完了</title>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/wro.css}" href="../../static/css/wro.css"/>
+<meta charset="UTF-8" />
+<title>Order Finished</title>
+<link rel="stylesheet" type="text/css" th:href="@{/css/wro.css}"
+	href="../../static/css/wro.css" />
 </head>
+<!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
 <body>
 
-<nav class="navbar navbar-default" role="navigation">
-    <div class="container">
-        <div class="navbar-header">
-            <a class="navbar-brand" th:href="@{/}"><span></span></a>
-        </div>
-        <div class="collapse navbar-collapse">
-            <ul class="nav navbar-nav navbar-right">
-                <li>
-                    <a th:href="@{/}" href="../goods/showGoods.html" th:text="#{label.home}">Home</a>
-                </li>
-                <li>
-                    <a th:href="@{/cart}" href="../cart/viewCart.html" th:text="#{label.cart}">cart</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
-<br/>
+	<div class="container">
+		<h1 th:text="#{msg.completeOrder}">Complete Order</h1>
 
-<div class="container">
-    <h1 th:text="#{msg.completeOrder}">注文完了</h1>
+		<p>
+			<i th:text="#{msg.thankyou}">Thank You</i>
+		</p>
+		<br />
+		<table class="table table-striped table-hover">
+			<tr>
+				<th th:text="#{label.orderNo}">Order No</th>
+				<td th:text="${order.orderId}">00001</td>
+			</tr>
+			<tr>
+				<th th:text="#{label.orderDate}">Order Date</th>
+				<td th:text="${order.orderDate}">2015-05-31</td>
+			</tr>
+		</table>
 
-    <p><i th:text="#{msg.thankyou}">お買い上げありがとうございます。</i></p>
-    <br/>
-    <table class="table table-striped table-hover">
-        <tr>
-            <th th:text="#{label.orderNo}">注文番号</th>
-            <td th:text="${order.orderId}">00001</td>
-        </tr>
-        <tr>
-            <th th:text="#{label.orderDate}">注文日</th>
-            <td th:text="${order.orderDate}">2015-05-31</td>
-        </tr>
-    </table>
-
-    <a th:href="@{/}" href="../goods/showGoods.html" class="btn btn-default" th:text="#{msg.backToHome}">買い物に戻る</a>
-</div>
+		<a th:href="@{/products}" href="../goods/showGoods.html"
+			class="btn btn-default" th:text="#{msg.backToHome}">Home</a>
+	</div>
 </body>
 </html>

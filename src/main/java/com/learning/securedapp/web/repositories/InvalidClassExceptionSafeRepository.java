@@ -3,7 +3,9 @@ package com.learning.securedapp.web.repositories;
 import org.springframework.data.redis.serializer.SerializationException;
 import org.springframework.session.ExpiringSession;
 import org.springframework.session.SessionRepository;
+import org.springframework.stereotype.Component;
 
+@Component
 public class InvalidClassExceptionSafeRepository<S extends ExpiringSession> implements SessionRepository<S> {
     private final SessionRepository<S> repository;
 
