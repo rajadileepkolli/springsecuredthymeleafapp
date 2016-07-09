@@ -15,7 +15,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.learning.securedapp.domain.Permission;
 import com.learning.securedapp.domain.Role;
 import com.learning.securedapp.domain.User;
 import com.learning.securedapp.web.services.LoginAttemptService;
@@ -63,15 +62,20 @@ public class CustomUserDetailsService implements UserDetailsService {
     private Collection<? extends GrantedAuthority> getAuthorities(List<Role> roleList) {
 
         Set<GrantedAuthority> authorities = new HashSet<>();
+        roleList.stream()
+                .peek(role -> authorities
+                        .add(new SimpleGrantedAuthority(role.getRoleName())))
+                .forEach(role -> role.getPermissions().forEach(p -> authorities
+                        .add(new SimpleGrantedAuthority("ROLE_" + p.getName()))));
 
-        for (Role role : roleList) {
+      /*  for (Role role : roleList) {
             authorities.add(new SimpleGrantedAuthority(role.getRoleName()));
             List<Permission> permissions = role.getPermissions();
             for (Permission permission : permissions) {
                 authorities
                         .add(new SimpleGrantedAuthority("ROLE_" + permission.getName()));
             }
-        }
+        }*/
         return authorities;
     }
 

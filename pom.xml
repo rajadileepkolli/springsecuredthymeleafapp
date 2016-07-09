@@ -14,14 +14,13 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.4.0.M3</version>
+        <version>1.4.0.RC1</version>
         <relativePath /> <!-- lookup parent from repository -->
     </parent>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
-        <mongodb.version>3.2.2</mongodb.version>
        <!--  <thymeleaf.version>3.0.0.RELEASE</thymeleaf.version>
         <thymeleaf-extras-springsecurity4.version>3.0.0.RELEASE</thymeleaf-extras-springsecurity4.version> -->
     </properties>

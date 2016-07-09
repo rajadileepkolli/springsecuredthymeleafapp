@@ -88,10 +88,10 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
             roleList.addAll(Arrays.asList("ROLE_SUPER_ADMIN", "ROLE_ADMIN",
                     "ROLE_CMS_ADMIN", "ROLE_USER"));
             for (String string : roleList) {
-                Role role = new Role();
-                role.setRoleName(string);
-                role.setPermissions(Arrays
-                        .asList(permissionRepository.findByName("MANAGE_SETTINGS")));
+                Role role = Role.builder().roleName(string)
+                        .permissions(Arrays.asList(
+                                permissionRepository.findByName("MANAGE_SETTINGS")))
+                        .build();
                 roleRepository.save(role);
             }
             Role role = roleRepository.findByRoleName("ROLE_SUPER_ADMIN");

@@ -1,9 +1,8 @@
 package com.learning.securedapp.web.controllers;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -85,15 +84,15 @@ public class UserController extends SecuredAppBaseController {
         if (null == user) {
             throw new SecuredAppException("409", "User Doesn't Exists");
         }
-        Map<String, Role> assignedRoleMap = new HashMap<>();
-        List<Role> roles = user.getRoleList();
-        for (Role role : roles) {
-            assignedRoleMap.put(role.getId(), role);
-        }
+        
+        List<String> assignedRoleList = user.getRoleList().parallelStream()
+                                                          .map(role -> role.getId())
+                                                          .collect(Collectors.toList());
+        
         List<Role> userRoles = new ArrayList<>();
         List<Role> allRoles = securityService.getAllRoles();
         for (Role role : allRoles) {
-            if (assignedRoleMap.containsKey(role.getId())) {
+            if (assignedRoleList.contains(role.getId())) {
                 userRoles.add(role);
             } else {
                 userRoles.add(null);

@@ -22,9 +22,8 @@ public class RoleRepositoryTest extends ApplicationTests{
         List<String> roleList = new ArrayList<>();
         roleList.addAll(Arrays.asList("ROLE_SUPER_ADMIN","ROLE_ADMIN","ROLE_CMS_ADMIN", "ROLE_USER"));
         for (String string : roleList) {
-            Role permission = new Role();
-            permission.setRoleName(string);
-            roleRepository.save(permission);
+            Role role = Role.builder().roleName(string).build();
+            roleRepository.save(role);
         }
     }
     

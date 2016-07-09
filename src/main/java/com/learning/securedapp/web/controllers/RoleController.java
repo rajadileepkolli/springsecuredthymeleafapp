@@ -51,7 +51,7 @@ public class RoleController extends SecuredAppBaseController
     
     @GetMapping(value="/roles/new")
     public String createRoleForm(Model model) {
-        Role role = new Role();
+        Role role = Role.builder().build();
         model.addAttribute("role",role);
         //model.addAttribute("permissionsList",securityService.getAllPermissions());        
         

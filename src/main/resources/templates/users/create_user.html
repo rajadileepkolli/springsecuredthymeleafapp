@@ -44,6 +44,12 @@
 							<input type="text" class="form-control"	name="email" th:field="*{email}" placeholder="Enter User Email" />
 							<p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" th:class="text-red">Incorrect data</p>
 						</div>
+						
+						<div class="form-group"	th:classappend="${#fields.hasErrors('zip')}? 'has-error'">
+							<label>Postal Code</label>
+							<input type="text" class="form-control" name="zip" th:field="*{zip}" placeholder="Enter postal code" />
+							<p th:if="${#fields.hasErrors('zip')}"	th:errors="*{zip}" th:class="text-red">Incorrect data</p>
+						</div>
 
 						<div class="form-group">
 							<label>Roles</label>

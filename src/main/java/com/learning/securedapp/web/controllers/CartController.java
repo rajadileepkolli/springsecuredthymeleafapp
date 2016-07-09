@@ -1,5 +1,10 @@
 package com.learning.securedapp.web.controllers;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,12 +14,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.learning.securedapp.web.domain.Cart;
 import com.learning.securedapp.web.domain.CartForm;
 
 @Controller
-@RequestMapping("cart")
+@RequestMapping("/cart")
 public class CartController extends SecuredAppBaseController{
     
     @Autowired
@@ -40,4 +46,28 @@ public class CartController extends SecuredAppBaseController{
         cart.remove(cartForm.getLineNo());
         return "redirect:/cart";
     }
+    
+    @GetMapping(value="/items/count")
+    @ResponseBody
+    public Map<String, Object> getCartItemCount(HttpServletRequest request, Model model)
+    {
+        Cart cart = getOrCreateCart(request);
+        int itemCount = cart.getOrderLines().getList().size();
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("count", itemCount);
+        return map;
+    }
+
+    private Cart getOrCreateCart(HttpServletRequest request) {
+        Cart cart = null;
+        cart = (Cart) request.getSession().getAttribute("CART_KEY");
+        if(cart == null){
+            cart = new Cart();
+            request.getSession().setAttribute("CART_KEY", cart);
+        }
+        return cart;
+    }
+        
+    
+    
 }

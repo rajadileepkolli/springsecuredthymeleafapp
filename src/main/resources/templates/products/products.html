@@ -23,10 +23,12 @@
 				<div class="col-xs-6">
 					<ul class="nav nav-pills navbar-right">
 						<li>
-							<a href="#" th:sref="order" class="btn btn-danger">
+						<form th:action="@{/viewCart}" action="../cart/viewCart.html" method="post" class="form-inline">
+							<button  type="button" th:sref="order" class="btn btn-danger">
 								<span id="cart-item-count" class="badge">(0)</span>
 								<span class="glyphicon glyphicon-shopping-cart"></span>Shopping Cart
-							</a>
+							</button>
+						</form>
 						</li>
 					</ul>
 				</div>
@@ -62,7 +64,7 @@
 									</td>
 									<td th:text="${product.productName}">name</td>
 									<td th:text="${product.description}">description</td>
-									<td th:text="'$' + ${#numbers.formatInteger(product.price, 3, 'COMMA')}">price</td>
+									<td th:text="'â‚¹' + ${#numbers.formatDecimal(product.price, 3, 'COMMA', 2 , 'POINT')}">price</td>
 									<td><a th:href="${'/product/' + product.productId}">View</a></td>
 									<div sec:authorize="hasRole('ROLE_CMS_ADMIN')">
 										<td><a th:href="${'/product/edit/' + product.productId}">Edit</a></td>
@@ -90,7 +92,7 @@
 									<p>
 										<i class="icon fa fa-success"> <span th:text="${success}"></span></i>
 									</p>
-									<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+									<button type="button" class="close" data-dismiss="alert" aria-hidden="true">Ã—</button>
 								</div>
 							</div>
 						</div>
@@ -101,7 +103,7 @@
 									<p>
 										<i class="icon fa fa-warning"><span th:text="${msg}"></span></i>
 									</p>
-									<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+									<button type="button" class="close" data-dismiss="alert" aria-hidden="true">Ã—</button>
 								</div>
 							</div>
 						</div>
@@ -112,7 +114,7 @@
 									<p>
 										<i class="icon fa fa-danger"> <span th:text="${error}"></span></i>
 									</p>
-									<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+									<button type="button" class="close" data-dismiss="alert" aria-hidden="true">Ã—</button>
 								</div>
 							</div>
 						</div>

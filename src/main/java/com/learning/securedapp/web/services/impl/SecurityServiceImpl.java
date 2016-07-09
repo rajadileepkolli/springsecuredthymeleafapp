@@ -3,6 +3,7 @@ package com.learning.securedapp.web.services.impl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -67,14 +68,18 @@ public class SecurityServiceImpl implements SecurityService{
         }
 
         List<Role> persistedRoles = new ArrayList<>();
-        List<Role> roles = user.getRoleList();
-        if (roles != null) {
+       // List<Role> roles = user.getRoleList();
+        user.getRoleList().parallelStream()
+                .filter(role -> role.getId() != null)
+                .collect(Collectors.toList())
+                .forEach(role -> persistedRoles.add(getRoleById(role.getId())));
+        /*if (roles != null) {
             for (Role role : roles) {
                 if (role.getId() != null) {
                     persistedRoles.add(getRoleById(role.getId()));
                 }
             }
-        }
+        }*/
         user.setRoleList(persistedRoles);
         return userRepository.save(user);
     }
@@ -94,16 +99,19 @@ public class SecurityServiceImpl implements SecurityService{
             throw new SecuredAppException("User "+user.getId()+" doesn't exist");
         }
         
-        List<Role> updatedRoles = new ArrayList<>();
-        List<Role> roles = user.getRoleList();
-        if(roles != null){
+//        List<Role> updatedRoles = new ArrayList<>();
+        List<Role> updatedRoles = user.getRoleList().stream()
+                .filter(role -> role.getId() != null)
+                .map(role -> getRoleById(role.getId()))
+                .collect(Collectors.toList());
+        /*if(roles != null){
             for (Role role : roles) {
                 if(role.getId() != null)
                 {
                     updatedRoles.add(getRoleById(role.getId()));
                 }
             }
-        }
+        }*/
         persistedUser.setRoleList(updatedRoles);
         return userRepository.save(persistedUser);
     }
@@ -163,18 +171,21 @@ public class SecurityServiceImpl implements SecurityService{
     @Override
     @CacheEvict(value = "roles", allEntries = true)
     public Role createRole(Role role) throws SecuredAppException {
-        List<Permission> persistedPermissions = new ArrayList<>();
-        List<Permission> permissions = role.getPermissions();
-        if(permissions != null){
+//        List<Permission> persistedPermissions = new ArrayList<>();
+        List<Permission> permissions = role.getPermissions().stream()
+                .filter(permission -> permission.getId() != null)
+                .map(permission -> findPermission(permission.getId()))
+                .collect(Collectors.toList());
+        /*if(permissions != null){
             for (Permission permission : permissions) {
                 if(permission.getId() != null)
                 {
                     persistedPermissions.add(findPermission(permission.getId()));
                 }
             }
-        }
+        }*/
         
-        role.setPermissions(persistedPermissions);
+        role.setPermissions(permissions);
         return roleRepository.save(role);
     }
 
@@ -199,16 +210,22 @@ public class SecurityServiceImpl implements SecurityService{
             throw new SecuredAppException("Role " + id + " doesn't exist");
         }
         persistedRole.setDescription(role.getDescription());
-        List<Permission> updatedPermissions = new ArrayList<>();
-        List<Permission> permissions = role.getPermissions();
-        if(permissions != null){
+       /* List<Permission> updatedPermissions = new ArrayList<>();
+        List<Permission> permissions = role.getPermissions();*/
+        
+        List<Permission> updatedPermissions = role.getPermissions().parallelStream()
+                .filter(permission -> permission.getId() != null)
+                .map(permission -> findPermission(permission.getId()))
+                .collect(Collectors.toList());
+        
+        /*if(permissions != null){
             for (Permission permission : permissions) {
                 if(permission.getId() != null)
                 {
                     updatedPermissions.add(findPermission(permission.getId()));
                 }
             }
-        }
+        }*/
         persistedRole.setPermissions(updatedPermissions);
         return roleRepository.save(persistedRole);
     }

@@ -16,12 +16,10 @@ public class UserRepositoryTest extends ApplicationTests{
     @Test
     public final void test() throws SecuredAppException {
         userRepository.deleteAll();
-        User user = new User();
-        user.setUserName("superadmin");
-        user.setPassword(new BCryptPasswordEncoder().encode("superadmin"));
-        user.setEmail("rajadileepkolli@gmail.com");
-        user.setEnabled(true);
-        user.setRoleList(roleRepository.findAll());
+        User user = User.builder().userName("superadmin")
+                .password(new BCryptPasswordEncoder(10).encode("superadmin"))
+                .email("expoenviron@gmail.com").enabled(true)
+                .roleList(roleRepository.findAll()).build();
         userRepository.save(user);
     }
 

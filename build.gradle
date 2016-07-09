@@ -1,6 +1,6 @@
 buildscript {
 	ext {
-		springBootVersion = '1.4.0.M3'
+		springBootVersion = '1.4.0.RC1'
 	}
 	repositories {
 		mavenCentral()
@@ -49,7 +49,7 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-actuator')
     compile('org.springframework.boot:spring-boot-starter-data-redis')
 	compile('org.springframework.boot:spring-boot-starter-data-mongodb')
-	//compile('org.springframework.boot:spring-boot-devtools')
+	compile('org.springframework.boot:spring-boot-devtools')
 	compile('org.springframework.boot:spring-boot-starter-hateoas')
 	compile('org.projectlombok:lombok')
     compile('com.google.guava:guava:19.0')
