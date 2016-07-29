@@ -9,13 +9,13 @@ import org.springframework.data.annotation.Id;
 import lombok.Data;
 
 @Data
-public class Category implements Serializable{
-    
-    private static final long serialVersionUID = 1L;
+public class Category implements Serializable {
 
-    @Id
-    private String categoryId;
-    
-    @NotNull
-    private String categoryName;
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	private String categoryId;
+
+	@NotNull
+	private String categoryName;
 }

@@ -19,12 +19,13 @@ import com.learning.securedapp.web.domain.Cart;
 
 /**
  * 
- * @author rajakolli 
+ * @author rajakolli
  * 
- * The @EnableRedisHttpSession annotation creates a Spring Bean with the
- * name of springSessionRepositoryFilter that implements Filter. The filter is what is in
- * charge of replacing the HttpSession implementation to be backed by Spring Session. In
- * this instance Spring Session is backed by Redis.
+ *         The @EnableRedisHttpSession annotation creates a Spring Bean with the
+ *         name of springSessionRepositoryFilter that implements Filter. The
+ *         filter is what is in charge of replacing the HttpSession
+ *         implementation to be backed by Spring Session. In this instance
+ *         Spring Session is backed by Redis.
  */
 
 @Configuration
@@ -32,63 +33,56 @@ import com.learning.securedapp.web.domain.Cart;
 @EnableRedisHttpSession
 public class RedisConfiguration extends CachingConfigurerSupport {
 
-    @Bean
-    public JedisConnectionFactory jedisConnectionFactory() {
-        JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory();
-        jedisConnectionFactory.setHostName("127.0.0.1");
-        jedisConnectionFactory.setPort(6379);
-        return jedisConnectionFactory;
-    }
+	@Bean
+	public JedisConnectionFactory jedisConnectionFactory() {
+		JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory();
+		jedisConnectionFactory.setHostName("127.0.0.1");
+		jedisConnectionFactory.setPort(6379);
+		return jedisConnectionFactory;
+	}
 
-    @Bean
-    public RedisTemplate<?, ?> redisTemplate() {
-        RedisTemplate<byte[], byte[]> redisTemplate = new RedisTemplate<>();
-        redisTemplate.setConnectionFactory(jedisConnectionFactory());
-        redisTemplate.setExposeConnection(true);
-        redisTemplate.setKeySerializer(stringRedisSerializer());
-        return redisTemplate;
-    }
+	@Bean
+	public RedisTemplate<?, ?> redisTemplate() {
+		RedisTemplate<byte[], byte[]> redisTemplate = new RedisTemplate<>();
+		redisTemplate.setConnectionFactory(jedisConnectionFactory());
+		redisTemplate.setExposeConnection(true);
+		redisTemplate.setKeySerializer(stringRedisSerializer());
+		return redisTemplate;
+	}
 
-    @Bean
-    public RedisCacheManager cacheManager() {
-        RedisCacheManager redisCacheManager = new RedisCacheManager(redisTemplate());
-        redisCacheManager.setTransactionAware(true);
-        redisCacheManager.setLoadRemoteCachesOnStartup(true);
-        redisCacheManager.setUsePrefix(true);
-        return redisCacheManager;
-    }
+	@Bean
+	@Override
+	public RedisCacheManager cacheManager() {
+		RedisCacheManager redisCacheManager = new RedisCacheManager(redisTemplate());
+		redisCacheManager.setTransactionAware(true);
+		redisCacheManager.setLoadRemoteCachesOnStartup(true);
+		redisCacheManager.setUsePrefix(true);
+		return redisCacheManager;
+	}
 
-/*    @Profile("local")
-    @Bean
-    @Override
-    public CacheManager cacheManager() {
-        return new SimpleCacheManager();
-    }*/
-    
-    @Bean
-    public StringRedisSerializer stringRedisSerializer() {
-       StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
-       return stringRedisSerializer;
-    }
-    
-    @Bean
-    @Override
-    public KeyGenerator keyGenerator() {
-      return (target, method, params) -> {
-        StringBuilder sb = new StringBuilder();
-        sb.append(target.getClass().getName());
-        sb.append(method.getName());
-        for (Object obj : params) {
-          sb.append(obj.toString());
-        }
-        return sb.toString();
-      };
-    }
-     
-    @Bean
-    @Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
-    Cart cart() {
-        return new CachingCart();
-    }
+	@Bean
+	public StringRedisSerializer stringRedisSerializer() {
+		return new StringRedisSerializer();
+	}
+
+	@Bean
+	@Override
+	public KeyGenerator keyGenerator() {
+		return (target, method, params) -> {
+			StringBuilder sb = new StringBuilder();
+			sb.append(target.getClass().getName());
+			sb.append(method.getName());
+			for (Object obj : params) {
+				sb.append(obj.toString());
+			}
+			return sb.toString();
+		};
+	}
+
+	@Bean
+	@Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
+	Cart cart() {
+		return new CachingCart();
+	}
 
 }

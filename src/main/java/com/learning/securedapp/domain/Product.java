@@ -16,16 +16,16 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Product implements Serializable{
-    
-    private static final long serialVersionUID = 1L;
-    
-    @Id
-    private String productId;
-    private String productName;
-    private String description;
-    private String imageUrl;
-    private Double price;
-    @DBRef(lazy= true)
-    private Category category;
+public class Product implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	private String productId;
+	private String productName;
+	private String description;
+	private String imageUrl;
+	private Double price;
+	@DBRef(lazy = true)
+	private Category category;
 }

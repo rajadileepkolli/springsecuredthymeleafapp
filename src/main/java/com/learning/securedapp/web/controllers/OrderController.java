@@ -24,42 +24,41 @@ import com.learning.securedapp.web.services.SecurityService;
 @RequestMapping("order")
 public class OrderController extends SecuredAppBaseController {
 
-    @Autowired
-    OrderService orderService;
-    @Autowired
-    SecurityService userService;
-    @Autowired
-    Cart cart;
+	@Autowired
+	OrderService orderService;
+	@Autowired
+	SecurityService userService;
+	@Autowired
+	Cart cart;
 
-    @RequestMapping(method = RequestMethod.GET, params = "confirm")
-    String confirm(Model model) {
-        model.addAttribute("orderLines", cart.getOrderLines());
-        if (cart.isEmpty()) {
-            model.addAttribute("error", "Cart Cannot be empty");
-            return "products/viewCart";
-        }
-        model.addAttribute("account", userService.getUserByUserName(getCurrentUser()));
-        model.addAttribute("signature", orderService.calcSignature(cart));
-        return "order/orderConfirm";
-    }
+	@RequestMapping(method = RequestMethod.GET, params = "confirm")
+	String confirm(Model model) {
+		model.addAttribute("orderLines", cart.getOrderLines());
+		if (cart.isEmpty()) {
+			model.addAttribute("error", "Cart Cannot be empty");
+			return "products/viewCart";
+		}
+		model.addAttribute("account", userService.getUserByUserName(getCurrentUser()));
+		model.addAttribute("signature", orderService.calcSignature(cart));
+		return "order/orderConfirm";
+	}
 
-    @RequestMapping(method = RequestMethod.POST)
-    String order(@RequestParam String signature, RedirectAttributes attributes) {
-        Order order = orderService.purchase(
-                userService.getUserByUserName(getCurrentUser()).getEmail(), cart,
-                signature);
-        attributes.addFlashAttribute(order);
-        return "redirect:/order?finish";
-    }
+	@RequestMapping(method = RequestMethod.POST)
+	String order(@RequestParam String signature, RedirectAttributes attributes) {
+		Order order = orderService.purchase(userService.getUserByUserName(getCurrentUser()).getEmail(), cart,
+				signature);
+		attributes.addFlashAttribute(order);
+		return "redirect:/order?finish";
+	}
 
-    @GetMapping(params = "finish")
-    String finish() {
-        return "order/orderFinish";
-    }
+	@GetMapping(params = "finish")
+	String finish() {
+		return "order/orderFinish";
+	}
 
-    @ExceptionHandler({ EmptyCartOrderException.class, InvalidCartOrderException.class })
-    @ResponseStatus(HttpStatus.CONFLICT)
-    ModelAndView handleOrderException(RuntimeException e) {
-        return new ModelAndView("order/error").addObject("error", e.getMessage());
-    }
+	@ExceptionHandler({ EmptyCartOrderException.class, InvalidCartOrderException.class })
+	@ResponseStatus(HttpStatus.CONFLICT)
+	ModelAndView handleOrderException(RuntimeException e) {
+		return new ModelAndView("order/error").addObject("error", e.getMessage());
+	}
 }

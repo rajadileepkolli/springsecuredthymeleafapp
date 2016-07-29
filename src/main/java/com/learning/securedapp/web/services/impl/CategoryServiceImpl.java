@@ -12,22 +12,22 @@ import com.learning.securedapp.web.services.CategoryService;
 @Service
 public class CategoryServiceImpl implements CategoryService {
 
-    @Autowired
-    CategoryRepository categoryRepository;
+	@Autowired
+	CategoryRepository categoryRepository;
 
-    @Override
-    public Category saveCategory(Category category) {
-        return categoryRepository.save(category);
-    }
+	@Override
+	public Category saveCategory(Category category) {
+		return categoryRepository.save(category);
+	}
 
-    @Override
-    public List<Category> getAllCategories() {
-        return categoryRepository.findAll();
-    }
+	@Override
+	public List<Category> getAllCategories() {
+		return categoryRepository.findAll();
+	}
 
-    @Override
-    public Category getbyName(String categoryName) {
-        return categoryRepository.findByCategoryName(categoryName);
-    }
+	@Override
+	public Category getbyName(String categoryName) {
+		return categoryRepository.findByCategoryName(categoryName);
+	}
 
 }

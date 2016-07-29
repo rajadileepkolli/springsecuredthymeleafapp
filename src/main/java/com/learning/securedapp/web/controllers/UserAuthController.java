@@ -23,104 +23,102 @@ import org.thymeleaf.context.Context;
 import com.learning.securedapp.exception.SecuredAppException;
 import com.learning.securedapp.service.email.EmailService;
 import com.learning.securedapp.web.services.SecurityService;
-import com.learning.securedapp.web.utils.WebUtils;
+import com.learning.securedapp.web.utils.WebAppUtils;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @Slf4j
 public class UserAuthController extends SecuredAppBaseController {
-    private static final String viewPrefix = "public/";
+	private static final String viewPrefix = "public/";
 
-    @Autowired
-    protected SecurityService securityService;
-    @Autowired
-    protected EmailService emailService;
-    @Autowired 
-    private TemplateEngine templateEngine;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+	@Autowired
+	protected SecurityService securityService;
+	@Autowired
+	protected EmailService emailService;
+	@Autowired
+	private TemplateEngine templateEngine;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
-    @GetMapping(value = "/forgotPwd")
-    public String forgotPwd() {
-        return viewPrefix + "forgotPwd";
-    }
+	@GetMapping(value = "/forgotPwd")
+	public String forgotPwd() {
+		return viewPrefix + "forgotPwd";
+	}
 
-    @PostMapping(value = "/forgotPwd")
-    public String handleForgotPwd(HttpServletRequest request, RedirectAttributes redirectAttributes) {
-        String email = request.getParameter("email");
-        try {
-            String token = securityService.resetPassword(email);
-            String resetPwdURL = WebUtils.getURLWithContextPath(request)
-                    + "/resetPwd?email=" + email + "&token=" + token;
-            log.debug(resetPwdURL);
-            this.sendForgotPasswordEmail(email, resetPwdURL);
-            redirectAttributes.addFlashAttribute("success", getMessage(INFO_PASSWORD_RESET_LINK_SENT));
-        } catch (SecuredAppException e) {
-            log.error(e.getMessage());
-            redirectAttributes.addFlashAttribute("msg", e.getMessage());
-        }
-        return "redirect:/forgotPwd";
-    }
+	@PostMapping(value = "/forgotPwd")
+	public String handleForgotPwd(HttpServletRequest request, RedirectAttributes redirectAttributes) {
+		String email = request.getParameter("email");
+		try {
+			String token = securityService.resetPassword(email);
+			String resetPwdURL = WebAppUtils.getURLWithContextPath(request) + "/resetPwd?email=" + email + "&token="
+					+ token;
+			log.debug(resetPwdURL);
+			this.sendForgotPasswordEmail(email, resetPwdURL);
+			redirectAttributes.addFlashAttribute("success", getMessage(INFO_PASSWORD_RESET_LINK_SENT));
+		} catch (SecuredAppException e) {
+			log.error(e.getMessage());
+			redirectAttributes.addFlashAttribute("msg", e.getMessage());
+		}
+		return "redirect:/forgotPwd";
+	}
 
-    @GetMapping(value = "/resetPwd")
-    public String resetPwd(HttpServletRequest request, Model model,
-            RedirectAttributes redirectAttributes) {
-        String email = request.getParameter("email");
-        String token = request.getParameter("token");
+	@GetMapping(value = "/resetPwd")
+	public String resetPwd(HttpServletRequest request, Model model, RedirectAttributes redirectAttributes) {
+		String email = request.getParameter("email");
+		String token = request.getParameter("token");
 
-        try {
-           boolean valid = securityService.verifyPasswordResetToken(email, token);
-            if (valid) {
-                model.addAttribute("email", email);
-                model.addAttribute("token", token);
-                return viewPrefix + "resetPwd";
-            }
-        } catch (SecuredAppException e) {
-            redirectAttributes.addFlashAttribute("msg", getMessage(ERROR_INVALID_PASSWORD_RESET_REQUEST));
-            return "redirect:/login";
-        }
-        return null;
+		try {
+			boolean valid = securityService.verifyPasswordResetToken(email, token);
+			if (valid) {
+				model.addAttribute("email", email);
+				model.addAttribute("token", token);
+				return viewPrefix + "resetPwd";
+			}
+		} catch (SecuredAppException e) {
+			redirectAttributes.addFlashAttribute("msg", getMessage(ERROR_INVALID_PASSWORD_RESET_REQUEST));
+			return "redirect:/login";
+		}
+		return null;
 
-    }
+	}
 
-    @PostMapping(value = "/resetPwd")
-    public String handleResetPwd(HttpServletRequest request, Model model,
-            RedirectAttributes redirectAttributes) {
-        try {
-            String email = request.getParameter("email");
-            String token = request.getParameter("token");
-            String password = request.getParameter("password");
-            String confPassword = request.getParameter("confPassword");
-            if (!password.equals(confPassword)) {
-                model.addAttribute("email", email);
-                model.addAttribute("token", token);
-                model.addAttribute("msg", getMessage(ERROR_PASSWORD_CONF_PASSWORD_MISMATCH));
-                return viewPrefix + "resetPwd";
-            }
-            String encodedPwd = passwordEncoder.encode(password);
-            securityService.updatePassword(email, token, encodedPwd);
-            redirectAttributes.addFlashAttribute("success", getMessage(INFO_PASSWORD_UPDATED_SUCCESS));
-        } catch (SecuredAppException e) {
-            log.error(e.getMessage());
-            redirectAttributes.addFlashAttribute("msg", getMessage(ERROR_INVALID_PASSWORD_RESET_REQUEST));
-        }
-        return "redirect:/login";
-    }
+	@PostMapping(value = "/resetPwd")
+	public String handleResetPwd(HttpServletRequest request, Model model, RedirectAttributes redirectAttributes) {
+		try {
+			String email = request.getParameter("email");
+			String token = request.getParameter("token");
+			String password = request.getParameter("password");
+			String confPassword = request.getParameter("confPassword");
+			if (!password.equals(confPassword)) {
+				model.addAttribute("email", email);
+				model.addAttribute("token", token);
+				model.addAttribute("msg", getMessage(ERROR_PASSWORD_CONF_PASSWORD_MISMATCH));
+				return viewPrefix + "resetPwd";
+			}
+			String encodedPwd = passwordEncoder.encode(password);
+			securityService.updatePassword(email, token, encodedPwd);
+			redirectAttributes.addFlashAttribute("success", getMessage(INFO_PASSWORD_UPDATED_SUCCESS));
+		} catch (SecuredAppException e) {
+			log.error(e.getMessage());
+			redirectAttributes.addFlashAttribute("msg", getMessage(ERROR_INVALID_PASSWORD_RESET_REQUEST));
+		}
+		return "redirect:/login";
+	}
 
-    protected void sendForgotPasswordEmail(String email, String resetPwdURL) {
-        try {
+	protected void sendForgotPasswordEmail(String email, String resetPwdURL) {
+		try {
 
-            // Prepare the evaluation context
-            final Context ctx = new Context(Locale.ENGLISH);
-            ctx.setVariable("resetPwdURL", resetPwdURL);
+			// Prepare the evaluation context
+			final Context ctx = new Context(Locale.ENGLISH);
+			ctx.setVariable("resetPwdURL", resetPwdURL);
 
-            // Create the HTML body using Thymeleaf
-            final String htmlContent = this.templateEngine.process("forgot-password-email", ctx);
+			// Create the HTML body using Thymeleaf
+			final String htmlContent = this.templateEngine.process("forgot-password-email", ctx);
 
-            emailService.sendEmail(email, getMessage(LABEL_PASSWORD_RESET_EMAIL_SUBJECT), htmlContent);
-        } catch (SecuredAppException e) {
-            log.error(e.getMessage());
-        }
-    }
+			emailService.sendEmail(email, getMessage(LABEL_PASSWORD_RESET_EMAIL_SUBJECT), htmlContent);
+		} catch (SecuredAppException e) {
+			log.error(e.getMessage());
+		}
+	}
 }

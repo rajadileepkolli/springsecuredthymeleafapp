@@ -6,6 +6,6 @@ import com.learning.securedapp.domain.Role;
 
 public interface RoleRepository extends MongoRepository<Role, String> {
 
-    Role findByRoleName(String rolename);
+	Role findByRoleName(String rolename);
 
 }

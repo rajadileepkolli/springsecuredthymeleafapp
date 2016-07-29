@@ -7,17 +7,17 @@ import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 
 @Configuration
 public class ThymeleafConfigurator {
-    
-    @Bean
-    public ClassLoaderTemplateResolver emailTemplateResolver() {
-        ClassLoaderTemplateResolver emailTemplateResolver = new ClassLoaderTemplateResolver();
-        emailTemplateResolver.setPrefix("mails/");
-        emailTemplateResolver.setSuffix(".html");
-        emailTemplateResolver.setTemplateMode(TemplateMode.HTML);
-        emailTemplateResolver.setCharacterEncoding("UTF-8");
-        emailTemplateResolver.setOrder(0);
-        emailTemplateResolver.setCheckExistence(true);
 
-        return emailTemplateResolver;
-    }
+	@Bean
+	public ClassLoaderTemplateResolver emailTemplateResolver() {
+		ClassLoaderTemplateResolver emailTemplateResolver = new ClassLoaderTemplateResolver();
+		emailTemplateResolver.setPrefix("mails/");
+		emailTemplateResolver.setSuffix(".html");
+		emailTemplateResolver.setTemplateMode(TemplateMode.HTML);
+		emailTemplateResolver.setCharacterEncoding("UTF-8");
+		emailTemplateResolver.setOrder(0);
+		emailTemplateResolver.setCheckExistence(true);
+
+		return emailTemplateResolver;
+	}
 }

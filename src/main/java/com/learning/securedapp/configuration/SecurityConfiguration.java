@@ -71,9 +71,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Bean
     public RememberMeAuthenticationProvider rememberMeAuthenticationProvider() {
-        RememberMeAuthenticationProvider rememberMeAuthenticationProvider = new RememberMeAuthenticationProvider(
+        return new RememberMeAuthenticationProvider(
                 environment.getProperty("spring.application.name", "securedApp"));
-        return rememberMeAuthenticationProvider;
     }
 
     @Bean

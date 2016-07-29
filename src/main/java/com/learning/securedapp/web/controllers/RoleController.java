@@ -30,101 +30,99 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 @Slf4j
 @Secured(SecurityUtil.MANAGE_ROLES)
-public class RoleController extends SecuredAppBaseController
-{
-    private static final String viewPrefix = "roles/";
-    
-    @Autowired private SecurityService securityService;
-    @Autowired private RoleValidator roleValidator;
+public class RoleController extends SecuredAppBaseController {
+	private static final String viewPrefix = "roles/";
 
-    @ModelAttribute("permissionsList")
-    public List<Permission> permissionsList(){
-        return securityService.getAllPermissions();
-    }
-    
-    @GetMapping(value="/roles")
-    public String listRoles(Model model) {
-        List<Role> list = securityService.getAllRoles();
-        model.addAttribute("roles",list);
-        return viewPrefix+"roles";
-    }
-    
-    @GetMapping(value="/roles/new")
-    public String createRoleForm(Model model) {
-        Role role = Role.builder().build();
-        model.addAttribute("role",role);
-        //model.addAttribute("permissionsList",securityService.getAllPermissions());        
-        
-        return viewPrefix+"create_role";
-    }
+	@Autowired
+	private SecurityService securityService;
+	@Autowired
+	private RoleValidator roleValidator;
 
-    @PostMapping(value="/roles")
-    public String createRole(@Valid @ModelAttribute("role") Role role, BindingResult result, 
-            Model model, RedirectAttributes redirectAttributes) {
-        roleValidator.validate(role, result);
-        if(result.hasErrors()){
-            return viewPrefix+"create_role";
-        }
-        try {
-            Role persistedRole = securityService.createRole(role);
-            log.debug("Created new role with id : {} and name : {}", persistedRole.getId(), persistedRole.getRoleName());
-            redirectAttributes.addFlashAttribute("success", "Role "+persistedRole.getRoleName()+" created successfully");
-        } catch (SecuredAppException e) {
-            model.addAttribute("errorMessage", e.getMessage());
-            redirectAttributes.addFlashAttribute("error", "Role "+ role.getRoleName() +" was not created");
-            return "redirect:/error/accessDenied";
-        }
-        return "redirect:/roles";
-    }
-    
-    
-    @GetMapping(value="/roles/{id}")
-    public String editRoleForm(@PathVariable String id, Model model) {
-        Role role = securityService.getRoleById(id);
-        Map<String, Permission> assignedPermissionMap = new HashMap<>();
-        List<Permission> permissions = role.getPermissions();
-        for (Permission permission : permissions)
-        {
-            assignedPermissionMap.put(permission.getId(), permission);
-        }
-        List<Permission> rolePermissions = new ArrayList<>();
-        List<Permission> allPermissions = securityService.getAllPermissions();
-        for (Permission permission : allPermissions)
-        {
-            if(assignedPermissionMap.containsKey(permission.getId())){
-                rolePermissions.add(permission);
-            } else {
-                rolePermissions.add(null);
-            }
-        }
-        role.setPermissions(rolePermissions);
-        model.addAttribute("role",role);
-        //model.addAttribute("permissionsList",allPermissions);     
-        return viewPrefix+"edit_role";
-    }
-    
-    @PostMapping(value="/roles/{id}")
-    public String updateRole(@ModelAttribute("role") Role role, BindingResult result, 
-            Model model, RedirectAttributes redirectAttributes) {
-        try {
-            Role persistedRole = securityService.updateRole(role, role.getId());
-            log.debug("Updated role with id : {} and name : {}", persistedRole.getId(),
-                    persistedRole.getRoleName());
-            redirectAttributes.addFlashAttribute("success",
-                    "Role updated successfully for " + persistedRole.getRoleName());
-        } catch (SecuredAppException e) {
-            model.addAttribute("errorMessage", e.getMessage());
-            return "redirect:/error/accessDenied";
-        }
+	@ModelAttribute("permissionsList")
+	public List<Permission> permissionsList() {
+		return securityService.getAllPermissions();
+	}
 
-        return "redirect:/roles";
-    }
-    
-    // Delete
-    @GetMapping("/roles/delete/{id}")
-    public String delete(@PathVariable String id) {
-        securityService.deleteRole(id);
-        return "redirect:/roles";
-    }
+	@GetMapping(value = "/roles")
+	public String listRoles(Model model) {
+		List<Role> list = securityService.getAllRoles();
+		model.addAttribute("roles", list);
+		return viewPrefix + "roles";
+	}
+
+	@GetMapping(value = "/roles/new")
+	public String createRoleForm(Model model) {
+		Role role = Role.builder().build();
+		model.addAttribute("role", role);
+		// model.addAttribute("permissionsList",securityService.getAllPermissions());
+
+		return viewPrefix + "create_role";
+	}
+
+	@PostMapping(value = "/roles")
+	public String createRole(@Valid @ModelAttribute("role") Role role, BindingResult result, Model model,
+			RedirectAttributes redirectAttributes) throws SecuredAppException {
+		roleValidator.validate(role, result);
+		if (result.hasErrors()) {
+			return viewPrefix + "create_role";
+		}
+		try {
+			Role persistedRole = securityService.createRole(role);
+			log.debug("Created new role with id : {} and name : {}", persistedRole.getId(),
+					persistedRole.getRoleName());
+			redirectAttributes.addFlashAttribute("success",
+					"Role " + persistedRole.getRoleName() + " created successfully");
+		} catch (SecuredAppException e) {
+			model.addAttribute("errorMessage", e.getMessage());
+			redirectAttributes.addFlashAttribute("error", "Role " + role.getRoleName() + " was not created");
+			throw new SecuredAppException("Role " + role.getRoleName() + " was not created", e);
+		}
+		return "redirect:/roles";
+	}
+
+	@GetMapping(value = "/roles/{id}")
+	public String editRoleForm(@PathVariable String id, Model model) {
+		Role role = securityService.getRoleById(id);
+		Map<String, Permission> assignedPermissionMap = new HashMap<>();
+		List<Permission> permissions = role.getPermissions();
+		for (Permission permission : permissions) {
+			assignedPermissionMap.put(permission.getId(), permission);
+		}
+		List<Permission> rolePermissions = new ArrayList<>();
+		List<Permission> allPermissions = securityService.getAllPermissions();
+		for (Permission permission : allPermissions) {
+			if (assignedPermissionMap.containsKey(permission.getId())) {
+				rolePermissions.add(permission);
+			} else {
+				rolePermissions.add(null);
+			}
+		}
+		role.setPermissions(rolePermissions);
+		model.addAttribute("role", role);
+		// model.addAttribute("permissionsList",allPermissions);
+		return viewPrefix + "edit_role";
+	}
+
+	@PostMapping(value = "/roles/{id}")
+	public String updateRole(@ModelAttribute("role") Role role, BindingResult result, Model model,
+			RedirectAttributes redirectAttributes) throws SecuredAppException {
+		try {
+			Role persistedRole = securityService.updateRole(role, role.getId());
+			log.debug("Updated role with id : {} and name : {}", persistedRole.getId(), persistedRole.getRoleName());
+			redirectAttributes.addFlashAttribute("success",
+					"Role updated successfully for " + persistedRole.getRoleName());
+		} catch (SecuredAppException e) {
+			model.addAttribute("errorMessage", e.getMessage());
+			throw new SecuredAppException(e.getMessage());
+		}
+
+		return "redirect:/roles";
+	}
+
+	// Delete
+	@GetMapping("/roles/delete/{id}")
+	public String delete(@PathVariable String id) {
+		securityService.deleteRole(id);
+		return "redirect:/roles";
+	}
 }
-

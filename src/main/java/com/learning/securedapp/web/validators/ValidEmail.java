@@ -18,9 +18,9 @@ import javax.validation.Payload;
 @Documented
 public @interface ValidEmail {
 
-    String message() default "Invalid Email";
+	String message() default "Invalid Email";
 
-    Class<?>[] groups() default {};
+	Class<?>[] groups() default {};
 
-    Class<? extends Payload>[] payload() default {};
+	Class<? extends Payload>[] payload() default {};
 }

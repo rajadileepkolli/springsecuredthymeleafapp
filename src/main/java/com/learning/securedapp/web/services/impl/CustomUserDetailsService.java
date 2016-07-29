@@ -20,48 +20,42 @@ import com.learning.securedapp.web.services.SecurityService;
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
-    @Autowired
-    private SecurityService userService;
+	@Autowired
+	private SecurityService userService;
 
-    public CustomUserDetailsService() {
-        super();
-    }
+	public CustomUserDetailsService() {
+		super();
+	}
 
-    @Override
-    public UserDetails loadUserByUsername(String userName)
-            throws UsernameNotFoundException {
-        try {
-            User user = userService.getUserByUserName(userName);
-            if (null == user) {
-                throw new UsernameNotFoundException(
-                        String.format("User with userName=%s was not found", userName));
-            }
-            return new org.springframework.security.core.userdetails.User(
-                    user.getUserName(), user.getPassword(), user.isEnabled(), true, true,
-                    true, getAuthorities(user.getRoleList()));
-        } catch (final Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
+	@Override
+	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+		try {
+			User user = userService.getUserByUserName(userName);
+			if (null == user) {
+				throw new UsernameNotFoundException(String.format("User with userName=%s was not found", userName));
+			}
+			return new org.springframework.security.core.userdetails.User(user.getUserName(), user.getPassword(),
+					user.isEnabled(), true, true, true, getAuthorities(user.getRoleList()));
+		} catch (final Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
 
-    private Collection<? extends GrantedAuthority> getAuthorities(List<Role> roleList) {
+	private Collection<? extends GrantedAuthority> getAuthorities(List<Role> roleList) {
 
-        Set<GrantedAuthority> authorities = new HashSet<>();
-        roleList.stream()
-                .peek(role -> authorities
-                        .add(new SimpleGrantedAuthority(role.getRoleName())))
-                .forEach(role -> role.getPermissions().forEach(p -> authorities
-                        .add(new SimpleGrantedAuthority("ROLE_" + p.getName()))));
+		Set<GrantedAuthority> authorities = new HashSet<>();
+		roleList.stream().peek(role -> authorities.add(new SimpleGrantedAuthority(role.getRoleName())))
+				.forEach(role -> role.getPermissions()
+						.forEach(p -> authorities.add(new SimpleGrantedAuthority("ROLE_" + p.getName()))));
 
-      /*  for (Role role : roleList) {
-            authorities.add(new SimpleGrantedAuthority(role.getRoleName()));
-            List<Permission> permissions = role.getPermissions();
-            for (Permission permission : permissions) {
-                authorities
-                        .add(new SimpleGrantedAuthority("ROLE_" + permission.getName()));
-            }
-        }*/
-        return authorities;
-    }
+		/*
+		 * for (Role role : roleList) { authorities.add(new
+		 * SimpleGrantedAuthority(role.getRoleName())); List<Permission>
+		 * permissions = role.getPermissions(); for (Permission permission :
+		 * permissions) { authorities .add(new SimpleGrantedAuthority("ROLE_" +
+		 * permission.getName())); } }
+		 */
+		return authorities;
+	}
 
 }

@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class SecuredAppExceptionBean {
-    private String faultCode;
-    private String faultString;
+	private String faultCode;
+	private String faultString;
 }

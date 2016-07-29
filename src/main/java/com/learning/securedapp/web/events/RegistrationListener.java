@@ -19,49 +19,51 @@ import com.learning.securedapp.web.services.IUserService;
 
 @Component
 public class RegistrationListener implements ApplicationListener<OnRegistrationCompleteEvent> {
-    
-    @Autowired private IUserService service;
 
-    @Autowired private MessageSource messages;
+	@Autowired
+	private IUserService service;
 
-    @Autowired private EmailService emailService;
+	@Autowired
+	private MessageSource messages;
 
-    @Autowired private TemplateEngine templateEngine;
-    
-    private static final Logger LOG = LoggerFactory.getLogger(RegistrationListener.class);
+	@Autowired
+	private EmailService emailService;
 
-    @Override
-    public void onApplicationEvent(OnRegistrationCompleteEvent event) {
-        try {
-            this.confirmRegistration(event);
-        } catch (SecuredAppException e) {
-            LOG.error("Error while sending email",e);
-        }
-    }
+	@Autowired
+	private TemplateEngine templateEngine;
 
-    private void confirmRegistration(OnRegistrationCompleteEvent event) throws SecuredAppException {
-        final User user = event.getUser();
-        final String token = UUID.randomUUID().toString();
-        service.createVerificationTokenForUser(user, token);
-        emailService.sendEmail(user.getEmail(), "Registration Confirmation", getHtmlContent(event, token));
-    }
+	private static final Logger LOG = LoggerFactory.getLogger(RegistrationListener.class);
 
-    private String getHtmlContent(OnRegistrationCompleteEvent event, String token) {
-        // Prepare the evaluation context
-        final Context ctx = new Context(Locale.ENGLISH);
-        ctx.setVariable("name", event.getUser().getUserName());
-        
-        final String message = messages.getMessage("message.regSucc", null,
-                event.getLocale());
-        ctx.setVariable("message", message);
-        
-        final String confirmationUrl = event.getAppUrl()
-                + "/registrationConfirm.html?token=" + token;
-        ctx.setVariable("url", confirmationUrl);
+	@Override
+	public void onApplicationEvent(OnRegistrationCompleteEvent event) {
+		try {
+			this.confirmRegistration(event);
+		} catch (SecuredAppException e) {
+			LOG.error("Error while sending email", e);
+		}
+	}
 
-        // Create the HTML body using Thymeleaf
-        final String htmlContent = this.templateEngine.process("registration-email", ctx);
-        return htmlContent;
-    }
+	private void confirmRegistration(OnRegistrationCompleteEvent event) throws SecuredAppException {
+		final User user = event.getUser();
+		final String token = UUID.randomUUID().toString();
+		service.createVerificationTokenForUser(user, token);
+		emailService.sendEmail(user.getEmail(), "Registration Confirmation", getHtmlContent(event, token));
+	}
+
+	private String getHtmlContent(OnRegistrationCompleteEvent event, String token) {
+		// Prepare the evaluation context
+		final Context ctx = new Context(Locale.ENGLISH);
+		ctx.setVariable("name", event.getUser().getUserName());
+
+		final String message = messages.getMessage("message.regSucc", null, event.getLocale());
+		ctx.setVariable("message", message);
+
+		final String confirmationUrl = event.getAppUrl() + "/registrationConfirm.html?token=" + token;
+		ctx.setVariable("url", confirmationUrl);
+
+		// Create the HTML body using Thymeleaf
+		final String htmlContent = this.templateEngine.process("registration-email", ctx);
+		return htmlContent;
+	}
 
 }

@@ -9,22 +9,17 @@ import org.springframework.security.access.vote.RoleVoter;
 
 @Configuration
 public class HierarchyRoles {
-    
-//    @Lazy
-//    @Autowired private MongoDBAuthenticationProvider authenticationProvider;
 
-    @Bean
-    public RoleVoter roleVoter() {
-        return new RoleHierarchyVoter(roleHierarchy());
-    }
+	@Bean
+	public RoleVoter roleVoter() {
+		return new RoleHierarchyVoter(roleHierarchy());
+	}
 
-    @Bean
-    public RoleHierarchy roleHierarchy() {
-        RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
-        String roleHierarchyStringRepresentation = "ROLE_SUPER_ADMIN > ROLE_ADMIN ROLE_ADMIN > ROLE_CMS_ADMIN ROLE_CMS_ADMIN > ROLE_USER";
-        roleHierarchy.setHierarchy(roleHierarchyStringRepresentation);
-//        authenticationProvider
-//                .setAuthoritiesMapper(new RoleHierarchyAuthoritiesMapper(roleHierarchy));
-        return roleHierarchy;
-    }
+	@Bean
+	public RoleHierarchy roleHierarchy() {
+		RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
+		String roleHierarchyStringRepresentation = "ROLE_SUPER_ADMIN > ROLE_ADMIN ROLE_ADMIN > ROLE_CMS_ADMIN ROLE_CMS_ADMIN > ROLE_USER";
+		roleHierarchy.setHierarchy(roleHierarchyStringRepresentation);
+		return roleHierarchy;
+	}
 }

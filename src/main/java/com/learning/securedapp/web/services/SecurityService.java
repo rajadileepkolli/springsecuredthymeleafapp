@@ -9,44 +9,44 @@ import com.learning.securedapp.exception.SecuredAppException;
 
 public interface SecurityService {
 
-    List<Role> getAllRoles();
+	List<Role> getAllRoles();
 
-    List<User> getAllUsers();
+	List<User> getAllUsers();
 
-    User createUser(User user);
+	User createUser(User user);
 
-    User getUserById(String id);
-    
-    User getUserByUserName(String userName);
+	User getUserById(String id);
 
-    User updateUser(User user, String id) throws SecuredAppException;
+	User getUserByUserName(String userName);
 
-    User findUserByEmail(String email);
+	User updateUser(User user, String id) throws SecuredAppException;
 
-    String resetPassword(String email) throws SecuredAppException;
+	User findUserByEmail(String email);
 
-    boolean verifyPasswordResetToken(String email, String token) throws SecuredAppException;
+	String resetPassword(String email) throws SecuredAppException;
 
-    void updatePassword(String email, String token, String encodedPwd) throws SecuredAppException;
+	boolean verifyPasswordResetToken(String email, String token) throws SecuredAppException;
 
-    List<Permission> getAllPermissions();
+	void updatePassword(String email, String token, String encodedPwd) throws SecuredAppException;
 
-    Role createRole(Role role) throws SecuredAppException;
+	List<Permission> getAllPermissions();
 
-    Role getRoleById(String id);
+	Role createRole(Role role) throws SecuredAppException;
 
-    Role updateRole(Role role, String roleID) throws SecuredAppException;
+	Role getRoleById(String id);
 
-    Permission createPermission(Permission permission);
+	Role updateRole(Role role, String roleID) throws SecuredAppException;
 
-    Permission getPermissionByName(String permissionName);
+	Permission createPermission(Permission permission);
 
-    Role getRoleByName(String roleName);
+	Permission getPermissionByName(String permissionName);
 
-    void deleteUser(String userId);
+	Role getRoleByName(String roleName);
 
-    void deleteRole(String roleId);
+	void deleteUser(String userId);
 
-    User createUser(User userDTO, boolean validates);
+	void deleteRole(String roleId);
+
+	User createUser(User userDTO, boolean validates);
 
 }

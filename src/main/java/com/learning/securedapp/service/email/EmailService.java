@@ -18,29 +18,28 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class EmailService {
 
-    @Autowired
-    JavaMailSender javaMailSender;
+	@Autowired
+	JavaMailSender javaMailSender;
 
-    @Value("${support.email}")
-    String supportEmail;
+	@Value("${support.email}")
+	String supportEmail;
 
-    public void sendEmail(String to, String subject, String htmlContent)
-            throws SecuredAppException {
-        try {
-            final MimeMessage mimeMessage = this.javaMailSender.createMimeMessage();
-            final MimeMessageHelper message = new MimeMessageHelper(mimeMessage, "UTF-8");
-            message.setSubject(subject);
-            message.setFrom(supportEmail);
-            message.setTo(to);
-            message.setText(htmlContent, true /* isHtml */);
+	public void sendEmail(String to, String subject, String htmlContent) throws SecuredAppException {
+		try {
+			final MimeMessage mimeMessage = this.javaMailSender.createMimeMessage();
+			final MimeMessageHelper message = new MimeMessageHelper(mimeMessage, "UTF-8");
+			message.setSubject(subject);
+			message.setFrom(supportEmail);
+			message.setTo(to);
+			message.setText(htmlContent, true /* isHtml */);
 
-            // Send email
-            log.debug("........");
+			// Send email
+			log.debug("........");
 
-            javaMailSender.send(message.getMimeMessage());
-        } catch (MailException | MessagingException e) {
-            log.error(e.getMessage());
-            throw new SecuredAppException(e.getMessage());
-        }
-    }
+			javaMailSender.send(message.getMimeMessage());
+		} catch (MailException | MessagingException e) {
+			log.error(e.getMessage());
+			throw new SecuredAppException(e.getMessage());
+		}
+	}
 }

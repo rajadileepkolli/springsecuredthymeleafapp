@@ -16,12 +16,12 @@ import lombok.Data;
 @Data
 @Document(collection = "payments")
 public class Payment implements Serializable {
-    private static final long serialVersionUID = 1L;
-    @Id
-    private String id;
-    @Field(value = "cc_Number")
-    private String ccNumber;
-    private String cvv;
-    private BigDecimal amount;
+	private static final long serialVersionUID = 1L;
+	@Id
+	private String id;
+	@Field(value = "cc_Number")
+	private String ccNumber;
+	private String cvv;
+	private BigDecimal amount;
 
 }

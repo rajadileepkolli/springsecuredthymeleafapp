@@ -23,77 +23,78 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
  * 
  * @author rajakolli
  * 
- * To redirect from HTTP to HTTPS let us configure TomcatEmbeddedServletContainerFactory
- * bean in our WebConfiguration.java
+ *         To redirect from HTTP to HTTPS let us configure
+ *         TomcatEmbeddedServletContainerFactory bean in our
+ *         WebConfiguration.java
  * 
- * keystore can be generated using the command keytool -genkey -alias securedapp
- * -storetype PKCS12 -keyalg RSA -keysize 2048 -keystore securekeystore.p12 -validity 365
+ *         keystore can be generated using the command keytool -genkey -alias
+ *         securedapp -storetype PKCS12 -keyalg RSA -keysize 2048 -keystore
+ *         securekeystore.p12 -validity 365
  */
 @Configuration
 public class WebConfiguration extends WebMvcConfigurerAdapter {
 
-    @Value("${server.port:8443}")
-    private int serverPort;
-   
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        super.addInterceptors(registry);
-        registry.addInterceptor(localeChangeInterceptor());
-    }
-    
-    @Override
-    public void addViewControllers(ViewControllerRegistry registry) {
-        super.addViewControllers(registry);
-        registry.addViewController("/").setViewName("forward:/home.html");
-        registry.addViewController("/registration.html").setViewName("registration");
-        registry.addViewController("/successRegister.html").setViewName("successRegister");
-        registry.addViewController("/invalidSession.html");
-        registry.addViewController("/login.html").setViewName("login");
-        registry.addViewController("/home.html").setViewName("home");
-        registry.addViewController("/categories.html").setViewName("categories");
-    }
-    
+	@Value("${server.port:8443}")
+	private int serverPort;
 
-    @Bean
-    public HandlerInterceptor localeChangeInterceptor() {
-        LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
-        localeChangeInterceptor.setParamName("lang");
-        return localeChangeInterceptor;
-    }
-    
-    @Bean
-    public LocaleResolver localeResolver() {
-        CookieLocaleResolver cookieLocaleResolver = new CookieLocaleResolver();
-//        SessionLocaleResolver
-        cookieLocaleResolver.setDefaultLocale(Locale.ENGLISH);
-        return cookieLocaleResolver;
-    }
-    
-    @Bean
-    public EmbeddedServletContainerFactory servletContainer() {
-        TomcatEmbeddedServletContainerFactory tomcat = new TomcatEmbeddedServletContainerFactory() {
-            @Override
-            protected void postProcessContext(Context context) {
-                SecurityConstraint securityConstraint = new SecurityConstraint();
-                securityConstraint.setUserConstraint("CONFIDENTIAL");
-                SecurityCollection collection = new SecurityCollection();
-                collection.addPattern("/*");
-                securityConstraint.addCollection(collection);
-                context.addConstraint(securityConstraint);
-            }
-        };
+	@Override
+	public void addInterceptors(InterceptorRegistry registry) {
+		super.addInterceptors(registry);
+		registry.addInterceptor(localeChangeInterceptor());
+	}
 
-        tomcat.addAdditionalTomcatConnectors(initiateHttpConnector());
-        return tomcat;
-    }
+	@Override
+	public void addViewControllers(ViewControllerRegistry registry) {
+		super.addViewControllers(registry);
+		registry.addViewController("/").setViewName("forward:/home.html");
+		registry.addViewController("/registration.html").setViewName("registration");
+		registry.addViewController("/successRegister.html").setViewName("successRegister");
+		registry.addViewController("/invalidSession.html");
+		registry.addViewController("/login.html").setViewName("login");
+		registry.addViewController("/home.html").setViewName("home");
+		registry.addViewController("/categories.html").setViewName("categories");
+	}
 
-    private Connector initiateHttpConnector() {
-        Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
-        connector.setScheme("http");
-        connector.setPort(8080);
-        connector.setSecure(false);
-        connector.setRedirectPort(serverPort);
+	@Bean
+	public HandlerInterceptor localeChangeInterceptor() {
+		LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
+		localeChangeInterceptor.setParamName("lang");
+		return localeChangeInterceptor;
+	}
 
-        return connector;
-    }
+	@Bean
+	public LocaleResolver localeResolver() {
+		CookieLocaleResolver cookieLocaleResolver = new CookieLocaleResolver();
+		// SessionLocaleResolver
+		cookieLocaleResolver.setDefaultLocale(Locale.ENGLISH);
+		return cookieLocaleResolver;
+	}
+
+	@Bean
+	public EmbeddedServletContainerFactory servletContainer() {
+		TomcatEmbeddedServletContainerFactory tomcat = new TomcatEmbeddedServletContainerFactory() {
+			@Override
+			protected void postProcessContext(Context context) {
+				SecurityConstraint securityConstraint = new SecurityConstraint();
+				securityConstraint.setUserConstraint("CONFIDENTIAL");
+				SecurityCollection collection = new SecurityCollection();
+				collection.addPattern("/*");
+				securityConstraint.addCollection(collection);
+				context.addConstraint(securityConstraint);
+			}
+		};
+
+		tomcat.addAdditionalTomcatConnectors(initiateHttpConnector());
+		return tomcat;
+	}
+
+	private Connector initiateHttpConnector() {
+		Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
+		connector.setScheme("http");
+		connector.setPort(8080);
+		connector.setSecure(false);
+		connector.setRedirectPort(serverPort);
+
+		return connector;
+	}
 }

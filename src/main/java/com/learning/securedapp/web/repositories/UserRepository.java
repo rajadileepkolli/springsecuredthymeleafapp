@@ -6,8 +6,8 @@ import com.learning.securedapp.domain.User;
 
 public interface UserRepository extends MongoRepository<User, String> {
 
-    User findByUserName(String username);
+	User findByUserName(String username);
 
-    User findByEmail(String email);
+	User findByEmail(String email);
 
 }

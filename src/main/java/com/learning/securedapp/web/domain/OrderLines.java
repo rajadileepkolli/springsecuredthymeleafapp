@@ -12,30 +12,28 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class OrderLines implements Serializable {
-    private static final long serialVersionUID = 1L;
-    
-    final List<OrderLine> list;
+	private static final long serialVersionUID = 1L;
 
-    public OrderLines() {
-        this(new ArrayList<>());
-    }
+	final protected List<OrderLine> list;
 
-    public OrderLines orderId(UUID orderId) {
-        int i = 0;
-        for (OrderLine orderLine : list) {
-            orderLine.setLineNo(++i);
-            orderLine.setOrderId(orderId);
-        }
-        return this;
-    }
+	public OrderLines() {
+		this(new ArrayList<>());
+	}
 
-    public Stream<OrderLine> stream() {
-        return list.stream();
-    }
+	public OrderLines orderId(UUID orderId) {
+		int i = 0;
+		for (OrderLine orderLine : list) {
+			orderLine.setLineNo(++i);
+			orderLine.setOrderId(orderId);
+		}
+		return this;
+	}
 
-    public double getTotal() {
-        return list.stream()
-                .mapToDouble(OrderLine::getSubtotal)
-                .sum();
-    }
+	public Stream<OrderLine> stream() {
+		return list.stream();
+	}
+
+	public double getTotal() {
+		return list.stream().mapToDouble(OrderLine::getSubtotal).sum();
+	}
 }

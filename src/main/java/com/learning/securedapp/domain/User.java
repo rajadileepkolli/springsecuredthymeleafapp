@@ -24,34 +24,34 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class User implements Serializable{
+public class User implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    @Id
-    private String id;
+	@Id
+	private String id;
 
-    @Indexed
-    @Size(min=2, max=30)
-    private String userName;
+	@Indexed
+	@Size(min = 2, max = 30)
+	private String userName;
 
-    @Size(min=2, max=30)
-    private String password;
-    
-    @NotNull
-    @ValidEmail
-    private String email;
-    
-    private String passwordResetToken;
+	@Size(min = 2, max = 30)
+	private String password;
 
-    private boolean enabled = false;
-    
-    @NotNull
-    @Pattern(regexp = "[0-9]{6}")
-    private String zip;
-    
-    private String address;
+	@NotNull
+	@ValidEmail
+	private String email;
 
-    @DBRef(lazy= true)
-    private List<Role> roleList;
+	private String passwordResetToken;
+
+	private boolean enabled = false;
+
+	@NotNull
+	@Pattern(regexp = "[0-9]{6}")
+	private String zip;
+
+	private String address;
+
+	@DBRef(lazy = true)
+	private List<Role> roleList;
 }

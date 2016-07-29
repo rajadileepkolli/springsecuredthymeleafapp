@@ -5,8 +5,8 @@ import com.learning.securedapp.web.domain.Order;
 
 public interface OrderService {
 
-    Object calcSignature(Cart cart);
+	Object calcSignature(Cart cart);
 
-    Order purchase(String account, Cart cart, String signature);
+	Order purchase(String account, Cart cart, String signature);
 
 }

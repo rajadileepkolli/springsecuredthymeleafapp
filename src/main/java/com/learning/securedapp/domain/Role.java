@@ -20,17 +20,17 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Role implements Serializable{
-    
-    private static final long serialVersionUID = -6260569351005920639L;
-    
-    @Id
-    private String id;
-    
-    @Indexed
-    @NotNull
-    private String roleName;
-    private String description;
-    @DBRef(lazy= true)
-    private List<Permission> permissions;
+public class Role implements Serializable {
+
+	private static final long serialVersionUID = -6260569351005920639L;
+
+	@Id
+	private String id;
+
+	@Indexed
+	@NotNull
+	private String roleName;
+	private String description;
+	@DBRef(lazy = true)
+	private List<Permission> permissions;
 }

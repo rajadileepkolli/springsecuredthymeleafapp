@@ -21,53 +21,50 @@ import com.learning.securedapp.web.domain.CartForm;
 
 @Controller
 @RequestMapping("/cart")
-public class CartController extends SecuredAppBaseController{
-    
-    @Autowired
-    Cart cart;
+public class CartController extends SecuredAppBaseController {
 
-    @ModelAttribute
-    CartForm setUpForm() {
-        return new CartForm();
-    }
+	@Autowired
+	Cart cart;
 
-    @GetMapping()
-    String viewCart(Model model) {
-        model.addAttribute("orderLines", cart.getOrderLines());
-        return "products/viewCart";
-    }
+	@ModelAttribute
+	CartForm setUpForm() {
+		return new CartForm();
+	}
 
-    @PostMapping()
-    String removeFromCart(@Validated CartForm cartForm, BindingResult bindingResult, Model model) {
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("error", getMessage("error.notChecked"));
-            return viewCart(model);
-        }
-        cart.remove(cartForm.getLineNo());
-        return "redirect:/cart";
-    }
-    
-    @GetMapping(value="/items/count")
-    @ResponseBody
-    public Map<String, Object> getCartItemCount(HttpServletRequest request, Model model)
-    {
-        Cart cart = getOrCreateCart(request);
-        int itemCount = cart.getOrderLines().getList().size();
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("count", itemCount);
-        return map;
-    }
+	@GetMapping()
+	String viewCart(Model model) {
+		model.addAttribute("orderLines", cart.getOrderLines());
+		return "products/viewCart";
+	}
 
-    private Cart getOrCreateCart(HttpServletRequest request) {
-        Cart cart = null;
-        cart = (Cart) request.getSession().getAttribute("CART_KEY");
-        if(cart == null){
-            cart = new Cart();
-            request.getSession().setAttribute("CART_KEY", cart);
-        }
-        return cart;
-    }
-        
-    
-    
+	@PostMapping()
+	String removeFromCart(@Validated CartForm cartForm, BindingResult bindingResult, Model model) {
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("error", getMessage("error.notChecked"));
+			return viewCart(model);
+		}
+		cart.remove(cartForm.getLineNo());
+		return "redirect:/cart";
+	}
+
+	@GetMapping(value = "/items/count")
+	@ResponseBody
+	public Map<String, Object> getCartItemCount(HttpServletRequest request, Model model) {
+		Cart cart = getOrCreateCart(request);
+		int itemCount = cart.getOrderLines().getList().size();
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("count", itemCount);
+		return map;
+	}
+
+	private Cart getOrCreateCart(HttpServletRequest request) {
+		Cart cart = null;
+		cart = (Cart) request.getSession().getAttribute("CART_KEY");
+		if (cart == null) {
+			cart = new Cart();
+			request.getSession().setAttribute("CART_KEY", cart);
+		}
+		return cart;
+	}
+
 }

@@ -6,10 +6,10 @@ import com.learning.securedapp.domain.Category;
 
 public interface CategoryService {
 
-    public Category saveCategory(Category category);
+	public Category saveCategory(Category category);
 
-    public List<Category> getAllCategories();
+	public List<Category> getAllCategories();
 
-    public Category getbyName(String categoryName);
+	public Category getbyName(String categoryName);
 
 }

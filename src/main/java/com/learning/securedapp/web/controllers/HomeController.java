@@ -9,14 +9,14 @@ import com.learning.securedapp.domain.User;
 import com.learning.securedapp.web.services.SecurityService;
 
 @Controller
-public class HomeController extends SecuredAppBaseController
-{
-    @Autowired SecurityService securityService;
-    
+public class HomeController extends SecuredAppBaseController {
+	@Autowired
+	SecurityService securityService;
+
 	@GetMapping("/myAccount")
-	public String myAccount(Model model){
-        String userName = getCurrentUser();
-        User user =securityService.getUserByUserName(userName);
-        return "redirect:users/"+user.getId();
-    }
+	public String myAccount(Model model) {
+		String userName = getCurrentUser();
+		User user = securityService.getUserByUserName(userName);
+		return "redirect:users/" + user.getId();
+	}
 }

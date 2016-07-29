@@ -29,93 +29,89 @@ import com.learning.securedapp.web.services.ProductService;
 @Controller
 public class ProductController extends SecuredAppBaseController {
 
-    private static final String viewPrefix = "products/";
+	private static final String viewPrefix = "products/";
 
-    @Autowired private ProductService productService;
-    
-    @Autowired private CategoryService categoryService;
-    
-    @Autowired Cart cart;
-    
-    @ModelAttribute("categoryList")
-    public List<Category> categoryList(){
-        return categoryService.getAllCategories();
-    }
-    
-    @ModelAttribute
-    AddToCartForm addToCartForm() {
-        return new AddToCartForm();
-    }
-    
-    @GetMapping("product/new")
-    public String newProduct(Model model) {
-        model.addAttribute("product", Product.builder().build());
-        return viewPrefix + "create_product";
-    }
+	@Autowired
+	private ProductService productService;
 
-    @Secured(value = { "ROLE_ADMIN" })
-    @PostMapping(value = "product")
-    public String saveProduct(@Valid @ModelAttribute("product") Product product,
-            BindingResult bindingResult, Model model,
-            RedirectAttributes redirectAttributes) {
-        boolean updated = true;
-        if (product.getProductId().trim().length() == 0) {
-            product.setProductId(null);
-            updated = false;
-        }
-        Product persistedProduct = productService.saveProduct(product);
-        if (updated) {
-            redirectAttributes.addFlashAttribute("msg",
-                    persistedProduct.getProductName() + " updated successfully");
-        } else {
-            redirectAttributes.addFlashAttribute("success",
-                    product.getProductName() + " Created successfully");
-        }
+	@Autowired
+	private CategoryService categoryService;
 
-        return "redirect:/products";
-    }
+	@Autowired
+	Cart cart;
 
-    // Read
-    @Secured(value = { "ROLE_ADMIN", "ROLE_USER" })
-    @GetMapping("product/{id}")
-    public String showProduct(@PathVariable String id, Model model) {
-        model.addAttribute("product", productService.getProductById(id));
-        return viewPrefix + "productshow";
-    }
+	@ModelAttribute("categoryList")
+	public List<Category> categoryList() {
+		return categoryService.getAllCategories();
+	}
 
-    @GetMapping(value = "products")
-    public String showProducts(Model model) {
-        model.addAttribute("products", productService.listAllProducts());
-        return viewPrefix + "products";
-    }
+	@ModelAttribute
+	AddToCartForm addToCartForm() {
+		return new AddToCartForm();
+	}
 
-    // Update
-    @GetMapping("product/edit/{id}")
-    public String edit(@PathVariable String id, Model model) {
-        model.addAttribute("product", productService.getProductById(id));
-        return viewPrefix + "create_product";
-    }
-    
-    // Delete
-    @GetMapping("product/delete/{id}")
-    public String delete(@PathVariable String id) {
-        productService.deleteProduct(id);
-        return "redirect:/products";
-    }
+	@GetMapping("product/new")
+	public String newProduct(Model model) {
+		model.addAttribute("product", Product.builder().build());
+		return viewPrefix + "create_product";
+	}
 
-    
-    @PostMapping(value = "/addToCart")
-    String addToCart(@Validated AddToCartForm form, BindingResult result,
-                     @PageableDefault Pageable pageable, Model model) {
-        if (result.hasErrors()) {
-//            return showProducts(form.getCategoryId(), pageable, model);
-            return "redirect:/products";
-        }
-        Product goods = productService.getProductById(form.getProductId());
-        cart.add(OrderLine.builder()
-                .goods(goods)
-                .quantity(form.getQuantity())
-                .build());
-        return "redirect:/cart";
-    }
+	@Secured(value = { "ROLE_ADMIN" })
+	@PostMapping(value = "product")
+	public String saveProduct(@Valid @ModelAttribute("product") Product product, BindingResult bindingResult,
+			Model model, RedirectAttributes redirectAttributes) {
+		boolean updated = true;
+		if (product.getProductId().trim().length() == 0) {
+			product.setProductId(null);
+			updated = false;
+		}
+		Product persistedProduct = productService.saveProduct(product);
+		if (updated) {
+			redirectAttributes.addFlashAttribute("msg", persistedProduct.getProductName() + " updated successfully");
+		} else {
+			redirectAttributes.addFlashAttribute("success", product.getProductName() + " Created successfully");
+		}
+
+		return "redirect:/products";
+	}
+
+	// Read
+	@Secured(value = { "ROLE_ADMIN", "ROLE_USER" })
+	@GetMapping("product/{id}")
+	public String showProduct(@PathVariable String id, Model model) {
+		model.addAttribute("product", productService.getProductById(id));
+		return viewPrefix + "productshow";
+	}
+
+	@GetMapping(value = "products")
+	public String showProducts(Model model) {
+		model.addAttribute("products", productService.listAllProducts());
+		return viewPrefix + "products";
+	}
+
+	// Update
+	@GetMapping("product/edit/{id}")
+	public String edit(@PathVariable String id, Model model) {
+		model.addAttribute("product", productService.getProductById(id));
+		return viewPrefix + "create_product";
+	}
+
+	// Delete
+	@GetMapping("product/delete/{id}")
+	public String delete(@PathVariable String id) {
+		productService.deleteProduct(id);
+		return "redirect:/products";
+	}
+
+	@PostMapping(value = "/addToCart")
+	String addToCart(@Validated AddToCartForm form, BindingResult result, @PageableDefault Pageable pageable,
+			Model model) {
+		if (result.hasErrors()) {
+			// return showProducts(form.getCategoryId(), pageable, model);
+			return "redirect:/products";
+		}
+		Product goods = productService.getProductById(form.getProductId());
+		cart.add(OrderLine.builder().goods(goods).quantity(form.getQuantity()).build());
+		return "redirect:/cart";
+	}
 }

@@ -11,27 +11,28 @@ import com.learning.securedapp.web.services.ProductService;
 
 @Service
 public class ProductServiceImpl implements ProductService {
-    
-    @Autowired private ProductRepository productRepository;
-    
-    @Override
-    public Product saveProduct(Product product) {
-        return productRepository.save(product);
-    }
 
-    @Override
-    public Product getProductById(String id) {
-        return productRepository.findOne(id);
-    }
+	@Autowired
+	private ProductRepository productRepository;
 
-    @Override
-    public List<Product> listAllProducts() {
-        return productRepository.findAll();
-    }
+	@Override
+	public Product saveProduct(Product product) {
+		return productRepository.save(product);
+	}
 
-    @Override
-    public void deleteProduct(String id) {
-        productRepository.delete(id);
-    }
+	@Override
+	public Product getProductById(String id) {
+		return productRepository.findOne(id);
+	}
+
+	@Override
+	public List<Product> listAllProducts() {
+		return productRepository.findAll();
+	}
+
+	@Override
+	public void deleteProduct(String id) {
+		productRepository.delete(id);
+	}
 
 }

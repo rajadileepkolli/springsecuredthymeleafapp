@@ -9,11 +9,11 @@ import lombok.Data;
 @Data
 public class AddToCartForm {
 
-    @NotNull
-    private String productId;
-    @Min(1)
-    @Max(50)
-    private int quantity;
-    private String categoryId;
+	@NotNull
+	private String productId;
+	@Min(1)
+	@Max(50)
+	private int quantity;
+	private String categoryId;
 
 }

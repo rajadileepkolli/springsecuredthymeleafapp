@@ -9,67 +9,67 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
 public class VerificationToken {
-    
-    private static final int EXPIRATION = 60 * 24;
-    
-    @Id
-    private String id;
 
-    private String token;
-    
-    private Date expiryDate;
-    
-    @DBRef(lazy= true)
-    private User user;
+	private static final int EXPIRATION = 60 * 24;
 
-    public VerificationToken() {
-        super();
-    }
+	@Id
+	private String id;
 
-    public VerificationToken(final String token, final User user) {
-        super();
+	private String token;
 
-        this.token = token;
-        this.user = user;
-        this.expiryDate = calculateExpiryDate(EXPIRATION);
-    }
+	private Date expiryDate;
 
-    private Date calculateExpiryDate(int expiryTimeInMinutes) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(new Date().getTime());
-        cal.add(Calendar.MINUTE, expiryTimeInMinutes);
-        return new Date(cal.getTime().getTime());
-    }
+	@DBRef(lazy = true)
+	private User user;
 
-    public String getId() {
-        return id;
-    }
+	public VerificationToken() {
+		super();
+	}
 
-    public void setId(String id) {
-        this.id = id;
-    }
+	public VerificationToken(final String token, final User user) {
+		super();
 
-    public String getToken() {
-        return token;
-    }
+		this.token = token;
+		this.user = user;
+		this.expiryDate = calculateExpiryDate(EXPIRATION);
+	}
 
-    public void setToken(String token) {
-        this.token = token;
-    }
+	private Date calculateExpiryDate(int expiryTimeInMinutes) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTimeInMillis(new Date().getTime());
+		cal.add(Calendar.MINUTE, expiryTimeInMinutes);
+		return new Date(cal.getTime().getTime());
+	}
 
-    public User getUser() {
-        return user;
-    }
+	public String getId() {
+		return id;
+	}
 
-    public void setUser(User user) {
-        this.user = user;
-    }
+	public void setId(String id) {
+		this.id = id;
+	}
 
-    public Date getExpiryDate() {
-        return expiryDate;
-    }
+	public String getToken() {
+		return token;
+	}
 
-    public void setExpiryDate(Date expiryDate) {
-        this.expiryDate = expiryDate;
-    }
+	public void setToken(String token) {
+		this.token = token;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public Date getExpiryDate() {
+		return (Date) expiryDate.clone();
+	}
+
+	public void setExpiryDate(Date expiryDate) {
+		this.expiryDate = expiryDate != null ? (Date) expiryDate.clone() : null;
+	}
 }

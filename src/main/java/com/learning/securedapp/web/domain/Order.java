@@ -12,11 +12,11 @@ import org.springframework.data.annotation.Id;
 @Data
 @Builder
 public class Order implements Serializable {
-    private static final long serialVersionUID = 1L;
-    @Id
-    private String id;
-    private UUID orderId;
-    private String email;
-    private OrderLines orderLines;
-    private LocalDate orderDate;
+	private static final long serialVersionUID = 1L;
+	@Id
+	private String id;
+	private UUID orderId;
+	private String email;
+	private OrderLines orderLines;
+	private LocalDate orderDate;
 }
