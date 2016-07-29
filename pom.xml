@@ -14,15 +14,16 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.4.0.RC1</version>
+        <version>1.4.0.RELEASE</version>
         <relativePath /> <!-- lookup parent from repository -->
     </parent>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
-       <!--  <thymeleaf.version>3.0.0.RELEASE</thymeleaf.version>
-        <thymeleaf-extras-springsecurity4.version>3.0.0.RELEASE</thymeleaf-extras-springsecurity4.version> -->
+        <thymeleaf.version>3.0.1.RELEASE</thymeleaf.version>
+        <thymeleaf-layout-dialect.version>2.0.1</thymeleaf-layout-dialect.version>
+        <thymeleaf-extras-springsecurity4.version>3.0.0.RELEASE</thymeleaf-extras-springsecurity4.version>
     </properties>
 
     <dependencies>
@@ -37,6 +38,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+        <!-- Added pool jar to create redis pool by default -->
+        <dependency>
+        	<groupId>org.apache.commons</groupId>
+        	<artifactId>commons-pool2</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -82,10 +88,10 @@
             <artifactId>lombok</artifactId>
         </dependency>
 
-        <dependency>
+        <!-- <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
-        </dependency>
+        </dependency> -->
 
         <!-- webjars -->
         <dependency>
@@ -104,11 +110,11 @@
         </dependency>
         <!--./ webjars -->
 
-        <dependency>
+<!--         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>19.0</version>
-        </dependency>
+        </dependency> -->
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -124,6 +130,11 @@
             <groupId>org.springframework.restdocs</groupId>
             <artifactId>spring-restdocs-mockmvc</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+        	<groupId>de.flapdoodle.embed</groupId>
+        	<artifactId>de.flapdoodle.embed.mongo</artifactId>
+        	<scope>test</scope>
         </dependency>
     </dependencies>
 

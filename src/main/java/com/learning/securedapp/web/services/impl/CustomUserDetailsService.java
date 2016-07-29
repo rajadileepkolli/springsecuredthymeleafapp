@@ -5,8 +5,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -17,20 +15,13 @@ import org.springframework.stereotype.Service;
 
 import com.learning.securedapp.domain.Role;
 import com.learning.securedapp.domain.User;
-import com.learning.securedapp.web.services.LoginAttemptService;
 import com.learning.securedapp.web.services.SecurityService;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
     @Autowired
-    private HttpServletRequest request;
-
-    @Autowired
     private SecurityService userService;
-
-    @Autowired
-    private LoginAttemptService loginAttemptService;
 
     public CustomUserDetailsService() {
         super();
@@ -39,12 +30,6 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String userName)
             throws UsernameNotFoundException {
-        final String ip = getClientIP();
-
-        if (loginAttemptService.isBlocked(ip)) {
-            throw new RuntimeException("blocked");
-        }
-
         try {
             User user = userService.getUserByUserName(userName);
             if (null == user) {
@@ -77,14 +62,6 @@ public class CustomUserDetailsService implements UserDetailsService {
             }
         }*/
         return authorities;
-    }
-
-    private String getClientIP() {
-        final String xfHeader = request.getHeader("X-Forwarded-For");
-        if (xfHeader == null) {
-            return request.getRemoteAddr();
-        }
-        return xfHeader.split(",")[0];
     }
 
 }
