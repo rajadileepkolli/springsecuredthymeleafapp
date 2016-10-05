@@ -24,6 +24,12 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Component
+/**
+ * <p>DataLoader class.</p>
+ *
+ * @author rajakolli
+ * @version $Id: $Id
+ */
 @Slf4j
 @AllArgsConstructor // From spring 4.3 by creating constructor we can autowire
 					// all objects
@@ -35,6 +41,7 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 	private PermissionRepository permissionRepository;
 	private CategoryRepository categoryRepository;
 
+	/** {@inheritDoc} */
 	@Override
 	public void onApplicationEvent(ContextRefreshedEvent event) {
 		if (categoryRepository.findAll().isEmpty()) {

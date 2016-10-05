@@ -15,6 +15,12 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationFa
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.LocaleResolver;
 
+/**
+ * <p>CustomAuthenticationFailureHandler class.</p>
+ *
+ * @author rajakolli
+ * @version $Id: $Id
+ */
 @Component("authenticationFailureHandler")
 public class CustomAuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
 
@@ -24,6 +30,7 @@ public class CustomAuthenticationFailureHandler extends SimpleUrlAuthenticationF
 	@Autowired
 	private LocaleResolver localeResolver;
 
+	/** {@inheritDoc} */
 	@Override
 	public void onAuthenticationFailure(final HttpServletRequest request, final HttpServletResponse response,
 			final AuthenticationException exception) throws IOException, ServletException {

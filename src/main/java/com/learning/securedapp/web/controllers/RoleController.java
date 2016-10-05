@@ -28,43 +28,76 @@ import com.learning.securedapp.web.validators.RoleValidator;
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
+/**
+ * <p>RoleController class.</p>
+ *
+ * @author rajakolli
+ * @version $Id: $Id
+ */
 @Slf4j
 @Secured(SecurityUtil.MANAGE_ROLES)
 public class RoleController extends SecuredAppBaseController {
-	private static final String viewPrefix = "roles/";
+	private static final String VIEWPREFIX = "roles/";
 
 	@Autowired
 	private SecurityService securityService;
 	@Autowired
 	private RoleValidator roleValidator;
 
+	/**
+	 * <p>permissionsList.</p>
+	 *
+	 * @return a {@link java.util.List} object.
+	 */
 	@ModelAttribute("permissionsList")
 	public List<Permission> permissionsList() {
 		return securityService.getAllPermissions();
 	}
 
+	/**
+	 * <p>listRoles.</p>
+	 *
+	 * @param model a {@link org.springframework.ui.Model} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	@GetMapping(value = "/roles")
 	public String listRoles(Model model) {
 		List<Role> list = securityService.getAllRoles();
 		model.addAttribute("roles", list);
-		return viewPrefix + "roles";
+		return VIEWPREFIX + "roles";
 	}
 
+	/**
+	 * <p>createRoleForm.</p>
+	 *
+	 * @param model a {@link org.springframework.ui.Model} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	@GetMapping(value = "/roles/new")
 	public String createRoleForm(Model model) {
 		Role role = Role.builder().build();
 		model.addAttribute("role", role);
 		// model.addAttribute("permissionsList",securityService.getAllPermissions());
 
-		return viewPrefix + "create_role";
+		return VIEWPREFIX + "create_role";
 	}
 
+	/**
+	 * <p>createRole.</p>
+	 *
+	 * @param role a {@link com.learning.securedapp.domain.Role} object.
+	 * @param result a {@link org.springframework.validation.BindingResult} object.
+	 * @param model a {@link org.springframework.ui.Model} object.
+	 * @param redirectAttributes a {@link org.springframework.web.servlet.mvc.support.RedirectAttributes} object.
+	 * @return a {@link java.lang.String} object.
+	 * @throws com.learning.securedapp.exception.SecuredAppException if any.
+	 */
 	@PostMapping(value = "/roles")
 	public String createRole(@Valid @ModelAttribute("role") Role role, BindingResult result, Model model,
 			RedirectAttributes redirectAttributes) throws SecuredAppException {
 		roleValidator.validate(role, result);
 		if (result.hasErrors()) {
-			return viewPrefix + "create_role";
+			return VIEWPREFIX + "create_role";
 		}
 		try {
 			Role persistedRole = securityService.createRole(role);
@@ -80,6 +113,13 @@ public class RoleController extends SecuredAppBaseController {
 		return "redirect:/roles";
 	}
 
+	/**
+	 * <p>editRoleForm.</p>
+	 *
+	 * @param id a {@link java.lang.String} object.
+	 * @param model a {@link org.springframework.ui.Model} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	@GetMapping(value = "/roles/{id}")
 	public String editRoleForm(@PathVariable String id, Model model) {
 		Role role = securityService.getRoleById(id);
@@ -100,9 +140,19 @@ public class RoleController extends SecuredAppBaseController {
 		role.setPermissions(rolePermissions);
 		model.addAttribute("role", role);
 		// model.addAttribute("permissionsList",allPermissions);
-		return viewPrefix + "edit_role";
+		return VIEWPREFIX + "edit_role";
 	}
 
+	/**
+	 * <p>updateRole.</p>
+	 *
+	 * @param role a {@link com.learning.securedapp.domain.Role} object.
+	 * @param result a {@link org.springframework.validation.BindingResult} object.
+	 * @param model a {@link org.springframework.ui.Model} object.
+	 * @param redirectAttributes a {@link org.springframework.web.servlet.mvc.support.RedirectAttributes} object.
+	 * @return a {@link java.lang.String} object.
+	 * @throws com.learning.securedapp.exception.SecuredAppException if any.
+	 */
 	@PostMapping(value = "/roles/{id}")
 	public String updateRole(@ModelAttribute("role") Role role, BindingResult result, Model model,
 			RedirectAttributes redirectAttributes) throws SecuredAppException {
@@ -120,6 +170,12 @@ public class RoleController extends SecuredAppBaseController {
 	}
 
 	// Delete
+	/**
+	 * <p>delete.</p>
+	 *
+	 * @param id a {@link java.lang.String} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	@GetMapping("/roles/delete/{id}")
 	public String delete(@PathVariable String id) {
 		securityService.deleteRole(id);

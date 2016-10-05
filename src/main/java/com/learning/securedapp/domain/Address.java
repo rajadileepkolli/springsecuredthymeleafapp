@@ -11,8 +11,10 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import lombok.Data;
 
 /**
- * @author Raja
+ * <p>Address class.</p>
  *
+ * @author Raja
+ * @version $Id: $Id
  */
 @Data
 @Document

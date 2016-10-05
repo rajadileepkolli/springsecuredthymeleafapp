@@ -20,6 +20,12 @@ import com.learning.securedapp.web.domain.Cart;
 import com.learning.securedapp.web.domain.CartForm;
 
 @Controller
+/**
+ * <p>CartController class.</p>
+ *
+ * @author rajakolli
+ * @version $Id: $Id
+ */
 @RequestMapping("/cart")
 public class CartController extends SecuredAppBaseController {
 
@@ -47,6 +53,13 @@ public class CartController extends SecuredAppBaseController {
 		return "redirect:/cart";
 	}
 
+	/**
+	 * <p>getCartItemCount.</p>
+	 *
+	 * @param request a {@link javax.servlet.http.HttpServletRequest} object.
+	 * @param model a {@link org.springframework.ui.Model} object.
+	 * @return a {@link java.util.Map} object.
+	 */
 	@GetMapping(value = "/items/count")
 	@ResponseBody
 	public Map<String, Object> getCartItemCount(HttpServletRequest request, Model model) {

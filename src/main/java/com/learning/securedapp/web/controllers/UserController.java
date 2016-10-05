@@ -28,6 +28,12 @@ import com.learning.securedapp.web.validators.UserValidator;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+/**
+ * <p>UserController class.</p>
+ *
+ * @author rajakolli
+ * @version $Id: $Id
+ */
 @Controller
 @Secured(SecurityUtil.MANAGE_USERS)
 public class UserController extends SecuredAppBaseController {
@@ -41,11 +47,22 @@ public class UserController extends SecuredAppBaseController {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
+	/**
+	 * <p>rolesList.</p>
+	 *
+	 * @return a {@link java.util.List} object.
+	 */
 	@ModelAttribute("rolesList")
 	public List<Role> rolesList() {
 		return securityService.getAllRoles();
 	}
 
+	/**
+	 * <p>listUsers.</p>
+	 *
+	 * @param model a {@link org.springframework.ui.Model} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	@GetMapping(value = "/users")
 	public String listUsers(Model model) {
 		List<User> list = securityService.getAllUsers();
@@ -53,6 +70,12 @@ public class UserController extends SecuredAppBaseController {
 		return viewPrefix + "users";
 	}
 
+	/**
+	 * <p>createUserForm.</p>
+	 *
+	 * @param model a {@link org.springframework.ui.Model} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	@GetMapping(value = "/users/new")
 	public String createUserForm(Model model) {
 		User user = User.builder().build();
@@ -60,6 +83,15 @@ public class UserController extends SecuredAppBaseController {
 		return viewPrefix + "create_user";
 	}
 
+	/**
+	 * <p>createUser.</p>
+	 *
+	 * @param user a {@link com.learning.securedapp.domain.User} object.
+	 * @param result a {@link org.springframework.validation.BindingResult} object.
+	 * @param model a {@link org.springframework.ui.Model} object.
+	 * @param redirectAttributes a {@link org.springframework.web.servlet.mvc.support.RedirectAttributes} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	@PostMapping(value = "/users")
 	public String createUser(@Valid @ModelAttribute("user") User user, BindingResult result, Model model,
 			RedirectAttributes redirectAttributes) {
@@ -78,6 +110,14 @@ public class UserController extends SecuredAppBaseController {
 		return "redirect:/users";
 	}
 
+	/**
+	 * <p>editUserForm.</p>
+	 *
+	 * @param id a {@link java.lang.String} object.
+	 * @param model a {@link org.springframework.ui.Model} object.
+	 * @return a {@link java.lang.String} object.
+	 * @throws com.learning.securedapp.exception.SecuredAppException if any.
+	 */
 	@Secured(value = { "ROLE_USER" })
 	@GetMapping(value = "/users/{id}")
 	public String editUserForm(@PathVariable String id, Model model) throws SecuredAppException {
@@ -104,6 +144,16 @@ public class UserController extends SecuredAppBaseController {
 		return viewPrefix + "edit_user";
 	}
 
+	/**
+	 * <p>updateUser.</p>
+	 *
+	 * @param user a {@link com.learning.securedapp.domain.User} object.
+	 * @param result a {@link org.springframework.validation.BindingResult} object.
+	 * @param model a {@link org.springframework.ui.Model} object.
+	 * @param redirectAttributes a {@link org.springframework.web.servlet.mvc.support.RedirectAttributes} object.
+	 * @return a {@link java.lang.String} object.
+	 * @throws com.learning.securedapp.exception.SecuredAppException if any.
+	 */
 	@PostMapping(value = "/users/{id}")
 	public String updateUser(@Valid @ModelAttribute("user") User user, BindingResult result, Model model,
 			RedirectAttributes redirectAttributes) throws SecuredAppException {
@@ -117,6 +167,12 @@ public class UserController extends SecuredAppBaseController {
 	}
 
 	// Delete
+	/**
+	 * <p>delete.</p>
+	 *
+	 * @param id a {@link java.lang.String} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	@GetMapping("user/delete/{id}")
 	public String delete(@PathVariable String id) {
 		securityService.deleteUser(id);

@@ -10,8 +10,10 @@ import org.springframework.data.mongodb.core.mapping.Field;
 import lombok.Data;
 
 /**
- * @author Raja
+ * <p>Payment class.</p>
  *
+ * @author Raja
+ * @version $Id: $Id
  */
 @Data
 @Document(collection = "payments")

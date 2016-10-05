@@ -15,6 +15,12 @@ import com.learning.securedapp.exception.SecuredAppException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+/**
+ * <p>EmailService class.</p>
+ *
+ * @author rajakolli
+ * @version $Id: $Id
+ */
 @Service
 public class EmailService {
 
@@ -24,6 +30,14 @@ public class EmailService {
 	@Value("${support.email}")
 	String supportEmail;
 
+	/**
+	 * <p>sendEmail.</p>
+	 *
+	 * @param to a {@link java.lang.String} object.
+	 * @param subject a {@link java.lang.String} object.
+	 * @param htmlContent a {@link java.lang.String} object.
+	 * @throws com.learning.securedapp.exception.SecuredAppException if any.
+	 */
 	public void sendEmail(String to, String subject, String htmlContent) throws SecuredAppException {
 		try {
 			final MimeMessage mimeMessage = this.javaMailSender.createMimeMessage();

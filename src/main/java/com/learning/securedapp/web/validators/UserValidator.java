@@ -13,17 +13,25 @@ import com.learning.securedapp.web.services.SecurityService;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+/**
+ * <p>UserValidator class.</p>
+ *
+ * @author rajakolli
+ * @version $Id: $Id
+ */
 @Component
 public class UserValidator implements Validator {
 
 	@Autowired
 	protected SecurityService securityService;
 
+	/** {@inheritDoc} */
 	@Override
 	public boolean supports(Class<?> clazz) {
 		return User.class.isAssignableFrom(clazz);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void validate(Object target, Errors errors) {
 		log.debug("Validating {}", target);

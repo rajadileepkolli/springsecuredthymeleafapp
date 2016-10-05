@@ -12,9 +12,17 @@ import com.learning.securedapp.web.repositories.VerificationTokenRepository;
 import com.learning.securedapp.web.services.IUserService;
 
 @Service
+/**
+ * <p>UserServiceImpl class.</p>
+ *
+ * @author rajakolli
+ * @version $Id: $Id
+ */
 public class UserServiceImpl implements IUserService {
 
+	/** Constant <code>TOKEN_INVALID="invalidToken"</code> */
 	public static final String TOKEN_INVALID = "invalidToken";
+	/** Constant <code>TOKEN_EXPIRED="expired"</code> */
 	public static final String TOKEN_EXPIRED = "expired";
 
 	@Autowired
@@ -22,12 +30,14 @@ public class UserServiceImpl implements IUserService {
 	@Autowired
 	private UserRepository userRepository;
 
+	/** {@inheritDoc} */
 	@Override
 	public void createVerificationTokenForUser(User user, String token) {
 		VerificationToken myToken = new VerificationToken(token, user);
 		tokenRepository.save(myToken);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String validateVerificationToken(String token) {
 		VerificationToken verificationToken = tokenRepository.findByToken(token);

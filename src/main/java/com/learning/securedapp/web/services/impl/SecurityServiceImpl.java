@@ -24,6 +24,12 @@ import com.learning.securedapp.web.repositories.UserRepository;
 import com.learning.securedapp.web.services.SecurityService;
 
 @Service
+/**
+ * <p>SecurityServiceImpl class.</p>
+ *
+ * @author rajakolli
+ * @version $Id: $Id
+ */
 public class SecurityServiceImpl implements SecurityService {
 
 	@Autowired
@@ -35,24 +41,28 @@ public class SecurityServiceImpl implements SecurityService {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
+	/** {@inheritDoc} */
 	@Override
 	@Cacheable(value = "roles")
 	public List<Role> getAllRoles() {
 		return roleRepository.findAll();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	@Cacheable(value = "users")
 	public List<User> getAllUsers() {
 		return userRepository.findAll();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	@CacheEvict(value = "users", allEntries = true)
 	public User createUser(User user) {
 		return createUser(user, true);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	@CacheEvict(value = "users", allEntries = true)
 	public User createUser(User user, boolean validated) {
@@ -79,12 +89,14 @@ public class SecurityServiceImpl implements SecurityService {
 		return userRepository.save(user);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	@Cacheable(value = "user", key = "#id")
 	public User getUserById(String id) {
 		return userRepository.findOne(id);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	@Caching(evict = { @CacheEvict(value = "users", allEntries = true) }, put = {
 			@CachePut(value = "user", key = "#id") })
@@ -105,11 +117,13 @@ public class SecurityServiceImpl implements SecurityService {
 		return userRepository.save(persistedUser);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public User findUserByEmail(String email) {
 		return userRepository.findByEmail(email);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String resetPassword(String email) throws SecuredAppException {
 		User user = findUserByEmail(email);
@@ -122,6 +136,7 @@ public class SecurityServiceImpl implements SecurityService {
 		return uuid;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public boolean verifyPasswordResetToken(String email, String token) throws SecuredAppException {
 		User user = findUserByEmail(email);
@@ -134,6 +149,7 @@ public class SecurityServiceImpl implements SecurityService {
 		return true;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void updatePassword(String email, String token, String encodedPwd) throws SecuredAppException {
 		User user = findUserByEmail(email);
@@ -148,12 +164,14 @@ public class SecurityServiceImpl implements SecurityService {
 		userRepository.save(user);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	@Cacheable(value = "permissions")
 	public List<Permission> getAllPermissions() {
 		return permissionRepository.findAll();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	@CacheEvict(value = "roles", allEntries = true)
 	public Role createRole(Role role) throws SecuredAppException {
@@ -170,18 +188,21 @@ public class SecurityServiceImpl implements SecurityService {
 		return roleRepository.save(role);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	@Cacheable(value = "role", key = "#roleName", unless = "#result == null")
 	public Role getRoleByName(String roleName) {
 		return roleRepository.findByRoleName(roleName);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	@Cacheable(value = "role", key = "#id")
 	public Role getRoleById(String id) {
 		return roleRepository.findOne(id);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	@Caching(evict = { @CacheEvict(value = "roles", allEntries = true) }, put = {
 			@CachePut(value = "role", key = "#id") })
@@ -214,6 +235,7 @@ public class SecurityServiceImpl implements SecurityService {
 		return permissionRepository.findOne(id);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	@Caching(cacheable = { @Cacheable(value = "permission", key = "#id") }, evict = {
 			@CacheEvict(value = "permissions", allEntries = true) })
@@ -221,24 +243,28 @@ public class SecurityServiceImpl implements SecurityService {
 		return permissionRepository.save(permission);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	@Cacheable(value = "permission", key = "#permissionName")
 	public Permission getPermissionByName(String permissionName) {
 		return permissionRepository.findByName(permissionName);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	@Cacheable(value = "user", key = "#userName", unless = "#result == null")
 	public User getUserByUserName(String userName) {
 		return userRepository.findByUserName(userName);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	@Caching(evict = { @CacheEvict(value = "user", key = "#id"), @CacheEvict(value = "users", allEntries = true) })
 	public void deleteUser(String id) {
 		userRepository.delete(id);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	@Caching(evict = { @CacheEvict(value = "role", key = "#id"), @CacheEvict(value = "roles", allEntries = true) })
 	public void deleteRole(String id) {

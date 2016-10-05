@@ -23,24 +23,39 @@ import com.mongodb.MongoClient;
 import com.mongodb.WriteConcern;
 
 @Configuration
+/**
+ * <p>MongoDBConfiguration class.</p>
+ *
+ * @author rajakolli
+ * @version $Id: $Id
+ */
 public class MongoDBConfiguration extends AbstractMongoConfiguration {
 
+	/** {@inheritDoc} */
 	@Override
 	protected String getDatabaseName() {
 		return "test";
 	}
 
+	/** {@inheritDoc} */
 	@Bean(destroyMethod = "close")
 	@Override
 	public Mongo mongo() throws Exception {
 		return mongoClient();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	protected String getMappingBasePackage() {
 		return "com.learning.securedapp.domain";
 	}
 
+	/**
+	 * <p>mongoConverter.</p>
+	 *
+	 * @return a {@link org.springframework.data.mongodb.core.convert.MongoConverter} object.
+	 * @throws com.learning.securedapp.exception.SecuredAppException if any.
+	 */
 	@Bean
 	public MongoConverter mongoConverter() throws SecuredAppException {
 		MappingMongoConverter converter = null;
@@ -63,17 +78,25 @@ public class MongoDBConfiguration extends AbstractMongoConfiguration {
 		return converter;
 	}
 
+	/** {@inheritDoc} */
 	@Bean
 	@Override
 	public MongoDbFactory mongoDbFactory() throws UnknownHostException {
 		return new SimpleMongoDbFactory(mongoClient(), getDatabaseName());
 	}
 
+	/**
+	 * <p>mongoClient.</p>
+	 *
+	 * @return a {@link com.mongodb.MongoClient} object.
+	 * @throws java.net.UnknownHostException if any.
+	 */
 	@Bean(destroyMethod = "close")
 	public MongoClient mongoClient() throws UnknownHostException {
 		return new MongoClient();
 	}
 
+	/** {@inheritDoc} */
 	@Bean
 	@Override
 	public MongoTemplate mongoTemplate() throws Exception {
@@ -83,6 +106,11 @@ public class MongoDBConfiguration extends AbstractMongoConfiguration {
 		return mongoTemplate;
 	}
 
+	/**
+	 * <p>exceptionTranslator.</p>
+	 *
+	 * @return a {@link org.springframework.data.mongodb.core.MongoExceptionTranslator} object.
+	 */
 	@Bean
 	public MongoExceptionTranslator exceptionTranslator() {
 		return new MongoExceptionTranslator();

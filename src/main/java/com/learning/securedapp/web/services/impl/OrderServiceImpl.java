@@ -20,11 +20,18 @@ import com.learning.securedapp.web.repositories.OrderRepository;
 import com.learning.securedapp.web.services.OrderService;
 
 @Service
+/**
+ * <p>OrderServiceImpl class.</p>
+ *
+ * @author rajakolli
+ * @version $Id: $Id
+ */
 public class OrderServiceImpl implements OrderService {
 
 	@Autowired
 	private OrderRepository orderRepository;
 
+	/** {@inheritDoc} */
 	@Override
 	public Object calcSignature(Cart cart) {
 		byte[] serialized = SerializationUtils.serialize(cart.getOrderLines());
@@ -37,6 +44,7 @@ public class OrderServiceImpl implements OrderService {
 		return Base64.getEncoder().encodeToString(signature);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Order purchase(String email, Cart cart, String signature) {
 		if (cart.isEmpty()) {

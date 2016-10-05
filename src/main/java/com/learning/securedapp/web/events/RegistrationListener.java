@@ -18,6 +18,12 @@ import com.learning.securedapp.service.email.EmailService;
 import com.learning.securedapp.web.services.IUserService;
 
 @Component
+/**
+ * <p>RegistrationListener class.</p>
+ *
+ * @author rajakolli
+ * @version $Id: $Id
+ */
 public class RegistrationListener implements ApplicationListener<OnRegistrationCompleteEvent> {
 
 	@Autowired
@@ -34,6 +40,7 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
 
 	private static final Logger LOG = LoggerFactory.getLogger(RegistrationListener.class);
 
+	/** {@inheritDoc} */
 	@Override
 	public void onApplicationEvent(OnRegistrationCompleteEvent event) {
 		try {

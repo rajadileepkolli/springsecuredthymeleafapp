@@ -9,6 +9,12 @@ import org.springframework.data.annotation.Id;
 import lombok.Data;
 
 @Data
+/**
+ * <p>Category class.</p>
+ *
+ * @author rajakolli
+ * @version $Id: $Id
+ */
 public class Category implements Serializable {
 
 	private static final long serialVersionUID = 1L;

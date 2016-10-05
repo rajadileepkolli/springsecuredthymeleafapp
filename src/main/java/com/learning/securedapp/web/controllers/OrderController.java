@@ -21,6 +21,12 @@ import com.learning.securedapp.web.services.OrderService;
 import com.learning.securedapp.web.services.SecurityService;
 
 @Controller
+/**
+ * <p>OrderController class.</p>
+ *
+ * @author rajakolli
+ * @version $Id: $Id
+ */
 @RequestMapping("order")
 public class OrderController extends SecuredAppBaseController {
 

@@ -19,6 +19,12 @@ import com.learning.securedapp.web.services.CategoryService;
 import com.learning.securedapp.web.validators.CategoryValidator;
 
 @Controller
+/**
+ * <p>CategoryController class.</p>
+ *
+ * @author rajakolli
+ * @version $Id: $Id
+ */
 public class CategoryController extends SecuredAppBaseController {
 
 	private static final String viewPrefix = "category/";
@@ -29,6 +35,12 @@ public class CategoryController extends SecuredAppBaseController {
 	@Autowired
 	private CategoryValidator categoryValidator;
 
+	/**
+	 * <p>listCategories.</p>
+	 *
+	 * @param model a {@link org.springframework.ui.Model} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	@GetMapping(value = "/categories.html")
 	@Secured(value = "ROLE_CMS_ADMIN")
 	public String listCategories(Model model) {
@@ -37,6 +49,12 @@ public class CategoryController extends SecuredAppBaseController {
 		return viewPrefix + "categories";
 	}
 
+	/**
+	 * <p>newProduct.</p>
+	 *
+	 * @param model a {@link org.springframework.ui.Model} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	@GetMapping("/category/new")
 	@Secured(value = "ROLE_CMS_ADMIN")
 	public String newProduct(Model model) {
@@ -44,6 +62,15 @@ public class CategoryController extends SecuredAppBaseController {
 		return viewPrefix + "create_category";
 	}
 
+	/**
+	 * <p>saveCategory.</p>
+	 *
+	 * @param category a {@link com.learning.securedapp.domain.Category} object.
+	 * @param result a {@link org.springframework.validation.BindingResult} object.
+	 * @param model a {@link org.springframework.ui.Model} object.
+	 * @param redirectAttributes a {@link org.springframework.web.servlet.mvc.support.RedirectAttributes} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	@PostMapping(value = "/category/new")
 	@Secured(value = "ROLE_CMS_ADMIN")
 	public String saveCategory(@Valid @ModelAttribute("category") Category category, BindingResult result, Model model,

@@ -6,8 +6,19 @@ import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 
 @Configuration
+/**
+ * <p>ThymeleafConfigurator class.</p>
+ *
+ * @author rajakolli
+ * @version $Id: $Id
+ */
 public class ThymeleafConfigurator {
 
+	/**
+	 * <p>emailTemplateResolver.</p>
+	 *
+	 * @return a {@link org.thymeleaf.templateresolver.ClassLoaderTemplateResolver} object.
+	 */
 	@Bean
 	public ClassLoaderTemplateResolver emailTemplateResolver() {
 		ClassLoaderTemplateResolver emailTemplateResolver = new ClassLoaderTemplateResolver();

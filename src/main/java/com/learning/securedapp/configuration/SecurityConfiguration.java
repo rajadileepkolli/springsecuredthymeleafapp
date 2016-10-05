@@ -39,6 +39,12 @@ import com.learning.securedapp.web.repositories.MongoPersistentTokenRepositoryIm
 import com.learning.securedapp.web.repositories.RememberMeTokenRepository;
 
 @EnableWebSecurity
+/**
+ * <p>SecurityConfiguration class.</p>
+ *
+ * @author rajakolli
+ * @version $Id: $Id
+ */
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
@@ -55,11 +61,21 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     private AuthenticationFailureHandler authenticationFailureHandler;
 
+    /**
+     * <p>passwordEncoder.</p>
+     *
+     * @return a {@link org.springframework.security.crypto.password.PasswordEncoder} object.
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(10);
     }
 
+    /**
+     * <p>rememberMeServices.</p>
+     *
+     * @return a {@link org.springframework.security.web.authentication.RememberMeServices} object.
+     */
     @Bean
     public RememberMeServices rememberMeServices() {
         PersistentTokenBasedRememberMeServices rememberMeServices = new PersistentTokenBasedRememberMeServices(
@@ -69,17 +85,33 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return rememberMeServices;
     }
 
+    /**
+     * <p>rememberMeAuthenticationProvider.</p>
+     *
+     * @return a {@link org.springframework.security.authentication.RememberMeAuthenticationProvider} object.
+     */
     @Bean
     public RememberMeAuthenticationProvider rememberMeAuthenticationProvider() {
         return new RememberMeAuthenticationProvider(
                 environment.getProperty("spring.application.name", "securedApp"));
     }
 
+    /**
+     * <p>persistentTokenRepository.</p>
+     *
+     * @return a {@link org.springframework.security.web.authentication.rememberme.PersistentTokenRepository} object.
+     */
     @Bean
     public PersistentTokenRepository persistentTokenRepository() {
         return new MongoPersistentTokenRepositoryImpl(rememberMeTokenRepository);
     }
 
+    /**
+     * <p>configureGlobal.</p>
+     *
+     * @param auth a {@link org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder} object.
+     * @throws java.lang.Exception if any.
+     */
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth
@@ -87,12 +119,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .passwordEncoder(passwordEncoder());
     }
 
+    /** {@inheritDoc} */
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/css/**", "/js/**", "/images/**", "/resources/**",
                 "/webjars/**", "/mails/**");
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         
@@ -161,6 +195,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return defaultWebSecurityExpressionHandler;
     }
     
+    /**
+     * <p>getSpringSecurityFilterChainBindedToError.</p>
+     *
+     * @param springSecurityFilterChain a {@link javax.servlet.Filter} object.
+     * @return a {@link org.springframework.boot.web.servlet.FilterRegistrationBean} object.
+     */
     @Bean
     public FilterRegistrationBean getSpringSecurityFilterChainBindedToError(
                     @Qualifier("springSecurityFilterChain") Filter springSecurityFilterChain) {

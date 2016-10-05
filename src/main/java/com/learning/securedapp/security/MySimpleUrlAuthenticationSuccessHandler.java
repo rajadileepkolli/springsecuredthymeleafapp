@@ -17,12 +17,19 @@ import org.springframework.stereotype.Component;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * <p>MySimpleUrlAuthenticationSuccessHandler class.</p>
+ *
+ * @author rajakolli
+ * @version $Id: $Id
+ */
 @Component("myAuthenticationSuccessHandler")
 @Slf4j
 public class MySimpleUrlAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
 	private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
+	/** {@inheritDoc} */
 	@Override
 	public void onAuthenticationSuccess(final HttpServletRequest request, final HttpServletResponse response,
 			final Authentication authentication) throws IOException {
@@ -34,6 +41,14 @@ public class MySimpleUrlAuthenticationSuccessHandler implements AuthenticationSu
 		clearAuthenticationAttributes(request);
 	}
 
+	/**
+	 * <p>handle.</p>
+	 *
+	 * @param request a {@link javax.servlet.http.HttpServletRequest} object.
+	 * @param response a {@link javax.servlet.http.HttpServletResponse} object.
+	 * @param authentication a {@link org.springframework.security.core.Authentication} object.
+	 * @throws java.io.IOException if any.
+	 */
 	protected void handle(final HttpServletRequest request, final HttpServletResponse response,
 			final Authentication authentication) throws IOException {
 		final String targetUrl = determineTargetUrl(authentication);
@@ -46,6 +61,12 @@ public class MySimpleUrlAuthenticationSuccessHandler implements AuthenticationSu
 		redirectStrategy.sendRedirect(request, response, targetUrl);
 	}
 
+	/**
+	 * <p>determineTargetUrl.</p>
+	 *
+	 * @param authentication a {@link org.springframework.security.core.Authentication} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	protected String determineTargetUrl(final Authentication authentication) {
 		boolean isUser = false;
 		boolean isAdmin = false;
@@ -68,6 +89,11 @@ public class MySimpleUrlAuthenticationSuccessHandler implements AuthenticationSu
 		}
 	}
 
+	/**
+	 * <p>clearAuthenticationAttributes.</p>
+	 *
+	 * @param request a {@link javax.servlet.http.HttpServletRequest} object.
+	 */
 	protected void clearAuthenticationAttributes(final HttpServletRequest request) {
 		final HttpSession session = request.getSession(false);
 		if (session == null) {
@@ -76,10 +102,20 @@ public class MySimpleUrlAuthenticationSuccessHandler implements AuthenticationSu
 		session.removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
 	}
 
+	/**
+	 * <p>Setter for the field <code>redirectStrategy</code>.</p>
+	 *
+	 * @param redirectStrategy a {@link org.springframework.security.web.RedirectStrategy} object.
+	 */
 	public void setRedirectStrategy(final RedirectStrategy redirectStrategy) {
 		this.redirectStrategy = redirectStrategy;
 	}
 
+	/**
+	 * <p>Getter for the field <code>redirectStrategy</code>.</p>
+	 *
+	 * @return a {@link org.springframework.security.web.RedirectStrategy} object.
+	 */
 	protected RedirectStrategy getRedirectStrategy() {
 		return redirectStrategy;
 	}

@@ -18,6 +18,12 @@ import com.learning.securedapp.exception.SecuredAppException;
 import lombok.extern.slf4j.Slf4j;
 
 @ControllerAdvice
+/**
+ * <p>ErrorControllerAdvice class.</p>
+ *
+ * @author rajakolli
+ * @version $Id: $Id
+ */
 @Slf4j
 public class ErrorControllerAdvice {
 
@@ -28,6 +34,12 @@ public class ErrorControllerAdvice {
 		response.sendError(HttpStatus.BAD_REQUEST.value(), "Please try again and with a non empty string");
 	}
 
+	/**
+	 * <p>exception.</p>
+	 *
+	 * @param throwable a {@link java.lang.Throwable} object.
+	 * @return a {@link org.springframework.web.servlet.ModelAndView} object.
+	 */
 	@ExceptionHandler(Throwable.class)
 	public ModelAndView exception(Throwable throwable) {
 		log.error("Exception during execution of SpringMail application", throwable);
@@ -38,6 +50,14 @@ public class ErrorControllerAdvice {
 		return mav;
 	}
 
+	/**
+	 * <p>handleError.</p>
+	 *
+	 * @param req a {@link javax.servlet.http.HttpServletRequest} object.
+	 * @param exception a {@link java.lang.Exception} object.
+	 * @return a {@link org.springframework.web.servlet.ModelAndView} object.
+	 * @throws java.lang.Exception if any.
+	 */
 	@ExceptionHandler({ SecuredAppException.class, Exception.class })
 	public ModelAndView handleError(HttpServletRequest req, Exception exception) throws Exception {
 

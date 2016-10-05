@@ -20,16 +20,18 @@ import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 
 /**
- * 
+ * <p>WebConfiguration class.</p>
+ *
  * @author rajakolli
- * 
+ *
  *         To redirect from HTTP to HTTPS let us configure
  *         TomcatEmbeddedServletContainerFactory bean in our
  *         WebConfiguration.java
- * 
+ *
  *         keystore can be generated using the command keytool -genkey -alias
  *         securedapp -storetype PKCS12 -keyalg RSA -keysize 2048 -keystore
  *         securekeystore.p12 -validity 365
+ * @version $Id: $Id
  */
 @Configuration
 public class WebConfiguration extends WebMvcConfigurerAdapter {
@@ -37,12 +39,14 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
 	@Value("${server.port:8443}")
 	private int serverPort;
 
+	/** {@inheritDoc} */
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		super.addInterceptors(registry);
 		registry.addInterceptor(localeChangeInterceptor());
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void addViewControllers(ViewControllerRegistry registry) {
 		super.addViewControllers(registry);
@@ -55,6 +59,11 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
 		registry.addViewController("/categories.html").setViewName("categories");
 	}
 
+	/**
+	 * <p>localeChangeInterceptor.</p>
+	 *
+	 * @return a {@link org.springframework.web.servlet.HandlerInterceptor} object.
+	 */
 	@Bean
 	public HandlerInterceptor localeChangeInterceptor() {
 		LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
@@ -62,6 +71,11 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
 		return localeChangeInterceptor;
 	}
 
+	/**
+	 * <p>localeResolver.</p>
+	 *
+	 * @return a {@link org.springframework.web.servlet.LocaleResolver} object.
+	 */
 	@Bean
 	public LocaleResolver localeResolver() {
 		CookieLocaleResolver cookieLocaleResolver = new CookieLocaleResolver();
@@ -70,6 +84,11 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
 		return cookieLocaleResolver;
 	}
 
+	/**
+	 * <p>servletContainer.</p>
+	 *
+	 * @return a {@link org.springframework.boot.context.embedded.EmbeddedServletContainerFactory} object.
+	 */
 	@Bean
 	public EmbeddedServletContainerFactory servletContainer() {
 		TomcatEmbeddedServletContainerFactory tomcat = new TomcatEmbeddedServletContainerFactory() {

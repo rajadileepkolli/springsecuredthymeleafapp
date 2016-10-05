@@ -20,6 +20,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Document
+/**
+ * <p>User class.</p>
+ *
+ * @author rajakolli
+ * @version $Id: $Id
+ */
 @Data
 @Builder
 @AllArgsConstructor

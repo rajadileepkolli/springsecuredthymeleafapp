@@ -18,15 +18,25 @@ import com.learning.securedapp.domain.User;
 import com.learning.securedapp.web.services.SecurityService;
 
 @Service
+/**
+ * <p>CustomUserDetailsService class.</p>
+ *
+ * @author rajakolli
+ * @version $Id: $Id
+ */
 public class CustomUserDetailsService implements UserDetailsService {
 
 	@Autowired
 	private SecurityService userService;
 
+	/**
+	 * <p>Constructor for CustomUserDetailsService.</p>
+	 */
 	public CustomUserDetailsService() {
 		super();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
 		try {

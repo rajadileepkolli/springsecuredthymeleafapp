@@ -8,13 +8,29 @@ import org.springframework.security.access.vote.RoleHierarchyVoter;
 import org.springframework.security.access.vote.RoleVoter;
 
 @Configuration
+/**
+ * <p>HierarchyRoles class.</p>
+ *
+ * @author rajakolli
+ * @version $Id: $Id
+ */
 public class HierarchyRoles {
 
+	/**
+	 * <p>roleVoter.</p>
+	 *
+	 * @return a {@link org.springframework.security.access.vote.RoleVoter} object.
+	 */
 	@Bean
 	public RoleVoter roleVoter() {
 		return new RoleHierarchyVoter(roleHierarchy());
 	}
 
+	/**
+	 * <p>roleHierarchy.</p>
+	 *
+	 * @return a {@link org.springframework.security.access.hierarchicalroles.RoleHierarchy} object.
+	 */
 	@Bean
 	public RoleHierarchy roleHierarchy() {
 		RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();

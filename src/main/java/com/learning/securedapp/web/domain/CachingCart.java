@@ -15,32 +15,45 @@ import org.springframework.web.servlet.support.RequestContextUtils;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+/**
+ * <p>CachingCart class.</p>
+ *
+ * @author rajakolli
+ * @version $Id: $Id
+ */
 public class CachingCart extends Cart {
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * <p>Constructor for CachingCart.</p>
+	 */
 	public CachingCart() {
 		super();
 		loadCache();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public OrderLines getOrderLines() {
 		loadCache();
 		return super.getOrderLines();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Cart add(OrderLine orderLine) {
 		withSyncCache(() -> super.add(orderLine), true);
 		return this;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Cart remove(Set<Integer> lineNo) {
 		withSyncCache(() -> super.remove(lineNo), true);
 		return this;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Cart clear() {
 		withSyncCache(super::clear, true);

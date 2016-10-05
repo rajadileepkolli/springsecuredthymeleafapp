@@ -10,6 +10,12 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import lombok.Data;
 
 @Data
+/**
+ * <p>Permission class.</p>
+ *
+ * @author rajakolli
+ * @version $Id: $Id
+ */
 @Document
 public class Permission implements Serializable {
 

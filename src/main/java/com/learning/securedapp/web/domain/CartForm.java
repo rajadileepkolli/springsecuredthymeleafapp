@@ -8,6 +8,12 @@ import java.io.Serializable;
 import java.util.Set;
 
 @Data
+/**
+ * <p>CartForm class.</p>
+ *
+ * @author rajakolli
+ * @version $Id: $Id
+ */
 public class CartForm implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@NotEmpty

@@ -28,6 +28,12 @@ import com.learning.securedapp.web.utils.WebAppUtils;
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
+/**
+ * <p>UserAuthController class.</p>
+ *
+ * @author rajakolli
+ * @version $Id: $Id
+ */
 @Slf4j
 public class UserAuthController extends SecuredAppBaseController {
 	private static final String viewPrefix = "public/";
@@ -41,11 +47,23 @@ public class UserAuthController extends SecuredAppBaseController {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
+	/**
+	 * <p>forgotPwd.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	@GetMapping(value = "/forgotPwd")
 	public String forgotPwd() {
 		return viewPrefix + "forgotPwd";
 	}
 
+	/**
+	 * <p>handleForgotPwd.</p>
+	 *
+	 * @param request a {@link javax.servlet.http.HttpServletRequest} object.
+	 * @param redirectAttributes a {@link org.springframework.web.servlet.mvc.support.RedirectAttributes} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	@PostMapping(value = "/forgotPwd")
 	public String handleForgotPwd(HttpServletRequest request, RedirectAttributes redirectAttributes) {
 		String email = request.getParameter("email");
@@ -63,6 +81,14 @@ public class UserAuthController extends SecuredAppBaseController {
 		return "redirect:/forgotPwd";
 	}
 
+	/**
+	 * <p>resetPwd.</p>
+	 *
+	 * @param request a {@link javax.servlet.http.HttpServletRequest} object.
+	 * @param model a {@link org.springframework.ui.Model} object.
+	 * @param redirectAttributes a {@link org.springframework.web.servlet.mvc.support.RedirectAttributes} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	@GetMapping(value = "/resetPwd")
 	public String resetPwd(HttpServletRequest request, Model model, RedirectAttributes redirectAttributes) {
 		String email = request.getParameter("email");
@@ -83,6 +109,14 @@ public class UserAuthController extends SecuredAppBaseController {
 
 	}
 
+	/**
+	 * <p>handleResetPwd.</p>
+	 *
+	 * @param request a {@link javax.servlet.http.HttpServletRequest} object.
+	 * @param model a {@link org.springframework.ui.Model} object.
+	 * @param redirectAttributes a {@link org.springframework.web.servlet.mvc.support.RedirectAttributes} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	@PostMapping(value = "/resetPwd")
 	public String handleResetPwd(HttpServletRequest request, Model model, RedirectAttributes redirectAttributes) {
 		try {
@@ -106,6 +140,12 @@ public class UserAuthController extends SecuredAppBaseController {
 		return "redirect:/login";
 	}
 
+	/**
+	 * <p>sendForgotPasswordEmail.</p>
+	 *
+	 * @param email a {@link java.lang.String} object.
+	 * @param resetPwdURL a {@link java.lang.String} object.
+	 */
 	protected void sendForgotPasswordEmail(String email, String resetPwdURL) {
 		try {
 

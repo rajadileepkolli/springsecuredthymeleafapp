@@ -18,14 +18,16 @@ import com.learning.securedapp.web.domain.CachingCart;
 import com.learning.securedapp.web.domain.Cart;
 
 /**
- * 
+ * <p>RedisConfiguration class.</p>
+ *
  * @author rajakolli
- * 
+ *
  *         The @EnableRedisHttpSession annotation creates a Spring Bean with the
  *         name of springSessionRepositoryFilter that implements Filter. The
  *         filter is what is in charge of replacing the HttpSession
  *         implementation to be backed by Spring Session. In this instance
  *         Spring Session is backed by Redis.
+ * @version $Id: $Id
  */
 
 @Configuration
@@ -33,6 +35,11 @@ import com.learning.securedapp.web.domain.Cart;
 @EnableRedisHttpSession
 public class RedisConfiguration extends CachingConfigurerSupport {
 
+	/**
+	 * <p>jedisConnectionFactory.</p>
+	 *
+	 * @return a {@link org.springframework.data.redis.connection.jedis.JedisConnectionFactory} object.
+	 */
 	@Bean
 	public JedisConnectionFactory jedisConnectionFactory() {
 		JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory();
@@ -41,6 +48,11 @@ public class RedisConfiguration extends CachingConfigurerSupport {
 		return jedisConnectionFactory;
 	}
 
+	/**
+	 * <p>redisTemplate.</p>
+	 *
+	 * @return a {@link org.springframework.data.redis.core.RedisTemplate} object.
+	 */
 	@Bean
 	public RedisTemplate<?, ?> redisTemplate() {
 		RedisTemplate<byte[], byte[]> redisTemplate = new RedisTemplate<>();
@@ -50,6 +62,7 @@ public class RedisConfiguration extends CachingConfigurerSupport {
 		return redisTemplate;
 	}
 
+	/** {@inheritDoc} */
 	@Bean
 	@Override
 	public RedisCacheManager cacheManager() {
@@ -60,11 +73,17 @@ public class RedisConfiguration extends CachingConfigurerSupport {
 		return redisCacheManager;
 	}
 
+	/**
+	 * <p>stringRedisSerializer.</p>
+	 *
+	 * @return a {@link org.springframework.data.redis.serializer.StringRedisSerializer} object.
+	 */
 	@Bean
 	public StringRedisSerializer stringRedisSerializer() {
 		return new StringRedisSerializer();
 	}
 
+	/** {@inheritDoc} */
 	@Bean
 	@Override
 	public KeyGenerator keyGenerator() {

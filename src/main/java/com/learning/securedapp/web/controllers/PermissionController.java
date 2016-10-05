@@ -22,6 +22,12 @@ import com.learning.securedapp.web.validators.PermissionValidator;
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
+/**
+ * <p>PermissionController class.</p>
+ *
+ * @author rajakolli
+ * @version $Id: $Id
+ */
 @Slf4j
 @Secured(SecurityUtil.MANAGE_PERMISSIONS)
 public class PermissionController extends SecuredAppBaseController {
@@ -33,6 +39,12 @@ public class PermissionController extends SecuredAppBaseController {
 	@Autowired
 	private PermissionValidator permissionValidator;
 
+	/**
+	 * <p>listPermissions.</p>
+	 *
+	 * @param model a {@link org.springframework.ui.Model} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	@GetMapping(value = "/permissions")
 	public String listPermissions(Model model) {
 		List<Permission> list = securityService.getAllPermissions();
@@ -40,6 +52,12 @@ public class PermissionController extends SecuredAppBaseController {
 		return viewPrefix + "permissions";
 	}
 
+	/**
+	 * <p>createPermissionForm.</p>
+	 *
+	 * @param model a {@link org.springframework.ui.Model} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	@GetMapping(value = "/permissions/new")
 	public String createPermissionForm(Model model) {
 		Permission permission = new Permission();
@@ -47,6 +65,15 @@ public class PermissionController extends SecuredAppBaseController {
 		return viewPrefix + "create_permission";
 	}
 
+	/**
+	 * <p>createPermission.</p>
+	 *
+	 * @param permission a {@link com.learning.securedapp.domain.Permission} object.
+	 * @param result a {@link org.springframework.validation.BindingResult} object.
+	 * @param model a {@link org.springframework.ui.Model} object.
+	 * @param redirectAttributes a {@link org.springframework.web.servlet.mvc.support.RedirectAttributes} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	@PostMapping(value = "/permissions/new")
 	public String createPermission(@Valid @ModelAttribute("permission") Permission permission, BindingResult result,
 			Model model, RedirectAttributes redirectAttributes) {

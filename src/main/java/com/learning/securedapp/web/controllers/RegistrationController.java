@@ -24,6 +24,12 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
+/**
+ * <p>RegistrationController class.</p>
+ *
+ * @author rajakolli
+ * @version $Id: $Id
+ */
 @Slf4j
 @AllArgsConstructor
 public class RegistrationController {
@@ -34,6 +40,13 @@ public class RegistrationController {
 	private MessageSource messages;
 
 	// Registration
+	/**
+	 * <p>registerUserAccount.</p>
+	 *
+	 * @param accountDto a {@link com.learning.securedapp.domain.User} object.
+	 * @param request a {@link javax.servlet.http.HttpServletRequest} object.
+	 * @return a {@link com.learning.securedapp.web.utils.GenericResponse} object.
+	 */
 	@PostMapping(value = "/user/registration")
 	public GenericResponse registerUserAccount(@Valid final User accountDto, final HttpServletRequest request) {
 		log.debug("Registering user account with information: {}", accountDto);
@@ -46,6 +59,14 @@ public class RegistrationController {
 		return new GenericResponse("success");
 	}
 
+	/**
+	 * <p>confirmRegistration.</p>
+	 *
+	 * @param locale a {@link java.util.Locale} object.
+	 * @param model a {@link org.springframework.ui.Model} object.
+	 * @param token a {@link java.lang.String} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	@GetMapping(value = "/registrationConfirm")
 	public String confirmRegistration(Locale locale, Model model, @RequestParam("token") String token) {
 		String result = userService.validateVerificationToken(token);

@@ -10,26 +10,36 @@ import com.learning.securedapp.web.repositories.ProductRepository;
 import com.learning.securedapp.web.services.ProductService;
 
 @Service
+/**
+ * <p>ProductServiceImpl class.</p>
+ *
+ * @author rajakolli
+ * @version $Id: $Id
+ */
 public class ProductServiceImpl implements ProductService {
 
 	@Autowired
 	private ProductRepository productRepository;
 
+	/** {@inheritDoc} */
 	@Override
 	public Product saveProduct(Product product) {
 		return productRepository.save(product);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Product getProductById(String id) {
 		return productRepository.findOne(id);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public List<Product> listAllProducts() {
 		return productRepository.findAll();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void deleteProduct(String id) {
 		productRepository.delete(id);

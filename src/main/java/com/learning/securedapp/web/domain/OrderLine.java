@@ -9,6 +9,12 @@ import lombok.Builder;
 import lombok.Data;
 
 @Data
+/**
+ * <p>OrderLine class.</p>
+ *
+ * @author rajakolli
+ * @version $Id: $Id
+ */
 @Builder
 public class OrderLine implements Serializable {
 
@@ -19,6 +25,11 @@ public class OrderLine implements Serializable {
 	private UUID orderId;
 	private int lineNo;
 
+	/**
+	 * <p>getSubtotal.</p>
+	 *
+	 * @return a double.
+	 */
 	public double getSubtotal() {
 		return quantity * goods.getPrice();
 	}

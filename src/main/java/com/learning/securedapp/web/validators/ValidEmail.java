@@ -12,6 +12,12 @@ import java.lang.annotation.Target;
 import javax.validation.Constraint;
 import javax.validation.Payload;
 
+/**
+ * <p>ValidEmail class.</p>
+ *
+ * @author rajakolli
+ * @version $Id: $Id
+ */
 @Target({ TYPE, FIELD, ANNOTATION_TYPE })
 @Retention(RUNTIME)
 @Constraint(validatedBy = EmailValidator.class)

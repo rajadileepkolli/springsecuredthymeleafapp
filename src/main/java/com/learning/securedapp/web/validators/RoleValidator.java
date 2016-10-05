@@ -11,16 +11,24 @@ import com.learning.securedapp.web.services.SecurityService;
 import lombok.AllArgsConstructor;
 
 @Component
+/**
+ * <p>RoleValidator class.</p>
+ *
+ * @author rajakolli
+ * @version $Id: $Id
+ */
 @AllArgsConstructor // used for creating autowired bean for securityService
 public class RoleValidator implements Validator {
 
 	private SecurityService securityService;
 
+	/** {@inheritDoc} */
 	@Override
 	public boolean supports(Class<?> clazz) {
 		return RoleValidator.class.isAssignableFrom(clazz);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void validate(Object target, Errors errors) {
 		Role role = (Role) target;

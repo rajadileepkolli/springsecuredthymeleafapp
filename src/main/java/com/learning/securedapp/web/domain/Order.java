@@ -10,6 +10,12 @@ import java.util.UUID;
 import org.springframework.data.annotation.Id;
 
 @Data
+/**
+ * <p>Order class.</p>
+ *
+ * @author rajakolli
+ * @version $Id: $Id
+ */
 @Builder
 public class Order implements Serializable {
 	private static final long serialVersionUID = 1L;

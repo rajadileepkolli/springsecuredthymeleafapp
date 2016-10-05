@@ -16,6 +16,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+/**
+ * <p>Role class.</p>
+ *
+ * @author rajakolli
+ * @version $Id: $Id
+ */
 @Document
 @Builder
 @NoArgsConstructor

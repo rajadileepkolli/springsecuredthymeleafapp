@@ -27,6 +27,12 @@ import com.learning.securedapp.web.services.CategoryService;
 import com.learning.securedapp.web.services.ProductService;
 
 @Controller
+/**
+ * <p>ProductController class.</p>
+ *
+ * @author rajakolli
+ * @version $Id: $Id
+ */
 public class ProductController extends SecuredAppBaseController {
 
 	private static final String viewPrefix = "products/";
@@ -40,6 +46,11 @@ public class ProductController extends SecuredAppBaseController {
 	@Autowired
 	Cart cart;
 
+	/**
+	 * <p>categoryList.</p>
+	 *
+	 * @return a {@link java.util.List} object.
+	 */
 	@ModelAttribute("categoryList")
 	public List<Category> categoryList() {
 		return categoryService.getAllCategories();
@@ -50,12 +61,27 @@ public class ProductController extends SecuredAppBaseController {
 		return new AddToCartForm();
 	}
 
+	/**
+	 * <p>newProduct.</p>
+	 *
+	 * @param model a {@link org.springframework.ui.Model} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	@GetMapping("product/new")
 	public String newProduct(Model model) {
 		model.addAttribute("product", Product.builder().build());
 		return viewPrefix + "create_product";
 	}
 
+	/**
+	 * <p>saveProduct.</p>
+	 *
+	 * @param product a {@link com.learning.securedapp.domain.Product} object.
+	 * @param bindingResult a {@link org.springframework.validation.BindingResult} object.
+	 * @param model a {@link org.springframework.ui.Model} object.
+	 * @param redirectAttributes a {@link org.springframework.web.servlet.mvc.support.RedirectAttributes} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	@Secured(value = { "ROLE_ADMIN" })
 	@PostMapping(value = "product")
 	public String saveProduct(@Valid @ModelAttribute("product") Product product, BindingResult bindingResult,
@@ -76,6 +102,13 @@ public class ProductController extends SecuredAppBaseController {
 	}
 
 	// Read
+	/**
+	 * <p>showProduct.</p>
+	 *
+	 * @param id a {@link java.lang.String} object.
+	 * @param model a {@link org.springframework.ui.Model} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	@Secured(value = { "ROLE_ADMIN", "ROLE_USER" })
 	@GetMapping("product/{id}")
 	public String showProduct(@PathVariable String id, Model model) {
@@ -83,6 +116,12 @@ public class ProductController extends SecuredAppBaseController {
 		return viewPrefix + "productshow";
 	}
 
+	/**
+	 * <p>showProducts.</p>
+	 *
+	 * @param model a {@link org.springframework.ui.Model} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	@GetMapping(value = "products")
 	public String showProducts(Model model) {
 		model.addAttribute("products", productService.listAllProducts());
@@ -90,6 +129,13 @@ public class ProductController extends SecuredAppBaseController {
 	}
 
 	// Update
+	/**
+	 * <p>edit.</p>
+	 *
+	 * @param id a {@link java.lang.String} object.
+	 * @param model a {@link org.springframework.ui.Model} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	@GetMapping("product/edit/{id}")
 	public String edit(@PathVariable String id, Model model) {
 		model.addAttribute("product", productService.getProductById(id));
@@ -97,6 +143,12 @@ public class ProductController extends SecuredAppBaseController {
 	}
 
 	// Delete
+	/**
+	 * <p>delete.</p>
+	 *
+	 * @param id a {@link java.lang.String} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	@GetMapping("product/delete/{id}")
 	public String delete(@PathVariable String id) {
 		productService.deleteProduct(id);
