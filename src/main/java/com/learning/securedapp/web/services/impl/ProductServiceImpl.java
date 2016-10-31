@@ -10,12 +10,6 @@ import com.learning.securedapp.web.repositories.ProductRepository;
 import com.learning.securedapp.web.services.ProductService;
 
 @Service
-/**
- * <p>ProductServiceImpl class.</p>
- *
- * @author rajakolli
- * @version $Id: $Id
- */
 public class ProductServiceImpl implements ProductService {
 
 	@Autowired

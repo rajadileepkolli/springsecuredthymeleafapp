@@ -1,5 +1,7 @@
 package com.learning.securedapp.web.controllers;
 
+import static java.util.Objects.isNull;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,12 +22,6 @@ import com.learning.securedapp.web.domain.Cart;
 import com.learning.securedapp.web.domain.CartForm;
 
 @Controller
-/**
- * <p>CartController class.</p>
- *
- * @author rajakolli
- * @version $Id: $Id
- */
 @RequestMapping("/cart")
 public class CartController extends SecuredAppBaseController {
 
@@ -73,7 +69,7 @@ public class CartController extends SecuredAppBaseController {
 	private Cart getOrCreateCart(HttpServletRequest request) {
 		Cart cart = null;
 		cart = (Cart) request.getSession().getAttribute("CART_KEY");
-		if (cart == null) {
+		if (isNull(cart)) {
 			cart = new Cart();
 			request.getSession().setAttribute("CART_KEY", cart);
 		}
