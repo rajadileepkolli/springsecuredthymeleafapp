@@ -22,13 +22,13 @@ import com.mongodb.Mongo;
 import com.mongodb.MongoClient;
 import com.mongodb.WriteConcern;
 
-@Configuration
 /**
  * <p>MongoDBConfiguration class.</p>
  *
  * @author rajakolli
  * @version $Id: $Id
  */
+@Configuration
 public class MongoDBConfiguration extends AbstractMongoConfiguration {
 
 	/** {@inheritDoc} */
