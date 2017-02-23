@@ -1,22 +1,17 @@
 package com.learning.securedapp.service.email;
 
 import static com.icegreen.greenmail.util.ServerSetupTest.SMTP;
-import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import com.icegreen.greenmail.util.GreenMail;
+import com.learning.securedapp.ApplicationTests;
 import com.learning.securedapp.exception.SecuredAppException;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = RANDOM_PORT)
-public class EmailServiceTest
+public class EmailServiceTest extends ApplicationTests
 {
 
     @Autowired

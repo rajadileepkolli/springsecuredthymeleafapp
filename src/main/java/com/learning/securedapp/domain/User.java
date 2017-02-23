@@ -1,6 +1,7 @@
 package com.learning.securedapp.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.constraints.NotNull;
@@ -14,22 +15,14 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.learning.securedapp.web.validators.ValidEmail;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 @Document
-/**
- * <p>User class.</p>
- *
- * @author rajakolli
- * @version $Id: $Id
- */
-@Data
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@Getter
+@Setter
 public class User implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -59,5 +52,5 @@ public class User implements Serializable {
 	private String address;
 
 	@DBRef(lazy = true)
-	private List<Role> roleList;
+	private List<Role> roleList = new ArrayList<>();
 }
