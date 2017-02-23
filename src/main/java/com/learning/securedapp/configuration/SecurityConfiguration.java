@@ -26,7 +26,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
@@ -58,14 +57,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private RoleHierarchy roleHierarchy;
     @Autowired
     private RememberMeTokenRepository rememberMeTokenRepository;
-    @Autowired
-    private AuthenticationFailureHandler authenticationFailureHandler;
 
-    /**
-     * <p>passwordEncoder.</p>
-     *
-     * @return a {@link org.springframework.security.crypto.password.PasswordEncoder} object.
-     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(10);
@@ -166,7 +158,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .passwordParameter("password")
                 .failureUrl("/login.html?error=true")
                 // .successHandler(myAuthenticationSuccessHandler)
-                .failureHandler(authenticationFailureHandler)
+//                .failureHandler(authenticationFailureHandler)
                 .permitAll()
                 .and()
             .sessionManagement()

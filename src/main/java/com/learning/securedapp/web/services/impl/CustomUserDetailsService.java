@@ -1,9 +1,11 @@
 package com.learning.securedapp.web.services.impl;
 
+import static java.util.stream.Collectors.toSet;
+
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.learning.securedapp.domain.Permission;
 import com.learning.securedapp.domain.Role;
 import com.learning.securedapp.domain.User;
 import com.learning.securedapp.web.services.SecurityService;
@@ -24,14 +27,6 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Autowired
     private SecurityService userService;
 
-    /**
-     * <p>
-     * Constructor for CustomUserDetailsService.
-     * </p>
-     */
-    public CustomUserDetailsService() {
-        super();
-    }
 
     /** {@inheritDoc} */
     @Override
@@ -57,26 +52,20 @@ public class CustomUserDetailsService implements UserDetailsService {
         }
     }
 
-    private Collection<? extends GrantedAuthority> getAuthorities(List<Role> roleList) {
-
-        Set<GrantedAuthority> authorities = Stream
-                .concat(roleList.stream()
-                        .map(role -> new SimpleGrantedAuthority(role.getRoleName())),
-                        roleList.stream().flatMap(role -> role.getPermissions().stream())
-                                .map(p -> new SimpleGrantedAuthority(
-                                        "ROLE_" + p.getName())))
-                .collect(Collectors.toSet());
-
-       /* for (Role role : roleList) {
-            authorities.add(new SimpleGrantedAuthority(role.getRoleName()));
-            List<Permission> permissions = role.getPermissions();
-            for (Permission permission : permissions) {
-                authorities
-                        .add(new SimpleGrantedAuthority("ROLE_" + permission.getName()));
-            }
-        }*/
-         
-
+    private Collection<? extends GrantedAuthority> getAuthorities(List<Role> roleList)
+    {
+        Stream<SimpleGrantedAuthority> roleStream = roleList.stream()
+                .map(Role::getRoleName).map(SimpleGrantedAuthority::new);
+        Stream<SimpleGrantedAuthority> permissionStream = roleList.stream()
+                .map(role -> role.getPermissions())
+                .filter(Objects::nonNull)
+                .flatMap(role -> role.stream())
+                .map(Permission::getName)
+                .filter(Objects::nonNull)
+                .map(permissionName -> new SimpleGrantedAuthority(
+                        "ROLE_" + permissionName));
+        Set<GrantedAuthority> authorities = Stream.concat(roleStream, permissionStream)
+                .collect(toSet());
         return authorities;
     }
 

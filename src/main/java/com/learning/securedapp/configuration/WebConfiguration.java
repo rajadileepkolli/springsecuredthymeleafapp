@@ -1,7 +1,5 @@
 package com.learning.securedapp.configuration;
 
-import java.util.Locale;
-
 import org.apache.catalina.Context;
 import org.apache.catalina.connector.Connector;
 import org.apache.tomcat.util.descriptor.web.SecurityCollection;
@@ -11,13 +9,8 @@ import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.HandlerInterceptor;
-import org.springframework.web.servlet.LocaleResolver;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-import org.springframework.web.servlet.i18n.CookieLocaleResolver;
-import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 
 /**
  * <p>WebConfiguration class.</p>
@@ -30,21 +23,14 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
  *
  *         keystore can be generated using the command keytool -genkey -alias
  *         securedapp -storetype PKCS12 -keyalg RSA -keysize 2048 -keystore
- *         securekeystore.p12 -validity 365
- * @version $Id: $Id
+ *         securekeystore.p12 -validity 3650
+ * @version 1: 0
  */
 @Configuration
 public class WebConfiguration extends WebMvcConfigurerAdapter {
 
 	@Value("${server.port:8443}")
 	private int serverPort;
-
-	/** {@inheritDoc} */
-	@Override
-	public void addInterceptors(InterceptorRegistry registry) {
-		super.addInterceptors(registry);
-		registry.addInterceptor(localeChangeInterceptor());
-	}
 
 	/** {@inheritDoc} */
 	@Override
@@ -57,31 +43,6 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
 		registry.addViewController("/login.html").setViewName("login");
 		registry.addViewController("/home.html").setViewName("home");
 		registry.addViewController("/categories.html").setViewName("categories");
-	}
-
-	/**
-	 * <p>localeChangeInterceptor.</p>
-	 *
-	 * @return a {@link org.springframework.web.servlet.HandlerInterceptor} object.
-	 */
-	@Bean
-	public HandlerInterceptor localeChangeInterceptor() {
-		LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
-		localeChangeInterceptor.setParamName("lang");
-		return localeChangeInterceptor;
-	}
-
-	/**
-	 * <p>localeResolver.</p>
-	 *
-	 * @return a {@link org.springframework.web.servlet.LocaleResolver} object.
-	 */
-	@Bean
-	public LocaleResolver localeResolver() {
-		CookieLocaleResolver cookieLocaleResolver = new CookieLocaleResolver();
-		// SessionLocaleResolver
-		cookieLocaleResolver.setDefaultLocale(Locale.ENGLISH);
-		return cookieLocaleResolver;
 	}
 
 	/**

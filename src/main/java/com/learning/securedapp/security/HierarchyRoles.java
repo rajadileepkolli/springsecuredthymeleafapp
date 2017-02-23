@@ -7,13 +7,13 @@ import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.access.vote.RoleHierarchyVoter;
 import org.springframework.security.access.vote.RoleVoter;
 
-@Configuration
 /**
  * <p>HierarchyRoles class.</p>
  *
  * @author rajakolli
- * @version $Id: $Id
+ * @version 1: 0
  */
+@Configuration
 public class HierarchyRoles {
 
 	/**
