@@ -4,11 +4,11 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import com.learning.securedapp.ApplicationTests;
+import com.learning.securedapp.AbstractApplicationTests;
 import com.learning.securedapp.domain.User;
 import com.learning.securedapp.exception.SecuredAppException;
 
-public class UserRepositoryTest extends ApplicationTests
+public class UserRepositoryTest extends AbstractApplicationTests
 {
 
     @Autowired

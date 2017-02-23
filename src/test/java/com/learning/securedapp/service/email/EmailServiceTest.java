@@ -1,17 +1,16 @@
 package com.learning.securedapp.service.email;
 
-import static com.icegreen.greenmail.util.ServerSetupTest.SMTP;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.icegreen.greenmail.util.GreenMail;
-import com.learning.securedapp.ApplicationTests;
+import com.icegreen.greenmail.util.ServerSetupTest;
+import com.learning.securedapp.AbstractApplicationTests;
 import com.learning.securedapp.exception.SecuredAppException;
 
-public class EmailServiceTest extends ApplicationTests
+public class EmailServiceTest extends AbstractApplicationTests
 {
 
     @Autowired
@@ -22,7 +21,7 @@ public class EmailServiceTest extends ApplicationTests
     @Before
     public void testSmtpInit()
     {
-        testSmtp = new GreenMail(SMTP);
+        testSmtp = new GreenMail(ServerSetupTest.SMTPS);
         testSmtp.start();
     }
 
@@ -35,7 +34,7 @@ public class EmailServiceTest extends ApplicationTests
     @Test
     public final void testSendEmail() throws SecuredAppException
     {
-        emailService.sendEmail("rajadileepkolli@gmail.com", "JCart - Test Mail",
-                "This is a test email from JCart");
+        emailService.sendEmail("rajadileepkolli@gmail.com", "SecuredThymeleafApp - Test Mail",
+                "This is a test email from SecuredThymeleafApp");
     }
 }

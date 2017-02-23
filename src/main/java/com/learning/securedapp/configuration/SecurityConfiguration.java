@@ -19,7 +19,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -37,13 +36,6 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 import com.learning.securedapp.web.repositories.MongoPersistentTokenRepositoryImpl;
 import com.learning.securedapp.web.repositories.RememberMeTokenRepository;
 
-@EnableWebSecurity
-/**
- * <p>SecurityConfiguration class.</p>
- *
- * @author rajakolli
- * @version $Id: $Id
- */
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {

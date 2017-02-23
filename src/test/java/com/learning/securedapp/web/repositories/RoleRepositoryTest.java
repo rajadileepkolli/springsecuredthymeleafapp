@@ -8,10 +8,10 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.learning.securedapp.ApplicationTests;
+import com.learning.securedapp.AbstractApplicationTests;
 import com.learning.securedapp.domain.Role;
 
-public class RoleRepositoryTest extends ApplicationTests
+public class RoleRepositoryTest extends AbstractApplicationTests
 {
 
     @Autowired

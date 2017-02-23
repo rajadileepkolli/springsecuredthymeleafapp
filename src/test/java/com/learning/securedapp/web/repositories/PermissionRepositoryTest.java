@@ -7,10 +7,10 @@ import java.util.List;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.learning.securedapp.ApplicationTests;
+import com.learning.securedapp.AbstractApplicationTests;
 import com.learning.securedapp.domain.Permission;
 
-public class PermissionRepositoryTest extends ApplicationTests
+public class PermissionRepositoryTest extends AbstractApplicationTests
 {
 
     @Autowired

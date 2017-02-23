@@ -6,12 +6,6 @@ import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 
 @Configuration
-/**
- * <p>ThymeleafConfigurator class.</p>
- *
- * @author rajakolli
- * @version $Id: $Id
- */
 public class ThymeleafConfigurator {
 
 	/**
