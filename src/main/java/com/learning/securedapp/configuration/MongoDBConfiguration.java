@@ -1,6 +1,7 @@
 package com.learning.securedapp.configuration;
 
-import java.net.UnknownHostException;
+import java.util.Arrays;
+import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,7 +19,6 @@ import org.springframework.data.mongodb.core.convert.MongoConverter;
 
 import com.learning.securedapp.exception.SecuredAppException;
 import com.learning.securedapp.exception.SecuredAppExceptionBean;
-import com.mongodb.Mongo;
 import com.mongodb.MongoClient;
 import com.mongodb.WriteConcern;
 
@@ -26,7 +26,6 @@ import com.mongodb.WriteConcern;
  * <p>MongoDBConfiguration class.</p>
  *
  * @author rajakolli
- * @version $Id: $Id
  */
 @Configuration
 public class MongoDBConfiguration extends AbstractMongoConfiguration {
@@ -38,16 +37,9 @@ public class MongoDBConfiguration extends AbstractMongoConfiguration {
 	}
 
 	/** {@inheritDoc} */
-	@Bean(destroyMethod = "close")
 	@Override
-	public Mongo mongo() throws Exception {
-		return mongoClient();
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	protected String getMappingBasePackage() {
-		return "com.learning.securedapp.domain";
+	protected List<String> getMappingBasePackages() {
+		return Arrays.asList("com.learning.securedapp.domain");
 	}
 
 	/**
@@ -63,11 +55,6 @@ public class MongoDBConfiguration extends AbstractMongoConfiguration {
 			DbRefResolver dbRefResolver = new DefaultDbRefResolver(mongoDbFactory());
 			converter = new MappingMongoConverter(dbRefResolver, mongoMappingContext());
 			converter.setTypeMapper(new DefaultMongoTypeMapper(null));
-		} catch (UnknownHostException e) {
-			SecuredAppExceptionBean faultBean = new SecuredAppExceptionBean();
-			faultBean.setFaultCode("MONGO1");
-			faultBean.setFaultString("Unable to create MongoDBFactory");
-			throw new SecuredAppException(faultBean, e);
 		} catch (ClassNotFoundException e) {
 			SecuredAppExceptionBean faultBean = new SecuredAppExceptionBean();
 			faultBean.setFaultCode("MONGO2");
@@ -81,7 +68,7 @@ public class MongoDBConfiguration extends AbstractMongoConfiguration {
 	/** {@inheritDoc} */
 	@Bean
 	@Override
-	public MongoDbFactory mongoDbFactory() throws UnknownHostException {
+	public MongoDbFactory mongoDbFactory() {
 		return new SimpleMongoDbFactory(mongoClient(), getDatabaseName());
 	}
 
@@ -89,10 +76,9 @@ public class MongoDBConfiguration extends AbstractMongoConfiguration {
 	 * <p>mongoClient.</p>
 	 *
 	 * @return a {@link com.mongodb.MongoClient} object.
-	 * @throws java.net.UnknownHostException if any.
 	 */
 	@Bean(destroyMethod = "close")
-	public MongoClient mongoClient() throws UnknownHostException {
+	public MongoClient mongoClient() {
 		return new MongoClient();
 	}
 

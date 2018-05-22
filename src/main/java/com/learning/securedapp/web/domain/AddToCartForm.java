@@ -6,13 +6,13 @@ import javax.validation.constraints.NotNull;
 
 import lombok.Data;
 
-@Data
 /**
  * <p>AddToCartForm class.</p>
  *
  * @author rajakolli
  * @version $Id: $Id
  */
+@Data
 public class AddToCartForm {
 
 	@NotNull

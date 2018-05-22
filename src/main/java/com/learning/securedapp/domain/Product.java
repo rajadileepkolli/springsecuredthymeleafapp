@@ -8,16 +8,18 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
 /**
  * <p>Product class.</p>
  *
  * @author rajakolli
- * @version $Id: $Id
+ * @version 1: 0
  */
+@Setter
+@Getter
 @Document
 @Builder
 @AllArgsConstructor

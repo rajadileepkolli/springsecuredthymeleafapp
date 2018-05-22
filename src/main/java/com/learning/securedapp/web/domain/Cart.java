@@ -9,13 +9,13 @@ import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-@Data
 /**
  * <p>Cart class.</p>
  *
  * @author rajakolli
  * @version $Id: $Id
  */
+@Data
 @AllArgsConstructor
 public class Cart implements Serializable {
 

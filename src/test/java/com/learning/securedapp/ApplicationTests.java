@@ -25,92 +25,69 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 
-public class ApplicationTests extends AbstractApplicationTests
-{
+public class ApplicationTests extends AbstractApplicationTests {
 
     @Autowired
     private TestRestTemplate testRestTemplate;
 
     @BeforeClass
-    public static void sslSetUp()
-    {
-        try
-        {
+    public static void sslSetUp() {
+        try {
             // setup ssl context to ignore certificate errors
             SSLContext ctx = SSLContext.getInstance("TLS");
-            X509TrustManager tm = new X509TrustManager()
-            {
+            X509TrustManager tm = new X509TrustManager() {
                 @Override
                 public void checkClientTrusted(X509Certificate[] chain, String authType)
-                        throws CertificateException
-                {
+                        throws CertificateException {
                 }
 
                 @Override
                 public void checkServerTrusted(X509Certificate[] chain, String authType)
-                        throws CertificateException
-                {
+                        throws CertificateException {
                 }
 
                 @Override
-                public X509Certificate[] getAcceptedIssuers()
-                {
+                public X509Certificate[] getAcceptedIssuers() {
                     return null;
                 }
             };
             ctx.init(null, new TrustManager[] { tm }, null);
             SSLContext.setDefault(ctx);
         }
-        catch (Exception ex)
-        {
+        catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
     @TestConfiguration
-    static class Config
-    {
-        final MySimpleClientHttpRequestFactory factory = new ApplicationTests().new MySimpleClientHttpRequestFactory(
-                new HostnameVerifier()
-                {
-                    @Override
-                    public boolean verify(String hostname, SSLSession session)
-                    {
-                        return true;
-                    }
-                });
-
+    static class Config {
         @Bean
-        public RestTemplateBuilder restTemplateBuilder()
-        {
-            return new RestTemplateBuilder().requestFactory(factory);
+        public RestTemplateBuilder restTemplateBuilder() {
+            return new RestTemplateBuilder()
+                    .requestFactory(MySimpleClientHttpRequestFactory.class);
         }
     }
 
     @Test
-    public void testHome() throws Exception
-    {
+    public void testHome() throws Exception {
         ResponseEntity<String> entity = testRestTemplate.getForEntity("/login.html",
                 String.class);
         assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
-    class MySimpleClientHttpRequestFactory extends SimpleClientHttpRequestFactory
-    {
+    static class MySimpleClientHttpRequestFactory extends SimpleClientHttpRequestFactory {
 
-        private HostnameVerifier hostnameVerifier;
-
-        public MySimpleClientHttpRequestFactory(HostnameVerifier hostnameVerifier)
-        {
-            this.hostnameVerifier = hostnameVerifier;
-        }
+        private HostnameVerifier hostnameVerifier = new HostnameVerifier() {
+            @Override
+            public boolean verify(String hostname, SSLSession session) {
+                return true;
+            }
+        };
 
         @Override
         protected void prepareConnection(final HttpURLConnection connection,
-                final String httpMethod) throws IOException
-        {
-            if (connection instanceof HttpsURLConnection)
-            {
+                final String httpMethod) throws IOException {
+            if (connection instanceof HttpsURLConnection) {
                 ((HttpsURLConnection) connection)
                         .setHostnameVerifier(this.hostnameVerifier);
             }

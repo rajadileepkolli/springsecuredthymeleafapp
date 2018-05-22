@@ -62,7 +62,7 @@ public class MongoPersistentTokenRepositoryImpl implements PersistentTokenReposi
 	@Override
 	public void removeUserTokens(String username) {
 		List<RememberMeToken> tokens = this.rememberMeTokenRepository.findByUsername(username);
-		this.rememberMeTokenRepository.delete(tokens);
+		this.rememberMeTokenRepository.deleteAll(tokens);
 	}
 
 }

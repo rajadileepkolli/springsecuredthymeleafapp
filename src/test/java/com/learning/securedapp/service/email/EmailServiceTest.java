@@ -10,8 +10,7 @@ import com.icegreen.greenmail.util.ServerSetupTest;
 import com.learning.securedapp.AbstractApplicationTests;
 import com.learning.securedapp.exception.SecuredAppException;
 
-public class EmailServiceTest extends AbstractApplicationTests
-{
+public class EmailServiceTest extends AbstractApplicationTests {
 
     @Autowired
     private EmailService emailService;
@@ -19,22 +18,20 @@ public class EmailServiceTest extends AbstractApplicationTests
     private GreenMail testSmtp;
 
     @Before
-    public void testSmtpInit()
-    {
+    public void testSmtpInit() {
         testSmtp = new GreenMail(ServerSetupTest.SMTPS);
         testSmtp.start();
     }
 
     @After
-    public void cleanup()
-    {
+    public void cleanup() {
         testSmtp.stop();
     }
 
     @Test
-    public final void testSendEmail() throws SecuredAppException
-    {
-        emailService.sendEmail("rajadileepkolli@gmail.com", "SecuredThymeleafApp - Test Mail",
+    public final void testSendEmail() throws SecuredAppException {
+        emailService.sendEmail("rajadileepkolli@gmail.com",
+                "SecuredThymeleafApp - Test Mail",
                 "This is a test email from SecuredThymeleafApp");
     }
 }

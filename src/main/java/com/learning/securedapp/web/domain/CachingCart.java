@@ -14,13 +14,13 @@ import org.springframework.web.servlet.support.RequestContextUtils;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 /**
  * <p>CachingCart class.</p>
  *
  * @author rajakolli
  * @version $Id: $Id
  */
+@Slf4j
 public class CachingCart extends Cart {
 	private static final long serialVersionUID = 1L;
 

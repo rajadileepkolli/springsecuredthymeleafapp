@@ -5,12 +5,12 @@ import org.apache.catalina.connector.Connector;
 import org.apache.tomcat.util.descriptor.web.SecurityCollection;
 import org.apache.tomcat.util.descriptor.web.SecurityConstraint;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
-import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
+import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
+import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * <p>WebConfiguration class.</p>
@@ -27,7 +27,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
  * @version 1: 0
  */
 @Configuration
-public class WebConfiguration extends WebMvcConfigurerAdapter {
+public class WebConfiguration implements WebMvcConfigurer {
 
 	@Value("${server.port:8443}")
 	private int serverPort;
@@ -35,7 +35,6 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
 	/** {@inheritDoc} */
 	@Override
 	public void addViewControllers(ViewControllerRegistry registry) {
-		super.addViewControllers(registry);
 		registry.addViewController("/").setViewName("forward:/home.html");
 		registry.addViewController("/registration.html").setViewName("registration");
 		registry.addViewController("/successRegister.html").setViewName("successRegister");
@@ -51,8 +50,8 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
 	 * @return a {@link org.springframework.boot.context.embedded.EmbeddedServletContainerFactory} object.
 	 */
 	@Bean
-	public EmbeddedServletContainerFactory servletContainer() {
-		TomcatEmbeddedServletContainerFactory tomcat = new TomcatEmbeddedServletContainerFactory() {
+	public ConfigurableServletWebServerFactory webServerFactory() {
+	    TomcatServletWebServerFactory tomcat = new TomcatServletWebServerFactory() {
 			@Override
 			protected void postProcessContext(Context context) {
 				SecurityConstraint securityConstraint = new SecurityConstraint();

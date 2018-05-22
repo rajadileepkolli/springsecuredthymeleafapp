@@ -24,7 +24,7 @@ public class ProductServiceImpl implements ProductService {
 	/** {@inheritDoc} */
 	@Override
 	public Product getProductById(String id) {
-		return productRepository.findOne(id);
+		return productRepository.findById(id).orElse(null);
 	}
 
 	/** {@inheritDoc} */
@@ -36,7 +36,7 @@ public class ProductServiceImpl implements ProductService {
 	/** {@inheritDoc} */
 	@Override
 	public void deleteProduct(String id) {
-		productRepository.delete(id);
+		productRepository.deleteById(id);
 	}
 
 }

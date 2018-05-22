@@ -15,14 +15,18 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.learning.securedapp.web.validators.ValidEmail;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Document
 @Builder
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class User implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -43,6 +47,7 @@ public class User implements Serializable {
 
 	private String passwordResetToken;
 
+	@Builder.Default
 	private boolean enabled = false;
 
 	@NotNull
@@ -52,5 +57,6 @@ public class User implements Serializable {
 	private String address;
 
 	@DBRef(lazy = true)
+	@Builder.Default
 	private List<Role> roleList = new ArrayList<>();
 }

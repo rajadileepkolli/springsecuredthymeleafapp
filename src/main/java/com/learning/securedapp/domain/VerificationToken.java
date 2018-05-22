@@ -7,13 +7,20 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 /**
  * <p>VerificationToken class.</p>
  *
  * @author rajakolli
  * @version $Id: $Id
  */
+@Getter
+@Setter
+@Document
+@NoArgsConstructor
 public class VerificationToken {
 
 	private static final int EXPIRATION = 60 * 24;
@@ -27,13 +34,6 @@ public class VerificationToken {
 
 	@DBRef(lazy = true)
 	private User user;
-
-	/**
-	 * <p>Constructor for VerificationToken.</p>
-	 */
-	public VerificationToken() {
-		super();
-	}
 
 	/**
 	 * <p>Constructor for VerificationToken.</p>
@@ -54,60 +54,6 @@ public class VerificationToken {
 		cal.setTimeInMillis(new Date().getTime());
 		cal.add(Calendar.MINUTE, expiryTimeInMinutes);
 		return new Date(cal.getTime().getTime());
-	}
-
-	/**
-	 * <p>Getter for the field <code>id</code>.</p>
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	public String getId() {
-		return id;
-	}
-
-	/**
-	 * <p>Setter for the field <code>id</code>.</p>
-	 *
-	 * @param id a {@link java.lang.String} object.
-	 */
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	/**
-	 * <p>Getter for the field <code>token</code>.</p>
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	public String getToken() {
-		return token;
-	}
-
-	/**
-	 * <p>Setter for the field <code>token</code>.</p>
-	 *
-	 * @param token a {@link java.lang.String} object.
-	 */
-	public void setToken(String token) {
-		this.token = token;
-	}
-
-	/**
-	 * <p>Getter for the field <code>user</code>.</p>
-	 *
-	 * @return a {@link com.learning.securedapp.domain.User} object.
-	 */
-	public User getUser() {
-		return user;
-	}
-
-	/**
-	 * <p>Setter for the field <code>user</code>.</p>
-	 *
-	 * @param user a {@link com.learning.securedapp.domain.User} object.
-	 */
-	public void setUser(User user) {
-		this.user = user;
 	}
 
 	/**

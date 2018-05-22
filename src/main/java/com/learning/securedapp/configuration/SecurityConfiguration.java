@@ -37,7 +37,7 @@ import com.learning.securedapp.web.repositories.MongoPersistentTokenRepositoryIm
 import com.learning.securedapp.web.repositories.RememberMeTokenRepository;
 
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-@Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
+@Order(SecurityProperties.BASIC_AUTH_ORDER -2)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -186,10 +186,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
      * @return a {@link org.springframework.boot.web.servlet.FilterRegistrationBean} object.
      */
     @Bean
-    public FilterRegistrationBean getSpringSecurityFilterChainBindedToError(
+    public FilterRegistrationBean<Filter> getSpringSecurityFilterChainBindedToError(
                     @Qualifier("springSecurityFilterChain") Filter springSecurityFilterChain) {
 
-            FilterRegistrationBean registration = new FilterRegistrationBean();
+            FilterRegistrationBean<Filter> registration = new FilterRegistrationBean<>();
             registration.setFilter(springSecurityFilterChain);
             registration.setDispatcherTypes(EnumSet.allOf(DispatcherType.class));
             return registration;

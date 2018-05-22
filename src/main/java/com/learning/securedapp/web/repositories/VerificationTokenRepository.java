@@ -20,11 +20,4 @@ public interface VerificationTokenRepository extends MongoRepository<Verificatio
 	 */
 	VerificationToken findByToken(String token);
 
-	/**
-	 * <p>findById.</p>
-	 *
-	 * @param id a {@link java.lang.String} object.
-	 * @return a {@link com.learning.securedapp.domain.VerificationToken} object.
-	 */
-	VerificationToken findById(String id);
 }

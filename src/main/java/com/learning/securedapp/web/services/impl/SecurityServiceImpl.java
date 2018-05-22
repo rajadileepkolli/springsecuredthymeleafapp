@@ -2,6 +2,7 @@ package com.learning.securedapp.web.services.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -83,7 +84,7 @@ public class SecurityServiceImpl implements SecurityService {
     @Override
     @Cacheable(value = "user", key = "#id")
     public User getUserById(String id) {
-        return userRepository.findOne(id);
+        return userRepository.findById(id).orElse(null);
     }
 
     /** {@inheritDoc} */
@@ -195,7 +196,7 @@ public class SecurityServiceImpl implements SecurityService {
     @Override
     @Cacheable(value = "role", key = "#id")
     public Role getRoleById(String id) {
-        return roleRepository.findOne(id);
+        return roleRepository.findById(id).orElse(null);
     }
 
     /** {@inheritDoc} */
@@ -216,6 +217,7 @@ public class SecurityServiceImpl implements SecurityService {
         List<Permission> updatedPermissions = role.getPermissions().parallelStream()
                 .filter(permission -> permission.getId() != null)
                 .map(permission -> findPermission(permission.getId()))
+                .filter(Objects::nonNull)
                 .collect(Collectors.toCollection(ArrayList::new));
 
         /*
@@ -229,7 +231,7 @@ public class SecurityServiceImpl implements SecurityService {
 
     @Cacheable(value = "permission", key = "#id")
     private Permission findPermission(String id) {
-        return permissionRepository.findOne(id);
+        return permissionRepository.findById(id).orElse(null);
     }
 
     /** {@inheritDoc} */
@@ -259,7 +261,7 @@ public class SecurityServiceImpl implements SecurityService {
     @Caching(evict = { @CacheEvict(value = "user", key = "#id"),
             @CacheEvict(value = "users", allEntries = true) })
     public void deleteUser(String id) {
-        userRepository.delete(id);
+        userRepository.deleteById(id);
     }
 
     /** {@inheritDoc} */
@@ -267,7 +269,7 @@ public class SecurityServiceImpl implements SecurityService {
     @Caching(evict = { @CacheEvict(value = "role", key = "#id"),
             @CacheEvict(value = "roles", allEntries = true) })
     public void deleteRole(String id) {
-        roleRepository.delete(id);
+        roleRepository.deleteById(id);
     }
 
 }

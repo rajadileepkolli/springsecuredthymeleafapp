@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
-import org.springframework.data.redis.cache.RedisCacheManager;
+import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
@@ -42,10 +42,8 @@ public class RedisConfiguration extends CachingConfigurerSupport {
 	 */
 	@Bean
 	public JedisConnectionFactory jedisConnectionFactory() {
-		JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory();
-		jedisConnectionFactory.setHostName("127.0.0.1");
-		jedisConnectionFactory.setPort(6379);
-		return jedisConnectionFactory;
+		RedisStandaloneConfiguration configuration = new RedisStandaloneConfiguration();
+		return new JedisConnectionFactory(configuration);
 	}
 
 	/**
@@ -60,17 +58,6 @@ public class RedisConfiguration extends CachingConfigurerSupport {
 		redisTemplate.setExposeConnection(true);
 		redisTemplate.setKeySerializer(stringRedisSerializer());
 		return redisTemplate;
-	}
-
-	/** {@inheritDoc} */
-	@Bean
-	@Override
-	public RedisCacheManager cacheManager() {
-		RedisCacheManager redisCacheManager = new RedisCacheManager(redisTemplate());
-		redisCacheManager.setTransactionAware(true);
-		redisCacheManager.setLoadRemoteCachesOnStartup(true);
-		redisCacheManager.setUsePrefix(true);
-		return redisCacheManager;
 	}
 
 	/**

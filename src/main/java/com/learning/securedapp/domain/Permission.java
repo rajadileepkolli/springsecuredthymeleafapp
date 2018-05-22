@@ -7,12 +7,16 @@ import javax.validation.constraints.NotNull;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter 
 @Setter
 @Document
+@AllArgsConstructor
+@NoArgsConstructor
 public class Permission implements Serializable {
 
 	private static final long serialVersionUID = -6260569351005920639L;

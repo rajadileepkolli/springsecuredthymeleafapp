@@ -11,32 +11,26 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Document
 /**
  * <p>RememberMeToken class.</p>
  *
  * @author rajakolli
  * @version $Id: $Id
  */
+@Setter
+@Getter
+@Document
 @NoArgsConstructor
 public class RememberMeToken {
     
     @Id
-    @Setter
-    @Getter
     private String id;
 
-    @Setter
-    @Getter
     private String username;
 
     @Indexed
-    @Setter
-    @Getter
     private String series;
 
-    @Setter
-    @Getter
     private String tokenValue;
 
     private Date date;

@@ -8,9 +8,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-@TestPropertySource(properties = { "spring.data.mongodb.port=27017",
-        "spring.mail.host=localhost", "spring.mail.port=3425" })
-public abstract class AbstractApplicationTests
-{
+@TestPropertySource(properties = { "spring.mail.host=localhost",
+        "spring.mail.port=3425" })
+public abstract class AbstractApplicationTests {
 
 }

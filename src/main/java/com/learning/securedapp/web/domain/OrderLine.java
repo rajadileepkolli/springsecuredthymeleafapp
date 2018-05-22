@@ -8,13 +8,13 @@ import com.learning.securedapp.domain.Product;
 import lombok.Builder;
 import lombok.Data;
 
-@Data
 /**
  * <p>OrderLine class.</p>
  *
  * @author rajakolli
  * @version $Id: $Id
  */
+@Data
 @Builder
 public class OrderLine implements Serializable {
 

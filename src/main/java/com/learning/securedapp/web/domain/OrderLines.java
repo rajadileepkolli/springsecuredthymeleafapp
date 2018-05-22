@@ -9,18 +9,18 @@ import java.util.stream.Stream;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-@Data
 /**
  * <p>OrderLines class.</p>
  *
  * @author rajakolli
  * @version $Id: $Id
  */
+@Data
 @AllArgsConstructor
 public class OrderLines implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	final protected List<OrderLine> list;
+	protected final List<OrderLine> list;
 
 	/**
 	 * <p>Constructor for OrderLines.</p>
