@@ -12,7 +12,11 @@
 hs_err_pid*
 /bin/
 /target/
-/.classpath
-/.project
-/.settings/
+.classpath
+.project
+.settings/
 /logs/
+.factorypath
+.idea
+.iml
+/securedthymeleafapp.iml
