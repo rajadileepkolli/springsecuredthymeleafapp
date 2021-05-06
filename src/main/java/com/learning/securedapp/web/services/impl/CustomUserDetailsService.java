@@ -9,7 +9,6 @@ import com.learning.securedapp.web.services.SecurityService;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -19,7 +18,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-@Service
+@Service("customUserDetailsService")
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
 
@@ -28,23 +27,19 @@ public class CustomUserDetailsService implements UserDetailsService {
     /** {@inheritDoc} */
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-        try {
-            User user = userService.getUserByUserName(userName);
-            if (null == user) {
-                throw new UsernameNotFoundException(
-                        String.format("User with userName=%s was not found", userName));
-            }
-            return new org.springframework.security.core.userdetails.User(
-                    user.getUserName(),
-                    user.getPassword(),
-                    user.isEnabled(),
-                    true,
-                    true,
-                    true,
-                    getAuthorities(user.getRoleList()));
-        } catch (final Exception e) {
-            throw new RuntimeException(e);
+        User user = userService.getUserByUserName(userName);
+        if (null == user) {
+            throw new UsernameNotFoundException(
+                    String.format("User with userName=%s was not found", userName));
         }
+        return new org.springframework.security.core.userdetails.User(
+                user.getUserName(),
+                user.getPassword(),
+                user.isEnabled(),
+                true,
+                true,
+                true,
+                getAuthorities(user.getRoleList()));
     }
 
     private Collection<? extends GrantedAuthority> getAuthorities(List<Role> roleList) {
@@ -52,16 +47,14 @@ public class CustomUserDetailsService implements UserDetailsService {
                 roleList.stream().map(Role::getRoleName).map(SimpleGrantedAuthority::new);
         Stream<SimpleGrantedAuthority> permissionStream =
                 roleList.stream()
-                        .map(role -> role.getPermissions())
+                        .map(Role::getPermissions)
                         .filter(Objects::nonNull)
-                        .flatMap(role -> role.stream())
+                        .flatMap(Collection::stream)
                         .map(Permission::getName)
                         .filter(Objects::nonNull)
                         .map(
                                 permissionName ->
                                         new SimpleGrantedAuthority("ROLE_" + permissionName));
-        Set<GrantedAuthority> authorities =
-                Stream.concat(roleStream, permissionStream).collect(toSet());
-        return authorities;
+        return Stream.concat(roleStream, permissionStream).collect(toSet());
     }
 }

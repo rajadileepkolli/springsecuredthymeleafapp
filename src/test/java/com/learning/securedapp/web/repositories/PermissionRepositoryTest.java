@@ -1,30 +1,34 @@
 package com.learning.securedapp.web.repositories;
 
-import com.learning.securedapp.AbstractApplicationTests;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.learning.securedapp.domain.Permission;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 
-@Disabled
-public class PermissionRepositoryTest extends AbstractApplicationTests {
+@DataMongoTest
+class PermissionRepositoryTest {
 
-    @Autowired PermissionRepository permissionRepository;
+    @Autowired private PermissionRepository permissionRepository;
 
     @Test
-    public final void test() {
+    void test() {
 
-        List<String> permissionList = new ArrayList<>();
-        permissionList.addAll(
-                Arrays.asList(
-                        "MANAGE_USERS", "MANAGE_ROLES", "MANAGE_PERMISSIONS", "MANAGE_SETTINGS"));
+        List<String> permissionList =
+                new ArrayList<>(
+                        List.of(
+                                "MANAGE_USERS",
+                                "MANAGE_ROLES",
+                                "MANAGE_PERMISSIONS",
+                                "MANAGE_SETTINGS"));
         for (String string : permissionList) {
             Permission permission = new Permission();
             permission.setName(string);
             permissionRepository.save(permission);
         }
+        assertThat(this.permissionRepository.count()).isEqualTo(4);
     }
 }

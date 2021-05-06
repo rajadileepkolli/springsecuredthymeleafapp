@@ -1,14 +1,17 @@
 package com.learning.securedapp.configuration;
 
+import lombok.RequiredArgsConstructor;
 import org.apache.catalina.Context;
 import org.apache.catalina.connector.Connector;
 import org.apache.tomcat.util.descriptor.web.SecurityCollection;
 import org.apache.tomcat.util.descriptor.web.SecurityConstraint;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -23,12 +26,16 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * @version 1: 0
  */
 @Configuration(proxyBeanMethods = false)
+@RequiredArgsConstructor
 public class WebConfiguration implements WebMvcConfigurer {
 
-    @Value("${server.port:8443}")
-    private int serverPort;
+    private final Environment environment;
 
-    /** {@inheritDoc} */
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder(10);
+    }
+
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/").setViewName("forward:/home.html");
@@ -64,7 +71,7 @@ public class WebConfiguration implements WebMvcConfigurer {
         connector.setScheme("http");
         connector.setPort(8080);
         connector.setSecure(false);
-        connector.setRedirectPort(serverPort);
+        connector.setRedirectPort(environment.getProperty("server.port", Integer.class, 8443));
 
         return connector;
     }

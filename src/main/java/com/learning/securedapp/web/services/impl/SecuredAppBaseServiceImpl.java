@@ -1,19 +1,18 @@
-package com.learning.securedapp.web.controllers;
+package com.learning.securedapp.web.services.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.learning.securedapp.web.services.SecuredAppBaseService;
+import java.util.Locale;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Service;
 
-/**
- * Abstract SecuredAppBaseController class.
- *
- * @author rajakolli
- * @version $Id: $Id
- */
-public abstract class SecuredAppBaseController {
+@Service
+@RequiredArgsConstructor
+public class SecuredAppBaseServiceImpl implements SecuredAppBaseService {
 
-    @Autowired protected MessageSource messageSource;
+    private final MessageSource messageSource;
 
     /**
      * getMessage.
@@ -21,8 +20,9 @@ public abstract class SecuredAppBaseController {
      * @param code a {@link java.lang.String} object.
      * @return a {@link java.lang.String} object.
      */
+    @Override
     public String getMessage(String code) {
-        return messageSource.getMessage(code, null, null);
+        return messageSource.getMessage(code, null, Locale.ENGLISH);
     }
 
     /**
@@ -30,6 +30,7 @@ public abstract class SecuredAppBaseController {
      *
      * @return a {@link java.lang.String} object.
      */
+    @Override
     public String getCurrentUser() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username;

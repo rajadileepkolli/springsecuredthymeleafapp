@@ -1,6 +1,5 @@
-package com.learning.securedapp.web.controllers;
+package com.learning.securedapp.exception;
 
-import com.learning.securedapp.exception.SecuredAppException;
 import java.io.IOException;
 import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
@@ -14,12 +13,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 @ControllerAdvice
-/**
- * ErrorControllerAdvice class.
- *
- * @author rajakolli
- * @version $Id: $Id
- */
 @Slf4j
 public class ErrorControllerAdvice {
 

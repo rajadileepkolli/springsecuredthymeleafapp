@@ -6,16 +6,11 @@ import com.learning.securedapp.web.repositories.UserRepository;
 import com.learning.securedapp.web.repositories.VerificationTokenRepository;
 import com.learning.securedapp.web.services.IUserService;
 import java.util.Calendar;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
-/**
- * UserServiceImpl class.
- *
- * @author rajakolli
- * @version $Id: $Id
- */
+@RequiredArgsConstructor
 public class UserServiceImpl implements IUserService {
 
     /** Constant <code>TOKEN_INVALID="invalidToken"</code> */
@@ -23,8 +18,8 @@ public class UserServiceImpl implements IUserService {
     /** Constant <code>TOKEN_EXPIRED="expired"</code> */
     public static final String TOKEN_EXPIRED = "expired";
 
-    @Autowired private VerificationTokenRepository tokenRepository;
-    @Autowired private UserRepository userRepository;
+    private final VerificationTokenRepository tokenRepository;
+    private final UserRepository userRepository;
 
     /** {@inheritDoc} */
     @Override

@@ -1,11 +1,11 @@
-package com.learning.securedapp.service.email;
+package com.learning.securedapp.web.services.impl;
 
+import com.learning.securedapp.configuration.AppConfigurationProperties;
 import com.learning.securedapp.exception.SecuredAppException;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -18,12 +18,10 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class EmailService {
+public class EmailServiceImpl {
 
     private final JavaMailSender javaMailSender;
-
-    @Value("${support.email}")
-    String supportEmail;
+    private final AppConfigurationProperties appConfigurationProperties;
 
     /**
      * sendEmail.
@@ -39,7 +37,7 @@ public class EmailService {
             final MimeMessage mimeMessage = this.javaMailSender.createMimeMessage();
             final MimeMessageHelper message = new MimeMessageHelper(mimeMessage, "UTF-8");
             message.setSubject(subject);
-            message.setFrom(supportEmail);
+            message.setFrom(appConfigurationProperties.getSupportEmail());
             message.setTo(to);
             message.setText(htmlContent, true /* isHtml */);
 

@@ -11,12 +11,6 @@ import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 @Slf4j
-/**
- * UserValidator class.
- *
- * @author rajakolli
- * @version $Id: $Id
- */
 @Component
 @RequiredArgsConstructor
 public class UserValidator implements Validator {
@@ -32,12 +26,12 @@ public class UserValidator implements Validator {
     /** {@inheritDoc} */
     @Override
     public void validate(Object target, Errors errors) {
-        log.debug("Validating {}", target);
+        User user = (User) target;
+        log.debug("Validating {}", user);
         ValidationUtils.rejectIfEmptyOrWhitespace(
                 errors, "password", "message.password", "Password is required.");
         ValidationUtils.rejectIfEmptyOrWhitespace(
                 errors, "userName", "message.username", "UserName is required.");
-        User user = (User) target;
         validateEmail(errors, user);
     }
 

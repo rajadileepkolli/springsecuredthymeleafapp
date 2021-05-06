@@ -5,6 +5,7 @@ import com.learning.securedapp.web.repositories.RememberMeTokenRepository;
 import java.util.EnumSet;
 import javax.servlet.DispatcherType;
 import javax.servlet.Filter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
@@ -21,7 +22,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
@@ -35,21 +35,14 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @Order(SecurityProperties.BASIC_AUTH_ORDER - 2)
+@RequiredArgsConstructor
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    @Autowired Environment environment;
-
-    @Autowired
-    @Qualifier("customUserDetailsService")
-    private UserDetailsService customUserDetailsService;
-
-    @Autowired private RoleHierarchy roleHierarchy;
-    @Autowired private RememberMeTokenRepository rememberMeTokenRepository;
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(10);
-    }
+    private final Environment environment;
+    private final UserDetailsService customUserDetailsService;
+    private final RoleHierarchy roleHierarchy;
+    private final RememberMeTokenRepository rememberMeTokenRepository;
+    private final PasswordEncoder passwordEncoder;
 
     /**
      * rememberMeServices.
@@ -60,7 +53,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     public RememberMeServices rememberMeServices() {
         PersistentTokenBasedRememberMeServices rememberMeServices =
                 new PersistentTokenBasedRememberMeServices(
-                        environment.getProperty("spring.application.name", "securedApp"),
+                        environment.getProperty(
+                                "spring.application.name", String.class, "securedApp"),
                         customUserDetailsService,
                         persistentTokenRepository());
         rememberMeServices.setAlwaysRemember(true);
@@ -101,7 +95,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
      */
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(customUserDetailsService).passwordEncoder(passwordEncoder());
+        auth.userDetailsService(customUserDetailsService).passwordEncoder(passwordEncoder);
     }
 
     /** {@inheritDoc} */

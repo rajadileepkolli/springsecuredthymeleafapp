@@ -9,12 +9,6 @@ import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 @Component
-/**
- * CategoryValidator class.
- *
- * @author rajakolli
- * @version $Id: $Id
- */
 @RequiredArgsConstructor
 public class CategoryValidator implements Validator {
 

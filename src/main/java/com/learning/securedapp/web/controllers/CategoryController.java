@@ -5,7 +5,7 @@ import com.learning.securedapp.web.services.CategoryService;
 import com.learning.securedapp.web.validators.CategoryValidator;
 import java.util.List;
 import javax.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,19 +16,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-/**
- * CategoryController class.
- *
- * @author rajakolli
- * @version $Id: $Id
- */
-public class CategoryController extends SecuredAppBaseController {
+@RequiredArgsConstructor
+public class CategoryController {
 
     private static final String viewPrefix = "category/";
 
-    @Autowired private CategoryService categoryService;
+    private final CategoryService categoryService;
 
-    @Autowired private CategoryValidator categoryValidator;
+    private final CategoryValidator categoryValidator;
 
     /**
      * listCategories.

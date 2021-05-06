@@ -9,12 +9,6 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 @Component
-/**
- * PermissionValidator class.
- *
- * @author rajakolli
- * @version $Id: $Id
- */
 @RequiredArgsConstructor
 public class PermissionValidator implements Validator {
 

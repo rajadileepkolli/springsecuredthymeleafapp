@@ -5,8 +5,9 @@ import com.learning.securedapp.exception.InvalidCartOrderException;
 import com.learning.securedapp.web.domain.Cart;
 import com.learning.securedapp.web.domain.Order;
 import com.learning.securedapp.web.services.OrderService;
+import com.learning.securedapp.web.services.SecuredAppBaseService;
 import com.learning.securedapp.web.services.SecurityService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,18 +21,14 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-/**
- * OrderController class.
- *
- * @author rajakolli
- * @version $Id: $Id
- */
 @RequestMapping("order")
-public class OrderController extends SecuredAppBaseController {
+@RequiredArgsConstructor
+public class OrderController {
 
-    @Autowired OrderService orderService;
-    @Autowired SecurityService userService;
-    @Autowired Cart cart;
+    private final OrderService orderService;
+    private final SecurityService userService;
+    private final Cart cart;
+    private final SecuredAppBaseService securedAppBaseService;
 
     @RequestMapping(method = RequestMethod.GET, params = "confirm")
     String confirm(Model model) {
@@ -40,7 +37,8 @@ public class OrderController extends SecuredAppBaseController {
             model.addAttribute("error", "Cart Cannot be empty");
             return "products/viewCart";
         }
-        model.addAttribute("account", userService.getUserByUserName(getCurrentUser()));
+        model.addAttribute(
+                "account", userService.getUserByUserName(securedAppBaseService.getCurrentUser()));
         model.addAttribute("signature", orderService.calcSignature(cart));
         return "order/orderConfirm";
     }
@@ -49,7 +47,9 @@ public class OrderController extends SecuredAppBaseController {
     String order(@RequestParam String signature, RedirectAttributes attributes) {
         Order order =
                 orderService.purchase(
-                        userService.getUserByUserName(getCurrentUser()).getEmail(),
+                        userService
+                                .getUserByUserName(securedAppBaseService.getCurrentUser())
+                                .getEmail(),
                         cart,
                         signature);
         attributes.addFlashAttribute(order);

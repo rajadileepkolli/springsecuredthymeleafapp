@@ -2,13 +2,12 @@ package com.learning.securedapp.web.events;
 
 import com.learning.securedapp.domain.User;
 import com.learning.securedapp.exception.SecuredAppException;
-import com.learning.securedapp.service.email.EmailService;
 import com.learning.securedapp.web.services.IUserService;
+import com.learning.securedapp.web.services.impl.EmailServiceImpl;
 import java.util.Locale;
 import java.util.UUID;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
@@ -16,23 +15,17 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 @Component
-/**
- * RegistrationListener class.
- *
- * @author rajakolli
- * @version $Id: $Id
- */
+@Slf4j
+@RequiredArgsConstructor
 public class RegistrationListener implements ApplicationListener<OnRegistrationCompleteEvent> {
 
-    @Autowired private IUserService service;
+    private final IUserService service;
 
-    @Autowired private MessageSource messages;
+    private final MessageSource messages;
 
-    @Autowired private EmailService emailService;
+    private final EmailServiceImpl emailService;
 
-    @Autowired private TemplateEngine templateEngine;
-
-    private static final Logger LOG = LoggerFactory.getLogger(RegistrationListener.class);
+    private final TemplateEngine templateEngine;
 
     /** {@inheritDoc} */
     @Override
@@ -40,7 +33,7 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
         try {
             this.confirmRegistration(event);
         } catch (SecuredAppException e) {
-            LOG.error("Error while sending email", e);
+            log.error("Error while sending email", e);
         }
     }
 

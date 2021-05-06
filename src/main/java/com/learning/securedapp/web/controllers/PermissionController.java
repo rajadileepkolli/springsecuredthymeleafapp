@@ -6,8 +6,8 @@ import com.learning.securedapp.web.services.SecurityService;
 import com.learning.securedapp.web.validators.PermissionValidator;
 import java.util.List;
 import javax.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,20 +18,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-/**
- * PermissionController class.
- *
- * @author rajakolli
- * @version $Id: $Id
- */
 @Slf4j
 @Secured(SecurityUtil.MANAGE_PERMISSIONS)
-public class PermissionController extends SecuredAppBaseController {
+@RequiredArgsConstructor
+public class PermissionController {
+
     private static final String viewPrefix = "permissions/";
 
-    @Autowired protected SecurityService securityService;
+    private final SecurityService securityService;
 
-    @Autowired private PermissionValidator permissionValidator;
+    private final PermissionValidator permissionValidator;
 
     /**
      * listPermissions.

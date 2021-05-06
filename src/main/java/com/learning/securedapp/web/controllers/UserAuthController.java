@@ -7,13 +7,14 @@ import static com.learning.securedapp.web.utils.MessageCodes.INFO_PASSWORD_UPDAT
 import static com.learning.securedapp.web.utils.MessageCodes.LABEL_PASSWORD_RESET_EMAIL_SUBJECT;
 
 import com.learning.securedapp.exception.SecuredAppException;
-import com.learning.securedapp.service.email.EmailService;
+import com.learning.securedapp.web.services.SecuredAppBaseService;
 import com.learning.securedapp.web.services.SecurityService;
+import com.learning.securedapp.web.services.impl.EmailServiceImpl;
 import com.learning.securedapp.web.utils.WebAppUtils;
 import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,20 +25,16 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 @Controller
-/**
- * UserAuthController class.
- *
- * @author rajakolli
- * @version $Id: $Id
- */
 @Slf4j
-public class UserAuthController extends SecuredAppBaseController {
+@RequiredArgsConstructor
+public class UserAuthController {
     private static final String viewPrefix = "public/";
 
-    @Autowired protected SecurityService securityService;
-    @Autowired protected EmailService emailService;
-    @Autowired private TemplateEngine templateEngine;
-    @Autowired private PasswordEncoder passwordEncoder;
+    private final SecurityService securityService;
+    private final EmailServiceImpl emailService;
+    private final TemplateEngine templateEngine;
+    private final PasswordEncoder passwordEncoder;
+    private final SecuredAppBaseService securedAppBaseService;
 
     /**
      * forgotPwd.
@@ -72,7 +69,7 @@ public class UserAuthController extends SecuredAppBaseController {
             log.debug(resetPwdURL);
             this.sendForgotPasswordEmail(email, resetPwdURL);
             redirectAttributes.addFlashAttribute(
-                    "success", getMessage(INFO_PASSWORD_RESET_LINK_SENT));
+                    "success", securedAppBaseService.getMessage(INFO_PASSWORD_RESET_LINK_SENT));
         } catch (SecuredAppException e) {
             log.error(e.getMessage());
             redirectAttributes.addFlashAttribute("msg", e.getMessage());
@@ -104,7 +101,7 @@ public class UserAuthController extends SecuredAppBaseController {
             }
         } catch (SecuredAppException e) {
             redirectAttributes.addFlashAttribute(
-                    "msg", getMessage(ERROR_INVALID_PASSWORD_RESET_REQUEST));
+                    "msg", securedAppBaseService.getMessage(ERROR_INVALID_PASSWORD_RESET_REQUEST));
             return "redirect:/login";
         }
         return null;
@@ -130,17 +127,19 @@ public class UserAuthController extends SecuredAppBaseController {
             if (!password.equals(confPassword)) {
                 model.addAttribute("email", email);
                 model.addAttribute("token", token);
-                model.addAttribute("msg", getMessage(ERROR_PASSWORD_CONF_PASSWORD_MISMATCH));
+                model.addAttribute(
+                        "msg",
+                        securedAppBaseService.getMessage(ERROR_PASSWORD_CONF_PASSWORD_MISMATCH));
                 return viewPrefix + "resetPwd";
             }
             String encodedPwd = passwordEncoder.encode(password);
             securityService.updatePassword(email, token, encodedPwd);
             redirectAttributes.addFlashAttribute(
-                    "success", getMessage(INFO_PASSWORD_UPDATED_SUCCESS));
+                    "success", securedAppBaseService.getMessage(INFO_PASSWORD_UPDATED_SUCCESS));
         } catch (SecuredAppException e) {
             log.error(e.getMessage());
             redirectAttributes.addFlashAttribute(
-                    "msg", getMessage(ERROR_INVALID_PASSWORD_RESET_REQUEST));
+                    "msg", securedAppBaseService.getMessage(ERROR_INVALID_PASSWORD_RESET_REQUEST));
         }
         return "redirect:/login";
     }
@@ -162,7 +161,9 @@ public class UserAuthController extends SecuredAppBaseController {
             final String htmlContent = this.templateEngine.process("forgot-password-email", ctx);
 
             emailService.sendEmail(
-                    email, getMessage(LABEL_PASSWORD_RESET_EMAIL_SUBJECT), htmlContent);
+                    email,
+                    securedAppBaseService.getMessage(LABEL_PASSWORD_RESET_EMAIL_SUBJECT),
+                    htmlContent);
         } catch (SecuredAppException e) {
             log.error(e.getMessage());
         }

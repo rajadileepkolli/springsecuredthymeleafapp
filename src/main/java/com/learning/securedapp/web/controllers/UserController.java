@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -24,21 +24,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Slf4j
-/**
- * UserController class.
- *
- * @author rajakolli
- * @version $Id: $Id
- */
 @Controller
 @Secured(SecurityUtil.MANAGE_USERS)
-public class UserController extends SecuredAppBaseController {
+@RequiredArgsConstructor
+public class UserController {
 
     private static final String viewPrefix = "users/";
 
-    @Autowired protected SecurityService securityService;
-    @Autowired private UserValidator userValidator;
-    @Autowired private PasswordEncoder passwordEncoder;
+    private final SecurityService securityService;
+    private final UserValidator userValidator;
+    private final PasswordEncoder passwordEncoder;
 
     /**
      * rolesList.
@@ -127,9 +122,7 @@ public class UserController extends SecuredAppBaseController {
         }
 
         List<String> assignedRoleList =
-                user.getRoleList().parallelStream()
-                        .map(role -> role.getId())
-                        .collect(Collectors.toList());
+                user.getRoleList().parallelStream().map(Role::getId).collect(Collectors.toList());
 
         List<Role> userRoles = new ArrayList<>();
         List<Role> allRoles = securityService.getAllRoles();

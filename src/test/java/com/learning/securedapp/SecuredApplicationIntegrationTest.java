@@ -9,7 +9,6 @@ import java.security.cert.X509Certificate;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import org.junit.jupiter.api.BeforeAll;
@@ -23,9 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 
-public class ApplicationTests extends AbstractApplicationTests {
-
-    @Autowired private TestRestTemplate testRestTemplate;
+class SecuredApplicationIntegrationTest extends AbstractApplicationTest {
 
     @BeforeAll
     public static void sslSetUp() {
@@ -62,21 +59,9 @@ public class ApplicationTests extends AbstractApplicationTests {
         }
     }
 
-    @Test
-    public void testHome() throws Exception {
-        ResponseEntity<String> entity = testRestTemplate.getForEntity("/login.html", String.class);
-        assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
-    }
-
     static class MySimpleClientHttpRequestFactory extends SimpleClientHttpRequestFactory {
 
-        private HostnameVerifier hostnameVerifier =
-                new HostnameVerifier() {
-                    @Override
-                    public boolean verify(String hostname, SSLSession session) {
-                        return true;
-                    }
-                };
+        private final HostnameVerifier hostnameVerifier = (hostname, session) -> true;
 
         @Override
         protected void prepareConnection(
@@ -86,5 +71,18 @@ public class ApplicationTests extends AbstractApplicationTests {
             }
             super.prepareConnection(connection, httpMethod);
         }
+    }
+
+    @Autowired private TestRestTemplate testRestTemplate;
+
+    @Test
+    void loadContext() {
+        assertThat(MONGO_DB_CONTAINER.isRunning()).isTrue();
+    }
+
+    @Test
+    void testHome() {
+        ResponseEntity<String> entity = testRestTemplate.getForEntity("/login.html", String.class);
+        assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 }

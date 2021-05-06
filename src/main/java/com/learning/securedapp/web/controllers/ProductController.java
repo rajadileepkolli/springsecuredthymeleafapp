@@ -9,7 +9,7 @@ import com.learning.securedapp.web.services.CategoryService;
 import com.learning.securedapp.web.services.ProductService;
 import java.util.List;
 import javax.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.annotation.Secured;
@@ -24,21 +24,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-/**
- * ProductController class.
- *
- * @author rajakolli
- * @version $Id: $Id
- */
-public class ProductController extends SecuredAppBaseController {
+@RequiredArgsConstructor
+public class ProductController {
 
     private static final String viewPrefix = "products/";
 
-    @Autowired private ProductService productService;
+    private final ProductService productService;
 
-    @Autowired private CategoryService categoryService;
+    private final CategoryService categoryService;
 
-    @Autowired Cart cart;
+    private final Cart cart;
 
     /**
      * categoryList.

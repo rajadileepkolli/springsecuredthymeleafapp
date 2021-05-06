@@ -9,7 +9,7 @@ import com.learning.securedapp.web.utils.WebAppUtils;
 import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.MessageSource;
@@ -20,20 +20,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-/**
- * RegistrationController class.
- *
- * @author rajakolli
- * @version $Id: $Id
- */
 @Slf4j
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class RegistrationController {
 
-    private SecurityService securityService;
-    private ApplicationEventPublisher eventPublisher;
-    private IUserService userService;
-    private MessageSource messages;
+    private final SecurityService securityService;
+    private final ApplicationEventPublisher eventPublisher;
+    private final IUserService userService;
+    private final MessageSource messages;
 
     // Registration
     /**

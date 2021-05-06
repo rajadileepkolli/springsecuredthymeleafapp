@@ -6,12 +6,6 @@ import com.learning.securedapp.domain.User;
 import com.learning.securedapp.exception.SecuredAppException;
 import java.util.List;
 
-/**
- * SecurityService interface.
- *
- * @author rajakolli
- * @version $Id: $Id
- */
 public interface SecurityService {
 
     /**

@@ -4,10 +4,11 @@ import static java.util.Objects.isNull;
 
 import com.learning.securedapp.web.domain.Cart;
 import com.learning.securedapp.web.domain.CartForm;
+import com.learning.securedapp.web.services.SecuredAppBaseService;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,9 +21,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping("/cart")
-public class CartController extends SecuredAppBaseController {
+@RequiredArgsConstructor
+public class CartController {
 
-    @Autowired Cart cart;
+    private final Cart cart;
+    private final SecuredAppBaseService securedAppBaseService;
 
     @ModelAttribute
     CartForm setUpForm() {
@@ -38,7 +41,7 @@ public class CartController extends SecuredAppBaseController {
     @PostMapping()
     String removeFromCart(@Validated CartForm cartForm, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
-            model.addAttribute("error", getMessage("error.notChecked"));
+            model.addAttribute("error", securedAppBaseService.getMessage("error.notChecked"));
             return viewCart(model);
         }
         cart.remove(cartForm.getLineNo());
