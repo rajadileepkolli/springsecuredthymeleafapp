@@ -7,9 +7,9 @@ import static com.learning.securedapp.web.utils.MessageCodes.INFO_PASSWORD_UPDAT
 import static com.learning.securedapp.web.utils.MessageCodes.LABEL_PASSWORD_RESET_EMAIL_SUBJECT;
 
 import com.learning.securedapp.exception.SecuredAppException;
+import com.learning.securedapp.web.services.EmailService;
 import com.learning.securedapp.web.services.SecuredAppBaseService;
 import com.learning.securedapp.web.services.SecurityService;
-import com.learning.securedapp.web.services.impl.EmailServiceImpl;
 import com.learning.securedapp.web.utils.WebAppUtils;
 import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
@@ -31,7 +31,7 @@ public class UserAuthController {
     private static final String viewPrefix = "public/";
 
     private final SecurityService securityService;
-    private final EmailServiceImpl emailService;
+    private final EmailService emailService;
     private final TemplateEngine templateEngine;
     private final PasswordEncoder passwordEncoder;
     private final SecuredAppBaseService securedAppBaseService;

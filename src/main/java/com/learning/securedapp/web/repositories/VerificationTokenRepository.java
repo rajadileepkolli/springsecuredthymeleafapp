@@ -2,13 +2,9 @@ package com.learning.securedapp.web.repositories;
 
 import com.learning.securedapp.domain.VerificationToken;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Repository;
 
-/**
- * VerificationTokenRepository interface.
- *
- * @author rajakolli
- * @version $Id: $Id
- */
+@Repository
 public interface VerificationTokenRepository extends MongoRepository<VerificationToken, String> {
 
     /**

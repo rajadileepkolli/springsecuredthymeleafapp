@@ -2,6 +2,7 @@ package com.learning.securedapp.web.services.impl;
 
 import com.learning.securedapp.configuration.AppConfigurationProperties;
 import com.learning.securedapp.exception.SecuredAppException;
+import com.learning.securedapp.web.services.EmailService;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
@@ -11,14 +12,10 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
-/**
- * @author rajakolli
- * @version $Id: $Id
- */
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class EmailServiceImpl {
+public class EmailServiceImpl implements EmailService {
 
     private final JavaMailSender javaMailSender;
     private final AppConfigurationProperties appConfigurationProperties;
@@ -31,6 +28,7 @@ public class EmailServiceImpl {
      * @param htmlContent a {@link java.lang.String} object.
      * @throws com.learning.securedapp.exception.SecuredAppException if any.
      */
+    @Override
     public void sendEmail(String to, String subject, String htmlContent)
             throws SecuredAppException {
         try {

@@ -68,6 +68,8 @@ public class NamingConventionTest {
                     .resideInAPackage("com.learning.securedapp.web.repositories..")
                     .should()
                     .haveSimpleNameEndingWith("Repository")
+                    .orShould()
+                    .haveSimpleNameEndingWith("RepositoryImpl")
                     .andShould()
                     .beAnnotatedWith(Repository.class);
 }

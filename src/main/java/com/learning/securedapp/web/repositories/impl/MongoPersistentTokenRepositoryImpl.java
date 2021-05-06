@@ -1,32 +1,19 @@
-package com.learning.securedapp.web.repositories;
+package com.learning.securedapp.web.repositories.impl;
 
 import com.learning.securedapp.domain.RememberMeToken;
+import com.learning.securedapp.web.repositories.RememberMeTokenRepository;
 import java.util.Date;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.web.authentication.rememberme.PersistentRememberMeToken;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-/**
- * MongoPersistentTokenRepositoryImpl class.
- *
- * @author rajakolli
- * @version $Id: $Id
- */
+@RequiredArgsConstructor
 public class MongoPersistentTokenRepositoryImpl implements PersistentTokenRepository {
 
-    private RememberMeTokenRepository rememberMeTokenRepository;
-
-    /**
-     * Constructor for MongoPersistentTokenRepositoryImpl.
-     *
-     * @param rememberMeTokenRepository a {@link
-     *     com.learning.securedapp.web.repositories.RememberMeTokenRepository} object.
-     */
-    public MongoPersistentTokenRepositoryImpl(RememberMeTokenRepository rememberMeTokenRepository) {
-        this.rememberMeTokenRepository = rememberMeTokenRepository;
-    }
+    private final RememberMeTokenRepository rememberMeTokenRepository;
 
     /** {@inheritDoc} */
     @Override

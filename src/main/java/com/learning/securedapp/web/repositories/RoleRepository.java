@@ -2,13 +2,9 @@ package com.learning.securedapp.web.repositories;
 
 import com.learning.securedapp.domain.Role;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Repository;
 
-/**
- * RoleRepository interface.
- *
- * @author rajakolli
- * @version $Id: $Id
- */
+@Repository
 public interface RoleRepository extends MongoRepository<Role, String> {
 
     /**

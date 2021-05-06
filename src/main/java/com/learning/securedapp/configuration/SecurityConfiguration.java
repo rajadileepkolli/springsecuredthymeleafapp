@@ -1,7 +1,7 @@
 package com.learning.securedapp.configuration;
 
-import com.learning.securedapp.web.repositories.MongoPersistentTokenRepositoryImpl;
 import com.learning.securedapp.web.repositories.RememberMeTokenRepository;
+import com.learning.securedapp.web.repositories.impl.MongoPersistentTokenRepositoryImpl;
 import java.util.EnumSet;
 import javax.servlet.DispatcherType;
 import javax.servlet.Filter;

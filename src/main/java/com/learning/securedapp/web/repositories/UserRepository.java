@@ -2,13 +2,9 @@ package com.learning.securedapp.web.repositories;
 
 import com.learning.securedapp.domain.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Repository;
 
-/**
- * UserRepository interface.
- *
- * @author rajakolli
- * @version $Id: $Id
- */
+@Repository
 public interface UserRepository extends MongoRepository<User, String> {
 
     /**

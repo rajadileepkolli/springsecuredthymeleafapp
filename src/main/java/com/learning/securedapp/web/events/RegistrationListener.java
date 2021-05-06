@@ -2,8 +2,8 @@ package com.learning.securedapp.web.events;
 
 import com.learning.securedapp.domain.User;
 import com.learning.securedapp.exception.SecuredAppException;
+import com.learning.securedapp.web.services.EmailService;
 import com.learning.securedapp.web.services.IUserService;
-import com.learning.securedapp.web.services.impl.EmailServiceImpl;
 import java.util.Locale;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
 
     private final MessageSource messages;
 
-    private final EmailServiceImpl emailService;
+    private final EmailService emailService;
 
     private final TemplateEngine templateEngine;
 

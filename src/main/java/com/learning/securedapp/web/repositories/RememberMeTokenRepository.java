@@ -3,13 +3,9 @@ package com.learning.securedapp.web.repositories;
 import com.learning.securedapp.domain.RememberMeToken;
 import java.util.List;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Repository;
 
-/**
- * RememberMeTokenRepository interface.
- *
- * @author rajakolli
- * @version $Id: $Id
- */
+@Repository
 public interface RememberMeTokenRepository extends MongoRepository<RememberMeToken, String> {
     /**
      * findBySeries.

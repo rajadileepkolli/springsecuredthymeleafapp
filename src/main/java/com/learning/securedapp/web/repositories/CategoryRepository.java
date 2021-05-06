@@ -2,13 +2,9 @@ package com.learning.securedapp.web.repositories;
 
 import com.learning.securedapp.domain.Category;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Repository;
 
-/**
- * CategoryRepository interface.
- *
- * @author rajakolli
- * @version $Id: $Id
- */
+@Repository
 public interface CategoryRepository extends MongoRepository<Category, String> {
     /**
      * findByCategoryName.

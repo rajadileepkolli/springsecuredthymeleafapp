@@ -2,13 +2,9 @@ package com.learning.securedapp.web.repositories;
 
 import com.learning.securedapp.domain.Permission;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Repository;
 
-/**
- * PermissionRepository interface.
- *
- * @author rajakolli
- * @version $Id: $Id
- */
+@Repository
 public interface PermissionRepository extends MongoRepository<Permission, String> {
 
     /**
