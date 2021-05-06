@@ -1,19 +1,17 @@
 package com.learning.securedapp.domain;
 
 import java.io.Serializable;
-
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
- * <p>Product class.</p>
+ * Product class.
  *
  * @author rajakolli
  * @version 1: 0
@@ -26,14 +24,14 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Product implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@Id
-	private String productId;
-	private String productName;
-	private String description;
-	private String imageUrl;
-	private Double price;
-	@DBRef(lazy = true)
-	private Category category;
+    @Id private String productId;
+    private String productName;
+    private String description;
+    private String imageUrl;
+    private Double price;
+
+    @DBRef(lazy = true)
+    private Category category;
 }

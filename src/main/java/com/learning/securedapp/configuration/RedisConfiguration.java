@@ -1,5 +1,7 @@
 package com.learning.securedapp.configuration;
 
+import com.learning.securedapp.web.domain.CachingCart;
+import com.learning.securedapp.web.domain.Cart;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.interceptor.KeyGenerator;
@@ -14,81 +16,75 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.learning.securedapp.web.domain.CachingCart;
-import com.learning.securedapp.web.domain.Cart;
-
 /**
- * <p>RedisConfiguration class.</p>
+ * RedisConfiguration class.
  *
  * @author rajakolli
- *
- *         The @EnableRedisHttpSession annotation creates a Spring Bean with the
- *         name of springSessionRepositoryFilter that implements Filter. The
- *         filter is what is in charge of replacing the HttpSession
- *         implementation to be backed by Spring Session. In this instance
- *         Spring Session is backed by Redis.
+ *     <p>The @EnableRedisHttpSession annotation creates a Spring Bean with the name of
+ *     springSessionRepositoryFilter that implements Filter. The filter is what is in charge of
+ *     replacing the HttpSession implementation to be backed by Spring Session. In this instance
+ *     Spring Session is backed by Redis.
  * @version $Id: $Id
  */
-
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @EnableCaching
 @EnableRedisHttpSession
 public class RedisConfiguration extends CachingConfigurerSupport {
 
-	/**
-	 * <p>jedisConnectionFactory.</p>
-	 *
-	 * @return a {@link org.springframework.data.redis.connection.jedis.JedisConnectionFactory} object.
-	 */
-	@Bean
-	public JedisConnectionFactory jedisConnectionFactory() {
-		RedisStandaloneConfiguration configuration = new RedisStandaloneConfiguration();
-		return new JedisConnectionFactory(configuration);
-	}
+    /**
+     * jedisConnectionFactory.
+     *
+     * @return a {@link org.springframework.data.redis.connection.jedis.JedisConnectionFactory}
+     *     object.
+     */
+    @Bean
+    public JedisConnectionFactory jedisConnectionFactory() {
+        RedisStandaloneConfiguration configuration = new RedisStandaloneConfiguration();
+        return new JedisConnectionFactory(configuration);
+    }
 
-	/**
-	 * <p>redisTemplate.</p>
-	 *
-	 * @return a {@link org.springframework.data.redis.core.RedisTemplate} object.
-	 */
-	@Bean
-	public RedisTemplate<?, ?> redisTemplate() {
-		RedisTemplate<byte[], byte[]> redisTemplate = new RedisTemplate<>();
-		redisTemplate.setConnectionFactory(jedisConnectionFactory());
-		redisTemplate.setExposeConnection(true);
-		redisTemplate.setKeySerializer(stringRedisSerializer());
-		return redisTemplate;
-	}
+    /**
+     * redisTemplate.
+     *
+     * @return a {@link org.springframework.data.redis.core.RedisTemplate} object.
+     */
+    @Bean
+    public RedisTemplate<?, ?> redisTemplate() {
+        RedisTemplate<byte[], byte[]> redisTemplate = new RedisTemplate<>();
+        redisTemplate.setConnectionFactory(jedisConnectionFactory());
+        redisTemplate.setExposeConnection(true);
+        redisTemplate.setKeySerializer(stringRedisSerializer());
+        return redisTemplate;
+    }
 
-	/**
-	 * <p>stringRedisSerializer.</p>
-	 *
-	 * @return a {@link org.springframework.data.redis.serializer.StringRedisSerializer} object.
-	 */
-	@Bean
-	public StringRedisSerializer stringRedisSerializer() {
-		return new StringRedisSerializer();
-	}
+    /**
+     * stringRedisSerializer.
+     *
+     * @return a {@link org.springframework.data.redis.serializer.StringRedisSerializer} object.
+     */
+    @Bean
+    public StringRedisSerializer stringRedisSerializer() {
+        return new StringRedisSerializer();
+    }
 
-	/** {@inheritDoc} */
-	@Bean
-	@Override
-	public KeyGenerator keyGenerator() {
-		return (target, method, params) -> {
-			StringBuilder sb = new StringBuilder();
-			sb.append(target.getClass().getName());
-			sb.append(method.getName());
-			for (Object obj : params) {
-				sb.append(obj.toString());
-			}
-			return sb.toString();
-		};
-	}
+    /** {@inheritDoc} */
+    @Bean
+    @Override
+    public KeyGenerator keyGenerator() {
+        return (target, method, params) -> {
+            StringBuilder sb = new StringBuilder();
+            sb.append(target.getClass().getName());
+            sb.append(method.getName());
+            for (Object obj : params) {
+                sb.append(obj.toString());
+            }
+            return sb.toString();
+        };
+    }
 
-	@Bean
-	@Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
-	Cart cart() {
-		return new CachingCart();
-	}
-
+    @Bean
+    @Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
+    Cart cart() {
+        return new CachingCart();
+    }
 }

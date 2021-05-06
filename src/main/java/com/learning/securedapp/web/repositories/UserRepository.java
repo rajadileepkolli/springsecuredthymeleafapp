@@ -1,31 +1,29 @@
 package com.learning.securedapp.web.repositories;
 
+import com.learning.securedapp.domain.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-import com.learning.securedapp.domain.User;
-
 /**
- * <p>UserRepository interface.</p>
+ * UserRepository interface.
  *
  * @author rajakolli
  * @version $Id: $Id
  */
 public interface UserRepository extends MongoRepository<User, String> {
 
-	/**
-	 * <p>findByUserName.</p>
-	 *
-	 * @param username a {@link java.lang.String} object.
-	 * @return a {@link com.learning.securedapp.domain.User} object.
-	 */
-	User findByUserName(String username);
+    /**
+     * findByUserName.
+     *
+     * @param username a {@link java.lang.String} object.
+     * @return a {@link com.learning.securedapp.domain.User} object.
+     */
+    User findByUserName(String username);
 
-	/**
-	 * <p>findByEmail.</p>
-	 *
-	 * @param email a {@link java.lang.String} object.
-	 * @return a {@link com.learning.securedapp.domain.User} object.
-	 */
-	User findByEmail(String email);
-
+    /**
+     * findByEmail.
+     *
+     * @param email a {@link java.lang.String} object.
+     * @return a {@link com.learning.securedapp.domain.User} object.
+     */
+    User findByEmail(String email);
 }

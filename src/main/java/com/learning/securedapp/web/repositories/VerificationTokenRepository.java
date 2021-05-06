@@ -1,23 +1,21 @@
 package com.learning.securedapp.web.repositories;
 
+import com.learning.securedapp.domain.VerificationToken;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-import com.learning.securedapp.domain.VerificationToken;
-
 /**
- * <p>VerificationTokenRepository interface.</p>
+ * VerificationTokenRepository interface.
  *
  * @author rajakolli
  * @version $Id: $Id
  */
 public interface VerificationTokenRepository extends MongoRepository<VerificationToken, String> {
 
-	/**
-	 * <p>findByToken.</p>
-	 *
-	 * @param token a {@link java.lang.String} object.
-	 * @return a {@link com.learning.securedapp.domain.VerificationToken} object.
-	 */
-	VerificationToken findByToken(String token);
-
+    /**
+     * findByToken.
+     *
+     * @param token a {@link java.lang.String} object.
+     * @return a {@link com.learning.securedapp.domain.VerificationToken} object.
+     */
+    VerificationToken findByToken(String token);
 }

@@ -6,18 +6,17 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
 /**
- * <p>Abstract SecuredAppBaseController class.</p>
+ * Abstract SecuredAppBaseController class.
  *
  * @author rajakolli
  * @version $Id: $Id
  */
 public abstract class SecuredAppBaseController {
 
-    @Autowired
-    protected MessageSource messageSource;
+    @Autowired protected MessageSource messageSource;
 
     /**
-     * <p>getMessage.</p>
+     * getMessage.
      *
      * @param code a {@link java.lang.String} object.
      * @return a {@link java.lang.String} object.
@@ -27,21 +26,18 @@ public abstract class SecuredAppBaseController {
     }
 
     /**
-     * <p>getCurrentUser.</p>
+     * getCurrentUser.
      *
      * @return a {@link java.lang.String} object.
      */
     public String getCurrentUser() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication()
-                .getPrincipal();
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username;
         if (principal instanceof UserDetails) {
             username = ((UserDetails) principal).getUsername();
-        }
-        else {
+        } else {
             username = principal.toString();
         }
         return username;
     }
-
 }

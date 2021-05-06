@@ -1,15 +1,13 @@
 package com.learning.securedapp.web.domain;
 
+import com.learning.securedapp.domain.Product;
 import java.io.Serializable;
 import java.util.UUID;
-
-import com.learning.securedapp.domain.Product;
-
 import lombok.Builder;
 import lombok.Data;
 
 /**
- * <p>OrderLine class.</p>
+ * OrderLine class.
  *
  * @author rajakolli
  * @version $Id: $Id
@@ -18,19 +16,19 @@ import lombok.Data;
 @Builder
 public class OrderLine implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private Product goods;
-	private int quantity;
-	private UUID orderId;
-	private int lineNo;
+    private Product goods;
+    private int quantity;
+    private UUID orderId;
+    private int lineNo;
 
-	/**
-	 * <p>getSubtotal.</p>
-	 *
-	 * @return a double.
-	 */
-	public double getSubtotal() {
-		return quantity * goods.getPrice();
-	}
+    /**
+     * getSubtotal.
+     *
+     * @return a double.
+     */
+    public double getSubtotal() {
+        return quantity * goods.getPrice();
+    }
 }

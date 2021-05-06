@@ -6,16 +6,14 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
-
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
-
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -27,34 +25,31 @@ import org.springframework.http.client.SimpleClientHttpRequestFactory;
 
 public class ApplicationTests extends AbstractApplicationTests {
 
-    @Autowired
-    private TestRestTemplate testRestTemplate;
+    @Autowired private TestRestTemplate testRestTemplate;
 
-    @BeforeClass
+    @BeforeAll
     public static void sslSetUp() {
         try {
             // setup ssl context to ignore certificate errors
             SSLContext ctx = SSLContext.getInstance("TLS");
-            X509TrustManager tm = new X509TrustManager() {
-                @Override
-                public void checkClientTrusted(X509Certificate[] chain, String authType)
-                        throws CertificateException {
-                }
+            X509TrustManager tm =
+                    new X509TrustManager() {
+                        @Override
+                        public void checkClientTrusted(X509Certificate[] chain, String authType)
+                                throws CertificateException {}
 
-                @Override
-                public void checkServerTrusted(X509Certificate[] chain, String authType)
-                        throws CertificateException {
-                }
+                        @Override
+                        public void checkServerTrusted(X509Certificate[] chain, String authType)
+                                throws CertificateException {}
 
-                @Override
-                public X509Certificate[] getAcceptedIssuers() {
-                    return null;
-                }
-            };
-            ctx.init(null, new TrustManager[] { tm }, null);
+                        @Override
+                        public X509Certificate[] getAcceptedIssuers() {
+                            return null;
+                        }
+                    };
+            ctx.init(null, new TrustManager[] {tm}, null);
             SSLContext.setDefault(ctx);
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
@@ -63,36 +58,33 @@ public class ApplicationTests extends AbstractApplicationTests {
     static class Config {
         @Bean
         public RestTemplateBuilder restTemplateBuilder() {
-            return new RestTemplateBuilder()
-                    .requestFactory(MySimpleClientHttpRequestFactory.class);
+            return new RestTemplateBuilder().requestFactory(MySimpleClientHttpRequestFactory.class);
         }
     }
 
     @Test
     public void testHome() throws Exception {
-        ResponseEntity<String> entity = testRestTemplate.getForEntity("/login.html",
-                String.class);
+        ResponseEntity<String> entity = testRestTemplate.getForEntity("/login.html", String.class);
         assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
     static class MySimpleClientHttpRequestFactory extends SimpleClientHttpRequestFactory {
 
-        private HostnameVerifier hostnameVerifier = new HostnameVerifier() {
-            @Override
-            public boolean verify(String hostname, SSLSession session) {
-                return true;
-            }
-        };
+        private HostnameVerifier hostnameVerifier =
+                new HostnameVerifier() {
+                    @Override
+                    public boolean verify(String hostname, SSLSession session) {
+                        return true;
+                    }
+                };
 
         @Override
-        protected void prepareConnection(final HttpURLConnection connection,
-                final String httpMethod) throws IOException {
+        protected void prepareConnection(
+                final HttpURLConnection connection, final String httpMethod) throws IOException {
             if (connection instanceof HttpsURLConnection) {
-                ((HttpsURLConnection) connection)
-                        .setHostnameVerifier(this.hostnameVerifier);
+                ((HttpsURLConnection) connection).setHostnameVerifier(this.hostnameVerifier);
             }
             super.prepareConnection(connection, httpMethod);
         }
     }
-
 }

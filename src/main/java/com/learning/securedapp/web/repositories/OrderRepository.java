@@ -1,15 +1,12 @@
 package com.learning.securedapp.web.repositories;
 
+import com.learning.securedapp.web.domain.Order;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-import com.learning.securedapp.web.domain.Order;
-
 /**
- * <p>OrderRepository interface.</p>
+ * OrderRepository interface.
  *
  * @author rajakolli
  * @version $Id: $Id
  */
-public interface OrderRepository extends MongoRepository<Order, String> {
-
-}
+public interface OrderRepository extends MongoRepository<Order, String> {}

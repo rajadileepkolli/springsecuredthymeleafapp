@@ -1,20 +1,5 @@
 package com.learning.securedapp.web.services.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.Caching;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-
 import com.learning.securedapp.domain.Permission;
 import com.learning.securedapp.domain.Role;
 import com.learning.securedapp.domain.User;
@@ -23,18 +8,28 @@ import com.learning.securedapp.web.repositories.PermissionRepository;
 import com.learning.securedapp.web.repositories.RoleRepository;
 import com.learning.securedapp.web.repositories.UserRepository;
 import com.learning.securedapp.web.services.SecurityService;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
+import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 @Service
+@RequiredArgsConstructor
 public class SecurityServiceImpl implements SecurityService {
 
-    @Autowired
-    private UserRepository       userRepository;
-    @Autowired
-    private RoleRepository       roleRepository;
-    @Autowired
-    private PermissionRepository permissionRepository;
-    @Autowired
-    private PasswordEncoder      passwordEncoder;
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+    private final PermissionRepository permissionRepository;
+    private final PasswordEncoder passwordEncoder;
 
     /** {@inheritDoc} */
     @Override
@@ -72,10 +67,12 @@ public class SecurityServiceImpl implements SecurityService {
             user.setPassword(encodedPwd);
         }
 
-        List<Role> persistedRoles = user.getRoleList().stream().parallel()
-                .filter(role -> role.getId() != null)
-                .map(role -> getRoleById(role.getId()))
-                .collect(Collectors.toCollection(ArrayList::new));
+        List<Role> persistedRoles =
+                user.getRoleList().stream()
+                        .parallel()
+                        .filter(role -> role.getId() != null)
+                        .map(role -> getRoleById(role.getId()))
+                        .collect(Collectors.toCollection(ArrayList::new));
         user.setRoleList(persistedRoles);
         return userRepository.save(user);
     }
@@ -89,8 +86,9 @@ public class SecurityServiceImpl implements SecurityService {
 
     /** {@inheritDoc} */
     @Override
-    @Caching(evict = { @CacheEvict(value = "users", allEntries = true) }, put = {
-            @CachePut(value = "user", key = "#id") })
+    @Caching(
+            evict = {@CacheEvict(value = "users", allEntries = true)},
+            put = {@CachePut(value = "user", key = "#id")})
     public User updateUser(User user, String id) throws SecuredAppException {
         User persistedUser = getUserById(id);
         if (persistedUser == null) {
@@ -98,10 +96,12 @@ public class SecurityServiceImpl implements SecurityService {
         }
 
         // List<Role> updatedRoles = new ArrayList<>();
-        List<Role> updatedRoles = user.getRoleList().stream().parallel()
-                .filter(role -> role.getId() != null)
-                .map(role -> getRoleById(role.getId()))
-                .collect(Collectors.toCollection(ArrayList::new));
+        List<Role> updatedRoles =
+                user.getRoleList().stream()
+                        .parallel()
+                        .filter(role -> role.getId() != null)
+                        .map(role -> getRoleById(role.getId()))
+                        .collect(Collectors.toCollection(ArrayList::new));
         /*
          * if(roles != null){ for (Role role : roles) { if(role.getId() != null)
          * { updatedRoles.add(getRoleById(role.getId())); } } }
@@ -131,8 +131,7 @@ public class SecurityServiceImpl implements SecurityService {
 
     /** {@inheritDoc} */
     @Override
-    public boolean verifyPasswordResetToken(String email, String token)
-            throws SecuredAppException {
+    public boolean verifyPasswordResetToken(String email, String token) throws SecuredAppException {
         User user = findUserByEmail(email);
         if (user == null) {
             throw new SecuredAppException("Invalid email address");
@@ -171,10 +170,11 @@ public class SecurityServiceImpl implements SecurityService {
     @CacheEvict(value = "roles", allEntries = true)
     public Role createRole(Role role) throws SecuredAppException {
         // List<Permission> persistedPermissions = new ArrayList<>();
-        List<Permission> permissions = role.getPermissions().stream()
-                .filter(permission -> permission.getId() != null)
-                .map(permission -> findPermission(permission.getId()))
-                .collect(Collectors.toList());
+        List<Permission> permissions =
+                role.getPermissions().stream()
+                        .filter(permission -> permission.getId() != null)
+                        .map(permission -> findPermission(permission.getId()))
+                        .collect(Collectors.toList());
         /*
          * if(permissions != null){ for (Permission permission : permissions) {
          * if(permission.getId() != null) {
@@ -201,8 +201,9 @@ public class SecurityServiceImpl implements SecurityService {
 
     /** {@inheritDoc} */
     @Override
-    @Caching(evict = { @CacheEvict(value = "roles", allEntries = true) }, put = {
-            @CachePut(value = "role", key = "#id") })
+    @Caching(
+            evict = {@CacheEvict(value = "roles", allEntries = true)},
+            put = {@CachePut(value = "role", key = "#id")})
     public Role updateRole(Role role, String id) throws SecuredAppException {
         Role persistedRole = getRoleById(id);
         if (persistedRole == null) {
@@ -214,11 +215,12 @@ public class SecurityServiceImpl implements SecurityService {
          * List<Permission> permissions = role.getPermissions();
          */
 
-        List<Permission> updatedPermissions = role.getPermissions().parallelStream()
-                .filter(permission -> permission.getId() != null)
-                .map(permission -> findPermission(permission.getId()))
-                .filter(Objects::nonNull)
-                .collect(Collectors.toCollection(ArrayList::new));
+        List<Permission> updatedPermissions =
+                role.getPermissions().parallelStream()
+                        .filter(permission -> permission.getId() != null)
+                        .map(permission -> findPermission(permission.getId()))
+                        .filter(Objects::nonNull)
+                        .collect(Collectors.toCollection(ArrayList::new));
 
         /*
          * if(permissions != null){ for (Permission permission : permissions) {
@@ -236,8 +238,9 @@ public class SecurityServiceImpl implements SecurityService {
 
     /** {@inheritDoc} */
     @Override
-    @Caching(cacheable = { @Cacheable(value = "permission", key = "#id") }, evict = {
-            @CacheEvict(value = "permissions", allEntries = true) })
+    @Caching(
+            cacheable = {@Cacheable(value = "permission", key = "#id")},
+            evict = {@CacheEvict(value = "permissions", allEntries = true)})
     public Permission createPermission(Permission permission) {
         return permissionRepository.save(permission);
     }
@@ -258,18 +261,23 @@ public class SecurityServiceImpl implements SecurityService {
 
     /** {@inheritDoc} */
     @Override
-    @Caching(evict = { @CacheEvict(value = "user", key = "#id"),
-            @CacheEvict(value = "users", allEntries = true) })
+    @Caching(
+            evict = {
+                @CacheEvict(value = "user", key = "#id"),
+                @CacheEvict(value = "users", allEntries = true)
+            })
     public void deleteUser(String id) {
         userRepository.deleteById(id);
     }
 
     /** {@inheritDoc} */
     @Override
-    @Caching(evict = { @CacheEvict(value = "role", key = "#id"),
-            @CacheEvict(value = "roles", allEntries = true) })
+    @Caching(
+            evict = {
+                @CacheEvict(value = "role", key = "#id"),
+                @CacheEvict(value = "roles", allEntries = true)
+            })
     public void deleteRole(String id) {
         roleRepository.deleteById(id);
     }
-
 }

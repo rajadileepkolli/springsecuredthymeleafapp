@@ -1,45 +1,43 @@
 package com.learning.securedapp.web.services;
 
+import com.learning.securedapp.domain.Product;
 import java.util.List;
 
-import com.learning.securedapp.domain.Product;
-
 /**
- * <p>ProductService interface.</p>
+ * ProductService interface.
  *
  * @author rajakolli
  * @version $Id: $Id
  */
 public interface ProductService {
 
-	/**
-	 * <p>saveProduct.</p>
-	 *
-	 * @param product a {@link com.learning.securedapp.domain.Product} object.
-	 * @return a {@link com.learning.securedapp.domain.Product} object.
-	 */
-	Product saveProduct(Product product);
+    /**
+     * saveProduct.
+     *
+     * @param product a {@link com.learning.securedapp.domain.Product} object.
+     * @return a {@link com.learning.securedapp.domain.Product} object.
+     */
+    Product saveProduct(Product product);
 
-	/**
-	 * <p>getProductById.</p>
-	 *
-	 * @param id a {@link java.lang.String} object.
-	 * @return a {@link com.learning.securedapp.domain.Product} object.
-	 */
-	Product getProductById(String id);
+    /**
+     * getProductById.
+     *
+     * @param id a {@link java.lang.String} object.
+     * @return a {@link com.learning.securedapp.domain.Product} object.
+     */
+    Product getProductById(String id);
 
-	/**
-	 * <p>listAllProducts.</p>
-	 *
-	 * @return a {@link java.util.List} object.
-	 */
-	List<Product> listAllProducts();
+    /**
+     * listAllProducts.
+     *
+     * @return a {@link java.util.List} object.
+     */
+    List<Product> listAllProducts();
 
-	/**
-	 * <p>deleteProduct.</p>
-	 *
-	 * @param id a {@link java.lang.String} object.
-	 */
-	void deleteProduct(String id);
-
+    /**
+     * deleteProduct.
+     *
+     * @param id a {@link java.lang.String} object.
+     */
+    void deleteProduct(String id);
 }

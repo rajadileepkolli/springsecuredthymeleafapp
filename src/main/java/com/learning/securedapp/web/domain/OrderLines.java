@@ -5,12 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
- * <p>OrderLines class.</p>
+ * OrderLines class.
  *
  * @author rajakolli
  * @version $Id: $Id
@@ -18,47 +17,45 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class OrderLines implements Serializable {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	protected final List<OrderLine> list;
+    protected final List<OrderLine> list;
 
-	/**
-	 * <p>Constructor for OrderLines.</p>
-	 */
-	public OrderLines() {
-		this(new ArrayList<>());
-	}
+    /** Constructor for OrderLines. */
+    public OrderLines() {
+        this(new ArrayList<>());
+    }
 
-	/**
-	 * <p>orderId.</p>
-	 *
-	 * @param orderId a {@link java.util.UUID} object.
-	 * @return a {@link com.learning.securedapp.web.domain.OrderLines} object.
-	 */
-	public OrderLines orderId(UUID orderId) {
-		int i = 0;
-		for (OrderLine orderLine : list) {
-			orderLine.setLineNo(++i);
-			orderLine.setOrderId(orderId);
-		}
-		return this;
-	}
+    /**
+     * orderId.
+     *
+     * @param orderId a {@link java.util.UUID} object.
+     * @return a {@link com.learning.securedapp.web.domain.OrderLines} object.
+     */
+    public OrderLines orderId(UUID orderId) {
+        int i = 0;
+        for (OrderLine orderLine : list) {
+            orderLine.setLineNo(++i);
+            orderLine.setOrderId(orderId);
+        }
+        return this;
+    }
 
-	/**
-	 * <p>stream.</p>
-	 *
-	 * @return a {@link java.util.stream.Stream} object.
-	 */
-	public Stream<OrderLine> stream() {
-		return list.stream();
-	}
+    /**
+     * stream.
+     *
+     * @return a {@link java.util.stream.Stream} object.
+     */
+    public Stream<OrderLine> stream() {
+        return list.stream();
+    }
 
-	/**
-	 * <p>getTotal.</p>
-	 *
-	 * @return a double.
-	 */
-	public double getTotal() {
-		return list.stream().mapToDouble(OrderLine::getSubtotal).sum();
-	}
+    /**
+     * getTotal.
+     *
+     * @return a double.
+     */
+    public double getTotal() {
+        return list.stream().mapToDouble(OrderLine::getSubtotal).sum();
+    }
 }

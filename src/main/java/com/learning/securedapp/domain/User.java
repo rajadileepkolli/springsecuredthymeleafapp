@@ -1,25 +1,21 @@
 package com.learning.securedapp.domain;
 
+import com.learning.securedapp.web.validators.ValidEmail;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
-
-import com.learning.securedapp.web.validators.ValidEmail;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
 @Builder
@@ -29,34 +25,30 @@ import lombok.Setter;
 @NoArgsConstructor
 public class User implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@Id
-	private String id;
+    @Id private String id;
 
-	@Indexed
-	@Size(min = 2, max = 30)
-	private String userName;
+    @Indexed
+    @Size(min = 2, max = 30)
+    private String userName;
 
-	@Size(min = 2, max = 30)
-	private String password;
+    @Size(min = 2, max = 30)
+    private String password;
 
-	@NotNull
-	@ValidEmail
-	private String email;
+    @NotNull @ValidEmail private String email;
 
-	private String passwordResetToken;
+    private String passwordResetToken;
 
-	@Builder.Default
-	private boolean enabled = false;
+    @Builder.Default private boolean enabled = false;
 
-	@NotNull
-	@Pattern(regexp = "[0-9]{6}")
-	private String zip;
+    @NotNull
+    @Pattern(regexp = "[0-9]{6}")
+    private String zip;
 
-	private String address;
+    private String address;
 
-	@DBRef(lazy = true)
-	@Builder.Default
-	private List<Role> roleList = new ArrayList<>();
+    @DBRef(lazy = true)
+    @Builder.Default
+    private List<Role> roleList = new ArrayList<>();
 }

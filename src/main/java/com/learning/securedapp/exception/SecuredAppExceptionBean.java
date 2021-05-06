@@ -4,12 +4,12 @@ import lombok.Data;
 
 @Data
 /**
- * <p>SecuredAppExceptionBean class.</p>
+ * SecuredAppExceptionBean class.
  *
  * @author rajakolli
  * @version $Id: $Id
  */
 public class SecuredAppExceptionBean {
-	private String faultCode;
-	private String faultString;
+    private String faultCode;
+    private String faultString;
 }
