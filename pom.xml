@@ -23,7 +23,7 @@
 		<java.version>11</java.version>
 		<testcontainers.version>1.16.3</testcontainers.version>
 		<awaitility.version>4.2.0</awaitility.version>
-		<spotless.version>2.21.0</spotless.version>
+		<spotless.version>2.22.0</spotless.version>
 	</properties>
 
 	<dependencies>
