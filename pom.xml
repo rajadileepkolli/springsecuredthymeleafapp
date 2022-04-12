@@ -21,7 +21,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>11</java.version>
-		<testcontainers.version>1.16.3</testcontainers.version>
+		<testcontainers.version>1.17.0</testcontainers.version>
 		<awaitility.version>4.2.0</awaitility.version>
 		<spotless.version>2.22.1</spotless.version>
 	</properties>
