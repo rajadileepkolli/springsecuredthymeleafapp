@@ -53,7 +53,7 @@ color:#000;
 
 <script th:inline="javascript">
 /*<![CDATA[*/
-var serverContext = [[@{/}]];
+var serverContext = [['@{/}']];
 
 $(document).ready(function () {
 	$('form').submit(function(event) {
@@ -74,13 +74,13 @@ $(document).ready(function () {
 		    	showVerdictsInsideProgressBar:true,
 		    	showErrors:true,
 		    	errorMessages:{
-		    		  wordLength: /*[[#{error.wordLength}]]*/,
-		    		  wordNotEmail: /*[[#{error.wordNotEmail}]]*/,
-		    		  wordSequences: /*[[#{error.wordSequences}]]*/,
-		    		  wordLowercase: /*[[#{error.wordLowercase}]]*/,
-		    		  wordUppercase: /*[[#{error.wordUppercase}]]*/,
-		    	      wordOneNumber: /*[[#{error.wordOneNumber}]]*/,
-		    		  wordOneSpecialChar: /*[[#{error.wordOneSpecialChar}]]*/'
+		    		  wordLength: '/*[[#{error.wordLength}]]*/',
+		    		  wordNotEmail: '/*[[#{error.wordNotEmail}]]*/',
+		    		  wordSequences: '/*[[#{error.wordSequences}]]*/',
+		    		  wordLowercase: '/*[[#{error.wordLowercase}]]*/',
+		    		  wordUppercase: '/*[[#{error.wordUppercase}]]*/',
+		    	      wordOneNumber: '/*[[#{error.wordOneNumber}]]*/',
+		    		  wordOneSpecialChar: '/*[[#{error.wordOneSpecialChar}]]*/'
 		    		}
 		    	}
 		};
